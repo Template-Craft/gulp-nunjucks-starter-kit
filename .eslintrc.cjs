@@ -7,7 +7,6 @@ module.exports = {
       extends: [
         'eslint:recommended',
         'plugin:import/recommended',
-        'plugin:jsdoc/recommended-typescript-flavor',
         'plugin:n/recommended',
         'plugin:promise/recommended',
         'prettier',
@@ -15,6 +14,7 @@ module.exports = {
       files: ['**/*.{cjs,js,mjs}'],
       parserOptions: {
         ecmaVersion: 'latest',
+        requireConfigFile: false,
       },
       plugins: ['import', 'n', 'promise'],
       rules: {
@@ -23,9 +23,10 @@ module.exports = {
           'error',
           {
             alphabetize: { order: 'asc' },
-            'newlines-between': 'always',
+            'newlines-between': 'always-and-inside-groups',
           },
         ],
+        'object-shorthand': ['error', 'consistent'],
       },
     },
     {

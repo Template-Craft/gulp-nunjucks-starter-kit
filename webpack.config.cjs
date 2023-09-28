@@ -27,12 +27,12 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.m?js$/,
         exclude: /node_modules/,
         use: {
-          loader: require.resolve('babel-loader'),
+          loader: 'babel-loader',
           options: {
-            presets: [['@babel/preset-env', { modules: false }]],
+            presets: ['@babel/preset-env'],
           },
         },
       },
