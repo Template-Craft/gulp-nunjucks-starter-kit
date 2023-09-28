@@ -1,0 +1,7 @@
+{
+  "option": {
+    "blank_line_after_tag": "load,extends,include",
+    "linter_output_format": "{filename}:{line}: {code} {message} {match}",
+    "max_line_length": "120"
+  }
+}

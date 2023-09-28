@@ -1,0 +1,12 @@
+# Ignore Node Modules
+node_modules/
+
+# Ignore all .directory files
+*/**/*.directory
+*.directory
+
+# Ignore Build directory
+build/
+
+# Ignore package-lock.json file
+package-lock.json
