@@ -8,6 +8,7 @@ import { path } from './gulp/config/path.mjs'
 
 // Импорт задач
 import { copy } from './gulp/tasks/copy.mjs'
+import { reset } from './gulp/tasks/reset.mjs'
 
 // Передаём значения в глобальную переменную
 global.app = {
@@ -20,8 +21,8 @@ function watcher() {
   gulp.watch(path.watch.files, copy)
 }
 
-// Построение сценарием выполнения задач
-const dev = gulp.series(copy, watcher)
+// Построение сценариев выполнения задач
+const dev = gulp.series(reset, copy, watcher)
 
 // Выполнение сценария по умолчанию
 gulp.task('default', dev)

@@ -13,6 +13,7 @@ export const path = {
     files: `${buildFolder}/`,
   },
   src: {
+    nunjucks: `${srcFolder}/views/pages/*.+(html|njk|nunjucks|tpl|nj)`,
     files: `${srcFolder}/**/*.*`,
   },
   watch: {
