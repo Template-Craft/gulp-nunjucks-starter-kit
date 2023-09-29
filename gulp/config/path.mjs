@@ -1,11 +1,11 @@
 // Пути
-'use strict'
+'use strict';
 
-import * as nodePath from 'path'
-const rootFolder = nodePath.basename(nodePath.resolve()) // -> получаем корневую дир-ию
+import * as nodePath from 'path';
+const rootFolder = nodePath.basename(nodePath.resolve()); // -> получаем корневую дир-ию
 
-const buildFolder = './build'
-const srcFolder = './src'
+const buildFolder = './build';
+const srcFolder = './src';
 
 // объект с путями к файлам и папкам:
 export const path = {
@@ -22,4 +22,4 @@ export const path = {
   clean: buildFolder,
   srcFolder: srcFolder,
   rootFolder: rootFolder,
-}
+};
