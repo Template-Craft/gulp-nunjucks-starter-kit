@@ -19,7 +19,7 @@ root = true
 charset = utf-8
 
 # правила форматирования для шаблонов
-[*.{njk,nunjucks,nj,html,tpl}]
+[*.{njk,nunjucks,nj,html}]
 max_line_length = 120
 quote_type = double
 end_of_line = lf

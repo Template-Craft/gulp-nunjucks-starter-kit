@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{- getGlobalData.pageTitle -}}</title>
+  </head>
+  <body>
+    {% set arr = { "кошки": "2", "собака": "1", "мышей": "15" }%}
+
+    <ol>
+      {% for item, about in arr %}
+      <li>У нас есть: {{ about }} {{ item -}}</li>
+      {% endfor %}
+    </ol>
+
+    <script src="scripts/main.bundle.js"></script>
+  </body>
+</html>
