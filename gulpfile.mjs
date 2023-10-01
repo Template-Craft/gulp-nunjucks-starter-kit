@@ -1,3 +1,23 @@
+//  --------------------------------------------------------------------------------
+//   * Главный конфигурационный файл gulpfile.babel.js
+//   * В проекте используется Gulp + Webpack + Babel + Nunjucks
+//   * Конфигурационный файл и все раннеры используют синтаксис ES6+
+//   * больше информации о Babel    (https://babeljs.io/docs/en/)
+//   * больше информации о Webpack  (https://webpack.js.org/concepts/)
+//   * примеры конфигурации Webpack (https://webpack.js.org/configuration/)
+//   * больше о Nunjucks            (https://mozilla.github.io/nunjucks/templating.html#template-inheritance)
+//   *  --------
+//   *  --------
+//   * Это главный конфигурационный файл проекта, тут описываем задачи по запуску и сборке проекта.
+//   * Gulp-раннер разделён на модули, каждый модуль отвечает за что-то своё.
+//   * Модули-раннеры находятся в папке         -> /gulp/tasks
+//   * Модули-конфигурации находятся в папке    -> /gulp/config
+//   * Каталог в котором работаем с исходниками -> /src
+//   * Каталог в котором собирается проект      -> /build
+//   *
+//   *  Copyright (c) 2023 NИ
+//  --------------------------------------------------------------------------------
+
 /* eslint-disable n/no-unpublished-import */
 /* eslint-disable import/order */
 // eslint-disable-next-line n/no-unpublished-import

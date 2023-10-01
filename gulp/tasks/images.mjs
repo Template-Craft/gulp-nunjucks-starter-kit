@@ -1,6 +1,11 @@
 /* eslint-disable n/no-unpublished-import */
 /* eslint-disable import/order */
 /* eslint-disable no-undef */
+
+//  -------------------------------------------------------------;
+//    Таск-раннер для копирования картинок в папку build
+//  -------------------------------------------------------------;
+
 'use strict';
 
 export const images = () => {
