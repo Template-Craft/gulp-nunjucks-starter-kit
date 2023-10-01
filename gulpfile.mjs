@@ -20,6 +20,9 @@ import { scripts } from './gulp/tasks/scripts.mjs';
 import { fonts } from './gulp/tasks/fonts.mjs';
 import { images } from './gulp/tasks/images.mjs';
 
+// Оповещения
+import { modeStateNotifier } from './gulp/tasks/notify.mjs';
+
 // Передаём значения в глобальную переменную
 global.app = {
   isBuild: process.argv.includes('--build'), // -> Проверяем режим продакшена
@@ -34,7 +37,7 @@ function watcher() {
   gulp.watch(path.watch.nunjucks, templates);
   gulp.watch(path.watch.nunjucksData, gulp.parallel(templatesData, templates)).on('change', plugins.browsersync.reload);
   gulp.watch(path.watch.styles, styles);
-  gulp.watch(path.watch.styles, scripts);
+  gulp.watch(path.watch.scripts, scripts);
   gulp.watch(path.watch.images, images);
 }
 
@@ -43,8 +46,8 @@ function watcher() {
 const mainTasks = gulp.parallel(templates, styles, scripts, fonts, images);
 
 // gulp.series()   - последовательное выполнение задач
-const dev = gulp.series(reset, mainTasks, gulp.parallel(watcher, server));
-const build = gulp.series(reset, mainTasks);
+const dev = gulp.series(reset, mainTasks, gulp.parallel(watcher, server, modeStateNotifier));
+const build = gulp.series(reset, mainTasks, modeStateNotifier);
 
 // Экспорт сценариев:
 export { dev };
