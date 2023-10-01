@@ -9,8 +9,28 @@
     "build": "gulp build --build"
   },
   "engines": {
-    "node": "^16.20.2 || 18.18.0",
-    "npm": "^8.19.4 || ^9.8.1"
+    "node": "^16 || ^18",
+    "npm": "^8 || ^9"
+  },
+  "browserslist": {
+    "production": [
+      "> 1%",
+      "supports es6-module",
+      "last 6 chrome version",
+      "last 6 firefox version",
+      "Firefox ESR",
+      "not dead"
+    ],
+    "modern": [
+      "last 1 chrome version",
+      "last 1 firefox version"
+    ],
+    "ssr": [
+      "node 16"
+    ],
+    "node": [
+      "node 16"
+    ]
   },
   "os": [
     "darwin",
@@ -47,6 +67,7 @@
     "@types/gulp-clean-css": "^4.3.2",
     "@types/gulp-plumber": "^0.0.35",
     "@types/gulp-rename": "^2.0.3",
+    "@types/node-notifier": "^8.0.3",
     "@types/webpack-stream": "^3.2.13",
     "babel-loader": "^9.1.3",
     "browser-sync": "^2.29.3",
@@ -74,6 +95,7 @@
     "gulp-replace": "^1.1.4",
     "gulp-sass": "^5.1.0",
     "gulp-sourcemaps": "^3.0.0",
+    "node-notifier": "^10.0.1",
     "prettier": "^3.0.3",
     "sass": "^1.68.0",
     "webpack": "^5.88.2",

@@ -2,6 +2,29 @@
 /* eslint-disable import/order */
 /* eslint-disable no-undef */
 /* eslint-disable prefer-const */
+
+//  ----------------------------------------------------------------------------------------------------------------;
+//    Таск-раннер для отслеживания nunjucks шаблонов
+//  *
+//  * -> env.addGlobal('getGlobalData', globalDataObj);
+//  * делаем файлы с json данными доступными для всего окружения,
+//  * c помощью manageEnv <- функция из nunjucks
+//  * для предотвращения кэширования json используем fs -> стандартная функция node.js
+//  * вызывать в нужном файле: {{ getGlobalData.your_arr_value }}
+//  *
+//  * -> env.addGlobal('getComponentData', (file) => `components/${file}/${file}.json`);
+//  * * * * -> позволяет забыть о написании пути до файла с данными компонента, теперь достаточно вызвать фун-ию
+//  * * * * -> и передать ей название компонента: {% include getComponentData("componentName") %}
+//  * -> env.addGlobal('getComponent', (file) => `components/${file}/${file}.njk`);
+//  * * * * -> позволяет забыть о написании пути до файла, теперь достаточно вызвать фун-ию
+//  * * * * -> и передать ей название компонента: {% include getComponent("componentName") %}
+//  * -> env.addFilter('jsonParse', (value) => JSON.parse(value));
+//  * * * * -> фильтр, позволяющий распарсить данные из json объекта
+//  * - подробные инструкции по использованию тех или иных возможностей шаблонизатора,
+//  * - + на страницах документации
+//  *
+//  ----------------------------------------------------------------------------------------------------------------;
+
 'use strict';
 
 import nunjucksRender from 'gulp-nunjucks-render';

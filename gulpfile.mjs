@@ -1,3 +1,23 @@
+//  --------------------------------------------------------------------------------
+//   * Главный конфигурационный файл gulpfile.babel.js
+//   * В проекте используется Gulp + Webpack + Babel + Nunjucks
+//   * Конфигурационный файл и все раннеры используют синтаксис ES6+
+//   * больше информации о Babel    (https://babeljs.io/docs/en/)
+//   * больше информации о Webpack  (https://webpack.js.org/concepts/)
+//   * примеры конфигурации Webpack (https://webpack.js.org/configuration/)
+//   * больше о Nunjucks            (https://mozilla.github.io/nunjucks/templating.html#template-inheritance)
+//   *  --------
+//   *  --------
+//   * Это главный конфигурационный файл проекта, тут описываем задачи по запуску и сборке проекта.
+//   * Gulp-раннер разделён на модули, каждый модуль отвечает за что-то своё.
+//   * Модули-раннеры находятся в папке         -> /gulp/tasks
+//   * Модули-конфигурации находятся в папке    -> /gulp/config
+//   * Каталог в котором работаем с исходниками -> /src
+//   * Каталог в котором собирается проект      -> /build
+//   *
+//   *  Copyright (c) 2023 NИ
+//  --------------------------------------------------------------------------------
+
 /* eslint-disable n/no-unpublished-import */
 /* eslint-disable import/order */
 // eslint-disable-next-line n/no-unpublished-import
@@ -20,6 +40,9 @@ import { scripts } from './gulp/tasks/scripts.mjs';
 import { fonts } from './gulp/tasks/fonts.mjs';
 import { images } from './gulp/tasks/images.mjs';
 
+// Оповещения
+import { modeStateNotifier } from './gulp/tasks/notify.mjs';
+
 // Передаём значения в глобальную переменную
 global.app = {
   isBuild: process.argv.includes('--build'), // -> Проверяем режим продакшена
@@ -34,7 +57,7 @@ function watcher() {
   gulp.watch(path.watch.nunjucks, templates);
   gulp.watch(path.watch.nunjucksData, gulp.parallel(templatesData, templates)).on('change', plugins.browsersync.reload);
   gulp.watch(path.watch.styles, styles);
-  gulp.watch(path.watch.styles, scripts);
+  gulp.watch(path.watch.scripts, scripts);
   gulp.watch(path.watch.images, images);
 }
 
@@ -43,8 +66,8 @@ function watcher() {
 const mainTasks = gulp.parallel(templates, styles, scripts, fonts, images);
 
 // gulp.series()   - последовательное выполнение задач
-const dev = gulp.series(reset, mainTasks, gulp.parallel(watcher, server));
-const build = gulp.series(reset, mainTasks);
+const dev = gulp.series(reset, mainTasks, gulp.parallel(watcher, server, modeStateNotifier));
+const build = gulp.series(reset, mainTasks, modeStateNotifier);
 
 // Экспорт сценариев:
 export { dev };
