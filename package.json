@@ -98,7 +98,6 @@
     "gulp-sass": "^5.1.0",
     "gulp-sourcemaps": "^3.0.0",
     "node-notifier": "^10.0.1",
-    "postcss": "^8.4.31",
     "postcss-sort-media-queries": "^5.2.0",
     "prettier": "^3.0.3",
     "sass": "^1.68.0",

@@ -40,6 +40,7 @@ export const styles = () => {
           discardComments: true,
           autoprefixer: false,
           calc: false,
+          discardUnused: false,
           discardDuplicates: true,
           discardEmpty: true,
           mergeIdents: false,
