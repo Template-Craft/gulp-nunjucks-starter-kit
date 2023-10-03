@@ -65,6 +65,7 @@
     "@babel/register": "^7.22.15",
     "@types/gulp": "^4.0.14",
     "@types/gulp-clean-css": "^4.3.2",
+    "@types/gulp-concat": "^0.0.35",
     "@types/gulp-plumber": "^0.0.35",
     "@types/gulp-postcss": "^8.0.4",
     "@types/gulp-rename": "^2.0.3",
@@ -107,6 +108,7 @@
     "yargs": "^17.7.2"
   },
   "dependencies": {
-    "normalize.css": "^8.0.1"
+    "normalize.css": "^8.0.1",
+    "rfs": "^10.0.0"
   }
 }
