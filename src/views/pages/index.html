@@ -8,15 +8,25 @@
     <title>{{- getGlobalData.pageTitle -}}</title>
   </head>
   <body>
-    {% set arr = { "кошки": "2", "собака": "1", "мышей": "15" }%}
+    <main class="sections-wrapper">
+      <section class="first-display">
+        <div class="container">
+          <div class="row">
+            <div class="card-animals js-card-animals">
+              {% set arr = { "кошки": "2", "собака": "1", "мышей": "15" }%}
 
-    <ol>
-      {% for item, about in arr %}
-      <li>У нас есть: {{ about }} {{ item -}}</li>
-      {% endfor %}
-    </ol>
+              <ol>
+                {% for item, about in arr %}
+                <li>У нас есть: {{ about }} {{ item -}}</li>
+                {% endfor %}
+              </ol>
 
-    <button class="button js-button">кнопка</button>
+              <button class="button js-btn__card-animals">кнопка</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
 
     <script src="scripts/main.bundle.js"></script>
   </body>

@@ -105,5 +105,8 @@
     "webpack": "^5.88.2",
     "webpack-stream": "^7.0.0",
     "yargs": "^17.7.2"
+  },
+  "dependencies": {
+    "normalize.css": "^8.0.1"
   }
 }
