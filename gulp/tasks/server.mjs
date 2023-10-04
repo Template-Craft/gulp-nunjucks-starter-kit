@@ -7,12 +7,16 @@
 
 'use strict';
 
-export const server = (done) => {
+export const server = () => {
   app.plugins.browsersync.init({
+    watch: true,
+    notify: false,
+    posrt: 8080,
     server: {
       baseDir: `${app.path.build.html}`,
     },
-    notify: false,
-    posrt: 3005,
+    // Режим призрака, это когда отражаются действия на другом устройстве
+    // При кликах, работой с формами, и скролле страниц
+    ghostMode: false,
   });
 };

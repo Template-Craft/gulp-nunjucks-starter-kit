@@ -8,13 +8,15 @@
 'use strict';
 
 // Импортируем необходимые библиотеки:
-import dartSass from 'sass';
+import * as dartSass from 'sass';
 import gulpSass from 'gulp-sass';
 
-import autoprefixer from 'gulp-autoprefixer';
-import groupCssMediaQueries from 'gulp-group-css-media-queries';
+import gulpPostCSS from 'gulp-postcss';
 import sourcemaps from 'gulp-sourcemaps';
-import mincss from 'gulp-clean-css';
+import autoprefixer from 'autoprefixer';
+import postCSSSortMediaQueries from 'postcss-sort-media-queries';
+import cssnano from 'cssnano';
+import sccnanoPresetAdvanced from 'cssnano-preset-advanced';
 
 import rename from 'gulp-rename';
 
@@ -22,6 +24,40 @@ const sass = gulpSass(dartSass);
 
 /* global app */
 export const styles = () => {
+  const postCSSPlugins = [
+    autoprefixer({
+      cascade: true,
+      grid: true,
+      overrideBrowserslist: ['last 6 versions'],
+    }),
+    postCSSSortMediaQueries({
+      sort: 'desktop-first',
+    }),
+    cssnano({
+      preset: [
+        sccnanoPresetAdvanced,
+        {
+          discardComments: true,
+          autoprefixer: false,
+          calc: false,
+          discardUnused: false,
+          discardDuplicates: true,
+          discardEmpty: true,
+          mergeIdents: false,
+          mergeLonghand: true,
+          mergeRules: true,
+          minifyFontValues: true,
+          minifyGradients: true,
+          minifySelectors: true,
+          normalizeCharset: true,
+          normalizeWhitespace: true,
+          orderedValues: true,
+          uniqueSelectors: true,
+        },
+      ],
+    }),
+  ];
+
   return app.gulp
     .src(app.path.src.styles)
     .pipe(app.plugins.gulpIf(app.isDev, sourcemaps.init()))
@@ -35,37 +71,7 @@ export const styles = () => {
       ),
     )
     .pipe(sass.sync().on('error', sass.logError))
-    .pipe(groupCssMediaQueries())
-    .pipe(
-      autoprefixer({
-        cascade: true,
-        grid: true,
-        overrideBrowserslist: ['last 6 versions'],
-      }),
-    )
-    .pipe(
-      app.plugins.gulpIf(
-        app.isBuild,
-        mincss({
-          compatibility: 'ie8',
-          level: {
-            1: {
-              specialComments: 0,
-              removeEmpty: true,
-              removeWhitespace: true,
-            },
-            2: {
-              mergeMedia: true,
-              removeEmpty: true,
-              removeDuplicateFontRules: true,
-              removeDuplicateMediaBlocks: true,
-              removeDuplicateRules: true,
-              removeUnusedAtRules: false,
-            },
-          },
-        }),
-      ),
-    )
+    .pipe(gulpPostCSS(postCSSPlugins))
     .pipe(
       app.plugins.gulpIf(
         app.isBuild,

@@ -7,39 +7,34 @@
 
 'use strict';
 
+import os from 'node:os';
+
+import chalk from 'chalk';
+
 import notifier from 'node-notifier';
 
-const devModeAlert = (done) => {
-  notifier.notify({
-    title: 'Привет Мир!',
-    message: 'проект запущен, хорошего кодинга!',
+export const createNotification = async () => {
+  const devModMessage = 'проект запущен, хорошего кодинга!';
+  const buildModMessage = 'проверьте наличие папки build в родительской директории.';
+
+  const consoleInfo = `
+    ${chalk.yellow('------------ * ------------')}
+    OS: ${chalk.yellow(os.type)}
+    Arch: ${chalk.blue(os.arch)}
+    Platform: ${chalk.yellow(os.platform)}
+    ${chalk.yellow('------------ * ------------')}
+    Node Version: ${chalk.green(process.env.npm_config_user_agent)}
+    Mode: ${chalk.green(app.isDev ? 'Development' : 'Production')}
+    ${chalk.yellow('------------ * ------------')}
+  `;
+
+  await notifier.notify({
+    title: app.isDev ? 'Привет мир!' : 'Сборка завершена',
+    message: app.isDev ? `${devModMessage}` : `${buildModMessage}`,
     sound: false,
     timeout: 4,
-    'app-name': 'gulp-nunjucks-starter-kit',
+    'app-name': 'Gulp-Nunjucks-Starter-Kit',
   });
 
-  return done();
-};
-
-const buildModeAlert = (done) => {
-  notifier.notify({
-    title: 'Сборка завершена',
-    message: 'проверьте в родительской директории, наличие папки build',
-    sound: false,
-    timeout: 4,
-    'app-name': 'gulp-nunjucks-starter-kit',
-  });
-
-  return done();
-};
-
-// функция, которая проверяет в каком режиме мы сейчас находимся,
-//  -> если isDev true  то вызываем оповещение devModeAlert();
-//  -> или isDev false  то вызываем оповещение buildModeAlert();
-export const modeStateNotifier = (done) => {
-  if (app.isDev) {
-    devModeAlert(done);
-  } else {
-    buildModeAlert(done);
-  }
+  console.info(consoleInfo);
 };

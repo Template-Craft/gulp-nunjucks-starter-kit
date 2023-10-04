@@ -1,7 +1,28 @@
 // Импортируем дефолтные стили выше остальных!
-@import '_defaults/defaults.scss';
+@import '_defaults/_all_defaults.scss';
 
 // Подключаем файл, в который импортируем скриптом компоненты:
 @import '_components_import.scss';
 
 // Далее, подключаем секции:
+
+.row {
+  @include row-flex;
+}
+
+.container {
+  @include container;
+}
+
+.first-display {
+  width: 100%;
+
+  padding: rem(40) 0;
+}
+
+.card-animals {
+  @include make-col;
+  @include make-size(12);
+
+  @include font-size(20px);
+}

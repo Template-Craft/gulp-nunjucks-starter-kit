@@ -1,8 +1,3 @@
-/* eslint-disable n/no-unpublished-import */
-/* eslint-disable import/order */
-/* eslint-disable no-undef */
-/* eslint-disable prefer-const */
-
 //  ----------------------------------------------------------------------------------------------------------------;
 //    Таск-раннер для отслеживания nunjucks шаблонов
 //  *
@@ -24,6 +19,10 @@
 //  * - + на страницах документации
 //  *
 //  ----------------------------------------------------------------------------------------------------------------;
+/* eslint-disable n/no-unpublished-import */
+/* eslint-disable import/order */
+/* eslint-disable no-undef */
+/* eslint-disable prefer-const */
 
 'use strict';
 
@@ -32,21 +31,21 @@ import nunjucksRender from 'gulp-nunjucks-render';
 // nodejs standart function
 import fs from 'fs';
 
-// Опции рендера для nunjucks:
-const renderOptions = {
-  path: './src/views/',
-  watch: true,
-  noCache: true,
-  manageEnv: function (env) {
-    let globalDataObj = JSON.parse(fs.readFileSync(app.path.src.globalData));
-    env.addGlobal('getGlobalData', globalDataObj);
-    env.addGlobal('getComponentData', (file) => `components/${file}/${file}.json`);
-    env.addGlobal('getComponent', (file) => `components/${file}/${file}.njk`);
-    env.addFilter('jsonParse', (value) => JSON.parse(value));
-  },
-};
-
 export const templates = () => {
+  // Опции рендера для nunjucks:
+  const renderOptions = {
+    path: `${app.path.srcFolder}/views/`,
+    watch: true,
+    noCache: true,
+    manageEnv: function (env) {
+      let globalDataObj = JSON.parse(fs.readFileSync(app.path.src.globalData));
+      env.addGlobal('getGlobalData', globalDataObj);
+      env.addGlobal('getComponentData', (file) => `components/${file}/${file}.json`);
+      env.addGlobal('getComponent', (file) => `components/${file}/${file}.njk`);
+      env.addFilter('jsonParse', (value) => JSON.parse(value));
+    },
+  };
+
   return (
     app.gulp
       .src(app.path.src.nunjucks)

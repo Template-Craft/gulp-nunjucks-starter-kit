@@ -26,7 +26,7 @@ export const path = {
     nunjucksRenderSrcFolder: `${srcFolder}/views/`,
     nunjucksData: `${srcFolder}/views/components/**/*.json`,
     globalData: `${srcFolder}/views/data/db.json`,
-    styles: [`${srcFolder}/styles/main.scss`, `${srcFolder}/styles/vendor.scss`],
+    styles: `${srcFolder}/styles/main.scss`,
     scripts: `${srcFolder}/scripts/main/app.{cjs,js,mjs}`,
     images: `${srcFolder}/assets/img/**/*.{jpg,jpeg,png,gif,tiff,svg,webp}`,
     fonts: `${srcFolder}/assets/fonts/**/*.{woff,woff2,ttf}`,
@@ -41,4 +41,5 @@ export const path = {
   clean: buildFolder,
   srcFolder: srcFolder,
   rootFolder: rootFolder,
+  nodeModules: `./node_modules`,
 };

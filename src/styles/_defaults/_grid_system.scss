@@ -1,0 +1,222 @@
+// ----------------------------------------------------------------------;
+//    гибридная сетка, вдохновлена идеями bootstrap 5.0 + smart-grid.css
+// ----------------------------------------------------------------------;
+
+@use 'sass:math';
+
+/// @type Number
+/// @access public
+/// @prop {Number} $value - 12-ти колоночная дизайн система
+///
+$GRID_COLUMNS: 12 !default;
+
+/// @type Number
+/// @access public
+///
+/// @prop {Number} $value - Общее значение для смещения столбца margin/padding
+///
+$GRID_COLUMN_OFFSET: 30px !default;
+
+/// @type Number
+/// @access public
+///
+/// @prop {Number} ($column_offset / 2) - смещение контейнерных полей
+///
+$GRID_COLUMN_FIELDS: calc($GRID-COLUMN-OFFSET / 2);
+
+/// @type Number
+/// @access public
+///
+/// @prop {Number} ($column_offset * 0.5) - смещение одной из сторон margin/padding
+///
+$OFFSET_ONE_SIDE: ($GRID_COLUMN_OFFSET * 0.5);
+
+/// Массив с данными для контрольных точек
+/// @type Map
+/// @access public
+///
+/// @prop {Number} $point.breakpoint - контрольная точка для медиа-запросов
+///
+$GRID_BREAKPOINTS: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 1400px,
+) !default;
+
+@include _assert-ascending($GRID_BREAKPOINTS, '$GRID_BREAKPOINTS');
+@include _assert-starts-at-zero($GRID_BREAKPOINTS, '$GRID_BREAKPOINTS');
+
+// массив с данными для размеров точек контейнера
+$CONTAINER_MAX_WIDTHS: (
+  sm: 540px,
+  md: 720px,
+  lg: 960px,
+  xl: 1140px,
+  xxl: 1320px,
+) !default;
+
+@include _assert-ascending($CONTAINER_MAX_WIDTHS, '$CONTAINER_MAX_WIDTHS');
+
+// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//    Функции для распечатки точек остановы
+
+/// Минимальная ширина точки останова. Ноль для наименьшей (первой) точки останова.
+///
+/// @type Function
+/// @access public
+/// @prop {String} breakpoint-min($name, ($breakpoints: $GRID_BREAKPOINTS))  >> breakpoint-min(sm, (xs: 0, sm: 576px, md: 768px, lg: 992px, xl: 1200px, xxl: 1400px))
+///
+@function breakpoint-min($name, $breakpoints: $GRID_BREAKPOINTS) {
+  $min: map-get($breakpoints, $name);
+  @return if($min != 0, $min, null);
+}
+
+/// Максимальная ширина точки останова.
+/// Максимальное значение уменьшено на 0,02 пикселя, чтобы обойти ограничения
+/// Префиксы `min-` и `max-` и области просмотра с дробной шириной.
+/// См. https://www.w3.org/TR/mediaqueries-4/#mq-min-max
+/// Использует 0,02 пикселя вместо 0,01 пикселя, чтобы обойти текущую ошибку округления в Safari.
+/// См. https://bugs.webkit.org/show_bug.cgi?id=178261
+///
+/// @type Function
+/// @access public
+/// @prop {String} breakpoint-max($name, ($breakpoints: $GRID_BREAKPOINTS))  >> breakpoint-max(md, (xs: 0, sm: 576px, md: 768px, lg: 992px, xl: 1200px, xxl: 1400px))
+///
+@function breakpoint-max($name, $breakpoints: $GRID_BREAKPOINTS) {
+  $max: map-get($breakpoints, $name);
+  @return if($max and $max > 0, $max - 0.02, null);
+}
+
+// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------;
+
+// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//    Миксины для удобного использования совместно с фун-ями, и удобным вызовом медиа-запросов в коде
+
+/// Носитель с шириной не менее минимальной точки останова. Нет запроса на наименьшую точку останова.
+/// Применяет @content к данной точке останова и шире.
+/// Данный миксин подойдет для разработки в стиле mobile-first
+/// @type Mixin
+/// @access public
+/// @prop {String} media-breakpoint-up($name, $breakpoints: $GRID_BREAKPOINTS)
+///
+/// Пример использования: @include media-breakpoint-up(md) { @content };
+///
+@mixin media-breakpoint-up($name, $breakpoints: $GRID_BREAKPOINTS) {
+  $min: breakpoint-min($name, $breakpoints);
+  @if $min {
+    @media (min-width: $min) {
+      @content;
+    }
+  } @else {
+    @content;
+  }
+}
+
+/// Носитель не более максимальной ширины точки останова. Нет запроса на самую большую точку останова.
+/// Применяет @content к данной точке останова и уже.
+/// Данный миксин подойдёт для разработки в стиле desktop-first
+/// @type Mixin
+/// @access public
+/// @prop {String} media-breakpoint-down($name, $breakpoints: $GRID_BREAKPOINTS)
+///
+/// Пример использования: @include media-breakpoint-down(md) { @content };
+///
+@mixin media-breakpoint-down($name, $breakpoints: $GRID_BREAKPOINTS) {
+  $max: breakpoint-max($name, $breakpoints);
+  @if $max {
+    @media (max-width: $max) {
+      @content;
+    }
+  } @else {
+    @content;
+  }
+}
+
+// Гибриды от smart-grid.css сетка построена на отрицательных margin`ах
+
+///
+/// Полный контейнер
+/// @type Mixin
+/// @access public
+///
+@mixin container-full($fields: $GRID_COLUMN_FIELDS) {
+  padding-left: $fields;
+  padding-right: $fields;
+}
+
+///
+/// Миксин для объявления контейнера с опредленной шириной.
+/// контейнер адаптивный, за счёт генерации ширин из коллекции предопределённых велечин,
+/// и подстановки пары ключ/значение.
+/// @type Mixin
+/// @access public
+/// вызов контейнера без указаний аргументов: @include container;
+///
+@mixin container($container_width: $CONTAINER_MAX_WIDTHS) {
+  @include container-full;
+
+  width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+  box-sizing: border-box;
+
+  /// @prop {$key, $value} из коллекции $CONTAINER_MAX_WIDTHS >  @include media-breakpoint-up($key) { max-width: $value }
+  /// пример: всё это рендерится в -> @media (min-width: 576px) { .container { max-width: 540px; } }
+  ///
+  @each $key, $value in $container_width {
+    @include media-breakpoint-up($key) {
+      max-width: $value;
+    }
+  }
+}
+
+///
+/// Миксин для создания флексового ряда элементов
+/// @type Mixin
+/// @access public
+/// вызывается без параметров: @include row-flex;
+///
+@mixin row-flex($offset_one_side: $OFFSET_ONE_SIDE) {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: ($offset_one_side * -1);
+  margin-right: ($offset_one_side * -1);
+}
+
+///
+/// Миксин для объявления колонки, не принимает никаких аргументов.
+/// Работает совместно с make-size(), первым для построения колонки необходимо вызвать данный миксин
+/// @type Mixin
+/// @access public
+/// пример: @include make-col;
+///
+@mixin make-col($offset_one_side: $OFFSET_ONE_SIDE) {
+  flex-shrink: 0;
+  margin-left: $offset_one_side;
+  margin-right: $offset_one_side;
+  word-wrap: break-word;
+  box-sizing: border-box;
+}
+
+///
+/// Миксин задаёт колонке размер, работает совместно с миксином make-col()
+/// @type Mixin
+/// @access public
+/// @prop {Number} @include size($size); - можно передать от 1-12
+///
+///
+@mixin make-size($size: false, $columns: $GRID_COLUMNS, $offset: $GRID_COLUMN_OFFSET) {
+  @if $size {
+    $val: math.div(100%, $columns) * $size;
+    flex: 0 0 auto;
+    width: #{calc(#{$val} - #{$offset})};
+  } @else {
+    flex: 1 1 0;
+    max-width: 100%;
+  }
+}
+
+// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------;

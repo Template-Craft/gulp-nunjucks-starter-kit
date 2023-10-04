@@ -39,9 +39,10 @@ import { styles } from './gulp/tasks/styles.mjs';
 import { scripts } from './gulp/tasks/scripts.mjs';
 import { fonts } from './gulp/tasks/fonts.mjs';
 import { images } from './gulp/tasks/images.mjs';
+import { packageCss } from './gulp/tasks/packages.mjs';
 
 // Оповещения
-import { modeStateNotifier } from './gulp/tasks/notify.mjs';
+import { createNotification } from './gulp/tasks/notify.mjs';
 
 // Передаём значения в глобальную переменную
 global.app = {
@@ -63,11 +64,11 @@ function watcher() {
 
 // gulp.parallel() - параллельное выполнение задач
 // передаём сюда свои задачи (task)
-const mainTasks = gulp.parallel(templates, styles, scripts, fonts, images);
+const mainTasks = gulp.parallel(templates, packageCss, styles, scripts, fonts, images);
 
 // gulp.series()   - последовательное выполнение задач
-const dev = gulp.series(reset, mainTasks, gulp.parallel(watcher, server, modeStateNotifier));
-const build = gulp.series(reset, mainTasks, modeStateNotifier);
+const dev = gulp.series(reset, mainTasks, gulp.parallel(watcher, server, createNotification));
+const build = gulp.series(reset, mainTasks, createNotification);
 
 // Экспорт сценариев:
 export { dev };

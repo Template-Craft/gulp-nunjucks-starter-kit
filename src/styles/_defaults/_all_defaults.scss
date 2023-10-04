@@ -1,2 +1,9 @@
+@import '../../../node_modules/rfs/scss.scss';
+
 // Тут импортируем стили находящиеся в родительской папке _defaults
 @import 'reset';
+
+@import 'typography';
+@import 'tools';
+
+@import 'grid_system';

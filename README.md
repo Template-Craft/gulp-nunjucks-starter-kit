@@ -8,19 +8,22 @@
 
 _Таблица зависимостей:_
 
-| **devDependencies**                                            | **dependencies**                                                |
-| -------------------------------------------------------------- | --------------------------------------------------------------- |
-| [Babel](https://babeljs.io/docs/)                              | - [ ] [Normalize.scc](https://github.com/necolas/normalize.css) |
-| [Webpack](https://webpack.js.org/concepts/)                    | - [ ] [SmartGrid.css](https://www.npmjs.com/package/smart-grid) |
-| [ESLint](https://eslint.org/docs/latest/)                      | - [ ] [FontAwesome](https://fontawesome.com/docs)               |
-| [Gulp](https://gulpjs.com/docs/en/getting-started/quick-start) |                                                                 |
-| [Autoprefixer](https://github.com/postcss/autoprefixer)        |                                                                 |
-| [sass/scss](https://sass-lang.com/documentation/)              |                                                                 |
-| [Nunjucks](https://mozilla.github.io/nunjucks/templating.html) |                                                                 |
-| [yargs](http://yargs.js.org/docs/)                             |                                                                 |
-| [BrowserSync](https://browsersync.io/docs)                     |                                                                 |
-| [Prettier](https://prettier.io/docs/en/)                       |                                                                 |
-| [Editorconfig](https://editorconfig.org/)                      |                                                                 |
+| **devDependencies**                                                                 | **dependencies**                                                 |
+| ----------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| [Babel](https://babeljs.io/docs/)                                                   | - [X][Normalize.scc](https://github.com/necolas/normalize.css)   |
+| [Webpack](https://webpack.js.org/concepts/)                                         | - [X][RFS](https://github.com/twbs/rfs/tree/v9.0.3#installation) |
+| [ESLint](https://eslint.org/docs/latest/)                                           | - [ ][FontAwesome](https://fontawesome.com/docs)                 |
+| [Gulp](https://gulpjs.com/docs/en/getting-started/quick-start)                      |                                                                  |
+| [PostCSS](https://github.com/postcss/gulp-postcss)                                  |                                                                  |
+| [postcss-sort-media-queries](https://github.com/yunusga/postcss-sort-media-queries) |                                                                  |
+| [cssnano](https://github.com/cssnano/cssnano)                                       |                                                                  |
+| [Autoprefixer](https://github.com/postcss/autoprefixer)                             |                                                                  |
+| [sass/scss](https://sass-lang.com/documentation/)                                   |                                                                  |
+| [Nunjucks](https://mozilla.github.io/nunjucks/templating.html)                      |                                                                  |
+| [yargs](http://yargs.js.org/docs/)                                                  |                                                                  |
+| [BrowserSync](https://browsersync.io/docs)                                          |                                                                  |
+| [Prettier](https://prettier.io/docs/en/)                                            |                                                                  |
+| [Editorconfig](https://editorconfig.org/)                                           |                                                                  |
 
 > Примечание:
 > _весь список зависимостей можно посмотреть в файле `package.json`, в таблице выведены только самые важные._
