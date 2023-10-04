@@ -42,7 +42,7 @@ import { images } from './gulp/tasks/images.mjs';
 import { packageCss } from './gulp/tasks/packages.mjs';
 
 // Оповещения
-import { modeStateNotifier } from './gulp/tasks/notify.mjs';
+import { createNotification } from './gulp/tasks/notify.mjs';
 
 // Передаём значения в глобальную переменную
 global.app = {
@@ -67,8 +67,8 @@ function watcher() {
 const mainTasks = gulp.parallel(templates, packageCss, styles, scripts, fonts, images);
 
 // gulp.series()   - последовательное выполнение задач
-const dev = gulp.series(reset, mainTasks, gulp.parallel(watcher, server, modeStateNotifier));
-const build = gulp.series(reset, mainTasks, modeStateNotifier);
+const dev = gulp.series(reset, mainTasks, gulp.parallel(watcher, server, createNotification));
+const build = gulp.series(reset, mainTasks, createNotification);
 
 // Экспорт сценариев:
 export { dev };
