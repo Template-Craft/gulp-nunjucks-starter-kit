@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Инструмент для компонентного проектирования статических сайтов, как lending page так и много-страничных проектов.",
   "main": "gulpfile.mjs",
+  "bin": {
+    "kit-tools": "./cli/kit-tools.mjs"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "gulp",
@@ -71,6 +74,7 @@
     "@types/gulp-rename": "^2.0.3",
     "@types/node-notifier": "^8.0.3",
     "@types/webpack-stream": "^3.2.13",
+    "@types/yargs": "^17.0.26",
     "autoprefixer": "^10.4.16",
     "babel-loader": "^9.1.3",
     "browser-sync": "^2.29.3",
