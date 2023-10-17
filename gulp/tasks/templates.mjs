@@ -34,13 +34,13 @@ import fs from 'fs';
 export const templates = () => {
   // Опции рендера для nunjucks:
   const renderOptions = {
-    path: `${app.path.srcFolder}/views/`,
+    path: app.path.src.nunjucksRenderSrcFolder,
     watch: true,
     noCache: true,
     manageEnv: function (env) {
       let globalDataObj = JSON.parse(fs.readFileSync(app.path.src.globalData));
       env.addGlobal('getGlobalData', globalDataObj);
-      env.addGlobal('getComponentData', (file) => `components/${file}/${file}.json`);
+      env.addGlobal('getComponentData', (file) => `data/${file}.json`);
       env.addGlobal('getComponent', (file) => `components/${file}/${file}.njk`);
       env.addFilter('jsonParse', (value) => JSON.parse(value));
     },

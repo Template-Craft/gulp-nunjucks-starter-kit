@@ -1,0 +1,7 @@
+$header-border-color: #919191;
+
+.header {
+  @include padding(14px 0);
+
+  border-bottom: rem(1) solid $header-border-color;
+}

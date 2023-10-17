@@ -1,4 +1,6 @@
 // В этот файл подключаются компоненты
 // Не трогаем файл руками, сюда подключаются стили через скрипт.
 
-@import '../views/components/header/header.scss';
+@import '../views/components/header/_header.scss';
+
+@import '../views/components/footer/_footer.scss';

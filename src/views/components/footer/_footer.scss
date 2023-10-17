@@ -1,0 +1,7 @@
+$footer-border-color: #919191;
+
+.footer {
+  @include padding(22px 0);
+
+  border-top: rem(1) solid $footer-border-color;
+}

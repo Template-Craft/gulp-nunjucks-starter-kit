@@ -8,6 +8,8 @@
     <title>{{- getGlobalData.pageTitle -}}</title>
   </head>
   <body>
+    {% include getComponent('header') %}
+
     <main class="sections-wrapper">
       <section class="first-display">
         <div class="container">
@@ -27,6 +29,8 @@
         </div>
       </section>
     </main>
+
+    {% include getComponent('footer') %}
 
     <script src="scripts/main.bundle.js"></script>
   </body>

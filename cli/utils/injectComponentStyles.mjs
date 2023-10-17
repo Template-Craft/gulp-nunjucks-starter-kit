@@ -27,7 +27,7 @@ const injectStyle = async (style) => {
     const injectTo = `${stylesPath}/_components_import.scss`;
 
     // здесь подставляем максимально достоверный путь до файла стилей компонента.
-    const styleImport = `\n@import '${importPath}/${value}/${value}.scss';\n`;
+    const styleImport = `\n@import '${importPath}/${value}/_${value}.scss';\n`;
 
     // ищем директорию с компонентом, имя получаем из командной строки.
     await fs.readdir(path.resolve(__dirname, findDir), 'utf8', (err, files) => {
@@ -42,7 +42,7 @@ const injectStyle = async (style) => {
         }
 
         // проверяем является ли файл стилей, файлом если да, импортируем его в главный файл стилей.
-        fs.stat(`${findDir}/${value}.scss`, (errStatus, status) => {
+        fs.stat(`${findDir}/_${value}.scss`, (errStatus, status) => {
           if (errStatus) {
             console.error(chalk.red(errStatus));
           }
@@ -50,7 +50,7 @@ const injectStyle = async (style) => {
           // это файл?
           if (status.isFile()) {
             console.info(
-              chalk.blue(`\n${value}.scss - действительно является файлом, добавляем импорт в таблицу стилей...`),
+              chalk.blue(`\n_${value}.scss - действительно является файлом, добавляем импорт в таблицу стилей...`),
             );
 
             // Добавим в конец main.scss, импорт файла стилей нашего найденного компонента
@@ -58,7 +58,10 @@ const injectStyle = async (style) => {
               if (err) {
                 console.error(chalk.red(err));
               } else {
-                console.info(chalk.blue(`\nФайл ${findDir}.scss: \nУспешно импортирован в файл: ${injectTo}`));
+                let componentStylesheet = `${findDir}/_${value}`; // -> присваиваем значение из findDir
+                console.info(
+                  chalk.blue(`\nФайл ${componentStylesheet}.scss: \nУспешно импортирован в файл: ${injectTo}`),
+                );
               }
             });
           } else {

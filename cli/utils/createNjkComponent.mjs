@@ -16,14 +16,14 @@ const createComponent = async (name) => {
 
     // передадим в переменную до расширения файла,
     // имя, пришедшее из функции, и подставим его.
-    const files = [`${name}.njk`, `${name}.scss`];
+    const files = [`${name}.njk`, `_${name}.scss`];
     const componentData = [`${name}.json`];
 
     // проверяем на пустышку
     if (name === undefined) {
       console.error(
         chalk.red(
-          `Для создания компонента необходимо использовать один из двух ключей: \n${chalk.blue('-n')} or ${chalk.blue(
+          `Для создания компонента необходимо использовать один из двух ключей: \n${chalk.blue('-n')} или ${chalk.blue(
             '--name',
           )} передать имя после ключа!`,
         ),
