@@ -1,0 +1,30 @@
+{
+  "recommendations": [
+    "Atishay-Jain.All-Autocomplete",
+    "formulahendry.auto-close-tag",
+    "formulahendry.auto-complete-tag",
+    "vunguyentuan.vscode-css-variables",
+    "pranaygp.vscode-css-peek",
+    "pucelle.vscode-css-navigation",
+    "EditorConfig.EditorConfig",
+    "dbaeumer.vscode-eslint",
+    "mkxml.vscode-filesize",
+    "ginfuru.better-nunjucks",
+    "wix.vscode-import-cost",
+    "ionutvmi.path-autocomplete",
+    "esbenp.prettier-vscode",
+    "Nkzq.sass-variables-helper",
+    "mrmlnc.vscode-scss",
+    "rvest.vs-code-prettier-eslint",
+    "syler.sass-indented",
+    "gencer.html-slim-scss-css-class-completion",
+    "donjayamanne.git-extension-pack",
+    "eamodio.gitlens",
+    "stylelint.vscode-stylelint",
+    "MS-CEINTL.vscode-language-pack-ru",
+    "akamud.vscode-theme-onedark",
+    "equinusocio.vsc-material-theme-icons",
+    "PKief.material-product-icons",
+    "miguelsolorio.fluent-icons"
+  ]
+}
