@@ -1,15 +1,11 @@
-{% set footerDataInclude %}
-  {% include getComponentData('footer') %}
-{% endset %}
-
-{% set footerDataParse = (footerDataInclude | jsonParse) %}
+{% set footerData = getData('footer') %}
 
 <footer class="footer">
   <div class="container">
     <div class="row">
       <div class="footer__heading">
-        <h1 class="footer__heading__title"> {{- footerDataParse.footer.title -}} </h1>
-        <p class="footer__heading__subtitle"> {{- footerDataParse.footer.subtitle -}} </p>
+        <h1 class="footer__heading__title"> {{- footerData.footer.title -}} </h1>
+        <p class="footer__heading__subtitle"> {{- footerData.footer.subtitle -}} </p>
       </div>
     </div>
   </div>

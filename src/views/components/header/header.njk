@@ -1,15 +1,11 @@
-{% set headerDataInclude %}
-  {% include getComponentData('header') %}
-{% endset %}
-
-{% set headerDataParse = (headerDataInclude | jsonParse) %}
+{% set headerData = getData('header') %}
 
 <header class="header">
   <div class="container">
     <div class="row">
       <div class="header__heading">
-        <h1 class="header__heading__title"> {{- headerDataParse.header.title -}} </h1>
-        <p class="header__heading__subtitle"> {{- headerDataParse.header.subtitle -}} </p>
+        <h1 class="header__heading__title"> {{- headerData.header.title -}} </h1>
+        <p class="header__heading__subtitle"> {{- headerData.header.subtitle -}} </p>
       </div>
     </div>
   </div>

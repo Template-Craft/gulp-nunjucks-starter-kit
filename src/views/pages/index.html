@@ -1,3 +1,6 @@
+
+{% set db = getData('db') %}
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -5,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="styles/vendor.css" />
     <link rel="stylesheet" href="styles/main.css" />
-    <title>{{- getGlobalData.pageTitle -}}</title>
+    <title>{{- db.pageTitle -}}</title>
   </head>
   <body>
     {% include getComponent('header') %}
