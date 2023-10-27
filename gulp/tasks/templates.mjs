@@ -38,9 +38,11 @@ export const templates = () => {
     watch: true,
     noCache: true,
     manageEnv: function (env) {
-      let globalDataObj = JSON.parse(fs.readFileSync(app.path.src.globalData));
-      env.addGlobal('getGlobalData', globalDataObj);
-      env.addGlobal('getComponentData', (file) => `data/${file}.json`);
+      env.addGlobal('getData', (name) => {
+        const dataPath = `./src/views/data/${name}.json`;
+        let result = JSON.parse(fs.readFileSync(dataPath));
+        return result;
+      });
       env.addGlobal('getComponent', (file) => `components/${file}/${file}.njk`);
       env.addFilter('jsonParse', (value) => JSON.parse(value));
     },
@@ -76,7 +78,7 @@ export const templates = () => {
 
 export const templatesData = () => {
   return app.gulp
-    .src([app.path.src.nunjucksData, app.path.src.globalData])
+    .src(app.path.src.nunjucksData)
     .pipe(
       app.plugins.plumber(
         app.plugins.notify.onError({

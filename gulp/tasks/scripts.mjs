@@ -81,10 +81,11 @@ export const scripts = () => {
             /* Теперь вместо использования относительных путей при импорте:
                 # -> import Components from '../../components/components_name';
                 # используется псевдоним:
-                # -> import Components from 'Components/components_name';
+                # -> import component from 'Components/component_folder_name/component_name';
                 */
-            Components: path.resolve(__dirname, 'src/views/components/'),
+            Components: path.resolve(__dirname, '/src/views/components/'),
           },
+          extensions: ['', '.js', '.mjs', '.cjs'],
         },
       }),
       webpack,

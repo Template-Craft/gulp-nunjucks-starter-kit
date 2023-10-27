@@ -11,6 +11,7 @@ const rootFolder = nodePath.basename(nodePath.resolve()); // -> получаем
 
 const buildFolder = './build';
 const srcFolder = './src';
+const nodeModules = './node_modules';
 
 // объект с путями к файлам и папкам:
 export const path = {
@@ -25,7 +26,6 @@ export const path = {
     nunjucks: `${srcFolder}/views/pages/*.+(html|njk|nunjucks|nj)`,
     nunjucksRenderSrcFolder: `${srcFolder}/views/`,
     nunjucksData: `${srcFolder}/views/data/**/*.json`,
-    globalData: `${srcFolder}/views/data/db.json`,
     styles: `${srcFolder}/styles/main.scss`,
     scripts: `${srcFolder}/scripts/main/app.{cjs,js,mjs}`,
     images: `${srcFolder}/assets/img/**/*.{jpg,jpeg,png,gif,tiff,svg,webp}`,
@@ -35,11 +35,11 @@ export const path = {
     nunjucks: `${srcFolder}/views/**/*.+(html|njk|nunjucks|nj)`,
     nunjucksData: `${srcFolder}/views/data/**/*.json`,
     styles: [`${srcFolder}/styles/**/*.{scss,sass}`, `${srcFolder}/views/components/**/*.{scss,sass}`],
-    scripts: `${srcFolder}/scripts/main/**/*.{cjs,js,mjs}`,
+    scripts: [`${srcFolder}/scripts/main/**/*.{cjs,js,mjs}`, `${srcFolder}/views/components/**/*.{cjs,js,mjs}`],
     images: `${srcFolder}/assets/img/**/*.{jpg,jpeg,png,gif,tiff,svg,webp}`,
   },
   clean: buildFolder,
   srcFolder: srcFolder,
   rootFolder: rootFolder,
-  nodeModules: `./node_modules`,
+  nodeModules: nodeModules,
 };
