@@ -39,7 +39,7 @@
     "darwin",
     "linux",
     "win64",
-    "!win32"
+    "win32"
   ],
   "repository": {
     "type": "git",
