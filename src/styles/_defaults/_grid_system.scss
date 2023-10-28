@@ -44,6 +44,11 @@ $GRID_BREAKPOINTS: (
   lg: 992px,
   xl: 1200px,
   xxl: 1400px,
+  desktop-large: 1900px,
+  retina: 2500px,
+  4k: 3840px,
+  5k: 5000px,
+  8k: 8000px,
 ) !default;
 
 @include _assert-ascending($GRID_BREAKPOINTS, '$GRID_BREAKPOINTS');
