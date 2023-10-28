@@ -54,7 +54,7 @@ export const templates = () => {
       .pipe(
         app.plugins.plumber(
           app.plugins.notify.onError({
-            title: 'Nunjacks template',
+            title: 'Nunjucks template',
             sound: false,
             message: 'Error: <%= error.message %>',
           }),
