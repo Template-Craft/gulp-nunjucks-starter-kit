@@ -43,6 +43,13 @@ export const templates = () => {
         let result = JSON.parse(fs.readFileSync(dataPath));
         return result;
       });
+      env.addGlobal('getSection', (pageName = false, name) => {
+        if (pageName !== null && typeof pageName !== 'undefined') {
+          return `sections/${pageName}/_${name}.njk`;
+        } else {
+          return `sections/_${name}.njk`;
+        }
+      });
       env.addGlobal('getComponent', (file) => `components/${file}/${file}.njk`);
       env.addFilter('jsonParse', (value) => JSON.parse(value));
     },

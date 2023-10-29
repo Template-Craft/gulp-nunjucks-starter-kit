@@ -1,4 +1,8 @@
 {
+  "htmlLang": "en",
   "pageName": "General page",
-  "pageTitle": "Gulp nunjucks starter kit"
+  "pageTitle": "Gulp nunjucks starter kit",
+  "vendorStylesheetPath": "styles/vendor.css",
+  "mainStylesheetPath": "styles/main.css",
+  "mainScriptPath": "scripts/main.bundle.js"
 }

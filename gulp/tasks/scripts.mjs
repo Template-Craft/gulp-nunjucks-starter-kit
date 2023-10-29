@@ -79,10 +79,12 @@ export const scripts = () => {
         resolve: {
           alias: {
             /* Теперь вместо использования относительных путей при импорте:
-                # -> import Components from '../../components/components_name';
-                # используется псевдоним:
-                # -> import component from 'Components/component_folder_name/component_name';
-                */
+             *   # -> import Components from '../../components/components_name';
+             *   # используется псевдоним:
+             *   # -> import component from 'Components/component_folder_name/component_name';
+             */
+
+            Module: path.resolve(__dirname, '/node_modules/'),
             Components: path.resolve(__dirname, '/src/views/components/'),
           },
           extensions: ['', '.js', '.mjs', '.cjs'],
