@@ -11,19 +11,16 @@
 import webpack from 'webpack';
 import webpackStream from 'webpack-stream';
 
-import sourcemaps from 'gulp-sourcemaps';
-
 import rename from 'gulp-rename';
 
-import path from 'path';
+import nodePath from 'path';
 import { fileURLToPath } from 'url';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const __dirname = nodePath.dirname(fileURLToPath(import.meta.url));
 
 export const scripts = () => {
   return app.gulp
     .src(app.path.src.scripts)
-    .pipe(app.plugins.gulpIf(app.isDev, sourcemaps.init()))
     .pipe(
       app.plugins.plumber(
         app.plugins.notify.onError({
@@ -35,7 +32,7 @@ export const scripts = () => {
     )
     .pipe(
       webpackStream({
-        // входящие файлы
+        // режимы работы
         mode: app.isBuild ? 'production' : 'development',
         devtool: app.isBuild ? false : 'source-map',
 
@@ -43,7 +40,7 @@ export const scripts = () => {
         output: {
           filename: '[name].bundle.js',
           chunkFilename: '[name].js',
-          path: path.resolve(__dirname, 'build'),
+          path: nodePath.resolve(__dirname, 'build'),
         },
 
         // Оптимизации
@@ -84,8 +81,8 @@ export const scripts = () => {
              *   # -> import component from 'Components/component_folder_name/component_name';
              */
 
-            Module: path.resolve(__dirname, '/node_modules/'),
-            Components: path.resolve(__dirname, '/src/views/components/'),
+            Module: nodePath.resolve(__dirname, '/node_modules/'),
+            Components: nodePath.resolve(__dirname, '/src/views/components/'),
           },
           extensions: ['', '.js', '.mjs', '.cjs'],
         },
@@ -101,7 +98,6 @@ export const scripts = () => {
       ),
     )
     .pipe(app.plugins.plumber.stop())
-    .pipe(app.plugins.gulpIf(app.isDev, sourcemaps.write('./maps/')))
     .pipe(app.gulp.dest(app.path.build.scripts))
     .pipe(app.plugins.browsersync.stream());
 };
