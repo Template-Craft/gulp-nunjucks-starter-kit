@@ -25,16 +25,11 @@ const injectStyle = async (style) => {
     const this_stylesheet = config.component_stylesheet(find_dir_path, value);
 
     // ищем директорию с компонентом, имя получаем из командной строки.
-    await fs.readdir(path.resolve(__dirname, find_dir_path), 'utf8', (err, files) => {
+    await fs.readdir(path.resolve(__dirname, find_dir_path), 'utf8', (err) => {
       if (err) {
         console.error(chalk.red(err)); // сообщаем ошибку в консоли
       } else {
         console.info(chalk.green(`Каталог существует и найден: ${find_dir_path}`));
-
-        // в цикле перебираем файлы и выводим инфу в консоль.
-        for (let file of files) {
-          console.info(chalk.green(`\nФайлы компонента: ${file}`));
-        }
 
         fs.stat(`${this_stylesheet}`, (error_msg, status) => {
           if (error_msg) {
@@ -56,7 +51,7 @@ const injectStyle = async (style) => {
               }
             });
           } else {
-            console.error(chalk.red(`\n${value} - объект не является файлом.`));
+            console.error(chalk.red(`\nОшибка: ${value} - объект не является файлом.`));
           }
         });
       }

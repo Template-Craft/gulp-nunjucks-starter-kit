@@ -12,17 +12,21 @@ import path from 'path';
 import chalk from 'chalk';
 
 import { UTILSCONFIG, CREATE_FILES } from '../config/config.mjs';
-const config = UTILSCONFIG.template;
+const config = UTILSCONFIG;
 const createFiles = CREATE_FILES;
 
 const createComponent = async (name) => {
   try {
     // проверка на дубликаты
-    const exists = fs.existsSync(config.spawn_dir(name));
+    const exists = fs.existsSync(config.template.spawn_dir(name));
 
     // передадим в переменную до расширения файла,
     // имя, пришедшее из функции, и подставим его.
-    const files_collection = [` ${name}${config.template_extension}`, `${name}.mjs`, `_${name}.scss`];
+    const files_collection = [
+      `${name}${config.template.extension}`,
+      `${name}.mjs`,
+      `_${name}${config.styles.extension}`,
+    ];
     const component_data = [`${name}.json`];
 
     // проверяем на пустышку
@@ -40,19 +44,19 @@ const createComponent = async (name) => {
         console.error(chalk.red(`Ошибка: Компонент ${name} существует! Попробуйте другое имя`));
       } else {
         // тут объявляем что мы собираемся создать директорию с файлами
-        await fs.mkdir(path.normalize(config.spawn_dir(name)), { recursive: true }, (err) => {
+        await fs.mkdir(path.normalize(config.template.spawn_dir(name)), { recursive: true }, (err) => {
           if (err) {
             console.error(chalk.red(err));
           }
 
           console.info(chalk.yellow('------ * component * ------'));
-          console.info(chalk.gray(`Каталог компонентов создан.: ${config.spawn_dir(name)}`));
-
-          // тут создаём папку компонента, с файлами переданными в массиве files_collection
-          createFiles(files_collection, config.spawn_dir(name));
+          console.info(chalk.gray(`Каталог компонента создан: ${config.template.spawn_dir(name)}`));
 
           // тут создаём файл данных компонента:
-          createFiles(component_data, config.data_dir);
+          createFiles(component_data, config.template.data_dir);
+
+          // тут создаём папку компонента, с файлами переданными в массиве files_collection
+          createFiles(files_collection, config.template.spawn_dir(name));
         });
       }
     }
