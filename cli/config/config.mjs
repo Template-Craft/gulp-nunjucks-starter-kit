@@ -15,6 +15,16 @@ export const UTILSCONFIG = {
       return `./src/views/components/${value}/`;
     },
   },
+  styles: {
+    component_path: './src/views/components/',
+    include_in: './src/styles/_components_import.scss',
+    component_stylesheet: function (dir_path, value) {
+      return `${dir_path}/_${value}.scss`;
+    },
+    import: function (value) {
+      return `\n@import '../views/components/${value}/_${value}.scss';\n`;
+    },
+  },
 };
 
 // @type function
