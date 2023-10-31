@@ -8,7 +8,7 @@
 import fs from 'fs';
 // не забываем про остальных юзеров, интегрируем утилиту path
 
-import path from 'path';
+import path from 'node:path';
 import chalk from 'chalk';
 
 import { UTILSCONFIG, CREATE_FILES } from '../config/config.mjs';
