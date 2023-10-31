@@ -11,8 +11,6 @@
 import webpack from 'webpack';
 import webpackStream from 'webpack-stream';
 
-import rename from 'gulp-rename';
-
 import nodePath from 'path';
 import { fileURLToPath } from 'url';
 
@@ -92,7 +90,7 @@ export const scripts = () => {
     .pipe(
       app.plugins.gulpIf(
         app.isBuild,
-        rename({
+        app.plugins.rename({
           suffix: '.min',
         }),
       ),

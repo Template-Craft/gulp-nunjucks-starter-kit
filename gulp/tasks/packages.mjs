@@ -10,8 +10,6 @@
 import cssnano from 'cssnano';
 import gulpConcat from 'gulp-concat';
 import gulpPostCSS from 'gulp-postcss';
-import rename from 'gulp-rename';
-import sourcemaps from 'gulp-sourcemaps';
 
 // Собираем, и конкатинируем js библиотеки
 export const packagesJs = () => {};
@@ -25,7 +23,7 @@ export const packageCss = () => {
 
   return app.gulp
     .src(cssLibsCollection)
-    .pipe(app.plugins.gulpIf(app.isDev, sourcemaps.init()))
+    .pipe(app.plugins.gulpIf(app.isDev, app.plugins.sourcemaps.init()))
     .pipe(
       app.plugins.plumber(
         app.plugins.notify.onError({
@@ -51,12 +49,12 @@ export const packageCss = () => {
     .pipe(
       app.plugins.gulpIf(
         app.isBuild,
-        rename({
+        app.plugins.rename({
           suffix: '.min',
         }),
       ),
     )
     .pipe(app.plugins.plumber.stop())
-    .pipe(app.plugins.gulpIf(app.isDev, sourcemaps.write('./maps/')))
+    .pipe(app.plugins.gulpIf(app.isDev, app.plugins.sourcemaps.write('./maps/')))
     .pipe(app.gulp.dest(app.path.build.styles));
 };

@@ -12,13 +12,10 @@ import * as dartSass from 'sass';
 import gulpSass from 'gulp-sass';
 
 import gulpPostCSS from 'gulp-postcss';
-import sourcemaps from 'gulp-sourcemaps';
 import autoprefixer from 'autoprefixer';
 import postCSSSortMediaQueries from 'postcss-sort-media-queries';
 import cssnano from 'cssnano';
 import sccnanoPresetAdvanced from 'cssnano-preset-advanced';
-
-import rename from 'gulp-rename';
 
 const sass = gulpSass(dartSass);
 
@@ -60,7 +57,7 @@ export const styles = () => {
 
   return app.gulp
     .src(app.path.src.styles)
-    .pipe(app.plugins.gulpIf(app.isDev, sourcemaps.init()))
+    .pipe(app.plugins.gulpIf(app.isDev, app.plugins.sourcemaps.init()))
     .pipe(
       app.plugins.plumber(
         app.plugins.notify.onError({
@@ -75,13 +72,13 @@ export const styles = () => {
     .pipe(
       app.plugins.gulpIf(
         app.isBuild,
-        rename({
+        app.plugins.rename({
           suffix: '.min',
         }),
       ),
     )
     .pipe(app.plugins.plumber.stop())
-    .pipe(app.plugins.gulpIf(app.isDev, sourcemaps.write('./maps/')))
+    .pipe(app.plugins.gulpIf(app.isDev, app.plugins.sourcemaps.write('./maps/')))
     .pipe(app.gulp.dest(app.path.build.styles))
     .pipe(app.plugins.browsersync.stream());
 };
