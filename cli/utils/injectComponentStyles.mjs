@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable prefer-const */
 /* eslint-disable n/no-unpublished-import */
 /* eslint-disable import/order */
@@ -11,56 +12,46 @@ import fs from 'fs';
 import path from 'path';
 import chalk from 'chalk';
 
+import { UTILSCONFIG } from '../config/config.mjs';
+const config = UTILSCONFIG.styles;
+
 const __dirname = path.resolve();
 
 const injectStyle = async (style) => {
   try {
     const value = style; // переопределяем переменную, для красоты кода.
 
-    const componentsPath = './src/views/components';
-    const stylesPath = './src/styles';
-    const importPath = '../views/components';
-
-    const findDir = `${componentsPath}/${value}`;
-
-    // здесь жёстко фиксируем путь до файла в который будем добавлять импорт стилей
-    const injectTo = `${stylesPath}/_components_import.scss`;
-
-    // здесь подставляем максимально достоверный путь до файла стилей компонента.
-    const styleImport = `\n@import '${importPath}/${value}/_${value}.scss';\n`;
+    const find_dir_path = `${config.component_path}${value}`;
+    const this_stylesheet = config.component_stylesheet(find_dir_path, value);
 
     // ищем директорию с компонентом, имя получаем из командной строки.
-    await fs.readdir(path.resolve(__dirname, findDir), 'utf8', (err, files) => {
+    await fs.readdir(path.resolve(__dirname, find_dir_path), 'utf8', (err, files) => {
       if (err) {
         console.error(chalk.red(err)); // сообщаем ошибку в консоли
       } else {
-        console.info(chalk.green(`Каталог существует и найден: ${findDir}`));
+        console.info(chalk.green(`Каталог существует и найден: ${find_dir_path}`));
 
         // в цикле перебираем файлы и выводим инфу в консоль.
         for (let file of files) {
-          console.info(chalk.green(`\nКомпоненты найдены: ${file}`));
+          console.info(chalk.green(`\nФайлы компонента: ${file}`));
         }
 
-        // проверяем является ли файл стилей, файлом если да, импортируем его в главный файл стилей.
-        fs.stat(`${findDir}/_${value}.scss`, (errStatus, status) => {
-          if (errStatus) {
-            console.error(chalk.red(errStatus));
+        fs.stat(`${this_stylesheet}`, (error_msg, status) => {
+          if (error_msg) {
+            console.error(chalk.red(error_msg));
           }
 
-          // это файл?
+          // Это файл?
           if (status.isFile()) {
-            console.info(
-              chalk.blue(`\n_${value}.scss - действительно является файлом, добавляем импорт в таблицу стилей...`),
-            );
+            console.info(chalk.blue(`\n_${value}.scss - существует и является файлом`));
 
             // Добавим в конец main.scss, импорт файла стилей нашего найденного компонента
-            fs.appendFile(injectTo, styleImport, 'utf8', (err) => {
-              if (err) {
-                console.error(chalk.red(err));
+            fs.appendFile(config.include_in, config.import(value), 'utf8', (error_msg) => {
+              if (error_msg) {
+                console.error(chalk.red(error_msg));
               } else {
-                let componentStylesheet = `${findDir}/_${value}`; // -> присваиваем значение из findDir
                 console.info(
-                  chalk.blue(`\nФайл ${componentStylesheet}.scss: \nУспешно импортирован в файл: ${injectTo}`),
+                  chalk.blue(`\nФайл ${this_stylesheet}: \nУспешно импортирован в файл: ${config.include_in}`),
                 );
               }
             });
