@@ -7,15 +7,10 @@
 // с помощью конструкции @import '';
 'use strict';
 
-import fs from 'fs';
-// не забываем про остальных юзеров, интегрируем утилиту path
-import path from 'node:path';
-import chalk from 'chalk';
+import { PLUGIN, UTILSCONFIG } from '../config/config.mjs';
 
-import { UTILSCONFIG } from '../config/config.mjs';
 const config = UTILSCONFIG.styles;
-
-const __dirname = path.resolve();
+const plugin = PLUGIN;
 
 const injectStyle = async (style) => {
   try {
@@ -25,33 +20,33 @@ const injectStyle = async (style) => {
     const this_stylesheet = config.component_stylesheet(find_dir_path, value);
 
     // ищем директорию с компонентом, имя получаем из командной строки.
-    await fs.readdir(path.resolve(__dirname, find_dir_path), 'utf8', (err) => {
+    await plugin.fs.readdir(plugin.nodePath.resolve(plugin.__dirname, find_dir_path), 'utf8', (err) => {
       if (err) {
-        console.error(chalk.red(err)); // сообщаем ошибку в консоли
+        console.error(plugin.chalk.red(err)); // сообщаем ошибку в консоли
       } else {
-        console.info(chalk.green(`Каталог существует и найден: ${find_dir_path}`));
+        console.info(plugin.chalk.green(`Каталог существует и найден: ${find_dir_path}`));
 
-        fs.stat(`${this_stylesheet}`, (error_msg, status) => {
+        plugin.fs.stat(`${this_stylesheet}`, (error_msg, status) => {
           if (error_msg) {
-            console.error(chalk.red(error_msg));
+            console.error(plugin.chalk.red(error_msg));
           }
 
           // Это файл?
           if (status.isFile()) {
-            console.info(chalk.blue(`\n_${value}.scss - существует и является файлом`));
+            console.info(plugin.chalk.blue(`\n_${value}.scss - существует и является файлом`));
 
             // Добавим в конец main.scss, импорт файла стилей нашего найденного компонента
-            fs.appendFile(config.include_in, config.import(value), 'utf8', (error_msg) => {
+            plugin.fs.appendFile(config.include_in, config.import(value), 'utf8', (error_msg) => {
               if (error_msg) {
-                console.error(chalk.red(error_msg));
+                console.error(plugin.chalk.red(error_msg));
               } else {
                 console.info(
-                  chalk.blue(`\nФайл ${this_stylesheet}: \nУспешно импортирован в файл: ${config.include_in}`),
+                  plugin.chalk.blue(`\nФайл ${this_stylesheet}: \nУспешно импортирован в файл: ${config.include_in}`),
                 );
               }
             });
           } else {
-            console.error(chalk.red(`\nОшибка: ${value} - объект не является файлом.`));
+            console.error(plugin.chalk.red(`\nОшибка: ${value} - объект не является файлом.`));
           }
         });
       }
