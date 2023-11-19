@@ -7,6 +7,16 @@ import nodePath from 'node:path';
 
 import chalk from 'chalk';
 
+const __dirname = nodePath.resolve();
+
+// часто используемые плагины
+export const PLUGIN = {
+  fs: fs,
+  chalk: chalk,
+  nodePath: nodePath,
+  __dirname: __dirname,
+};
+
 export const UTILSCONFIG = {
   template: {
     extension: '.njk',
