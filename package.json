@@ -12,27 +12,30 @@
     "build": "gulp build --build"
   },
   "engines": {
-    "node": "^16 || ^18",
-    "npm": "^8 || ^9"
+    "node": "^18",
+    "npm": "^9"
   },
   "browserslist": {
-    "production": [
-      "> 1%",
-      "supports es6-module",
-      "last 6 chrome version",
-      "last 6 firefox version",
+    "stylesheets": [
+      "> 0.1% in GB and not dead",
+      "last 6 Chrome versions",
+      "last 6 Firefox versions",
+      "last 6 Edge versions",
+      "last 2 Samsung versions",
       "Firefox ESR",
-      "not dead"
+      "Safari >= 11",
+      "iOS >= 11",
+      "ie 11"
+    ],
+    "javascripts": [
+      "supports es6-module"
     ],
     "modern": [
       "last 1 chrome version",
       "last 1 firefox version"
     ],
-    "ssr": [
-      "node 16"
-    ],
     "node": [
-      "node 16"
+      "node 18"
     ]
   },
   "os": [
