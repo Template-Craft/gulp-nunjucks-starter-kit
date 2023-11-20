@@ -2,9 +2,11 @@
 /* eslint-disable camelcase */
 
 'use strict';
+
 import fs from 'fs';
 import nodePath from 'node:path';
 
+import archiver from 'archiver';
 import chalk from 'chalk';
 
 const __dirname = nodePath.resolve();
@@ -13,6 +15,7 @@ const __dirname = nodePath.resolve();
 export const PLUGIN = {
   fs: fs,
   chalk: chalk,
+  archiver: archiver,
   nodePath: nodePath,
   __dirname: __dirname,
 };
@@ -36,6 +39,23 @@ export const UTILSCONFIG = {
       return `\n@import '../views/components/${value}/_${value}${this.extension}';\n`;
     },
   },
+  archive: {
+    tgz: {
+      extension: 'tar.gz',
+      option: archiver('tar', {
+        gzip: true,
+        gzipOptions: { level: 1 },
+      }),
+    },
+    tar: {
+      extension: 'tar',
+      option: archiver('tar'),
+    },
+    zip: {
+      extension: 'zip',
+      option: archiver('zip'),
+    },
+  },
 };
 
 // @type function
@@ -52,4 +72,30 @@ export const CREATE_FILES = (collection, dir_path) => {
       console.info(chalk.green(`Файл компонента создан, и находится по пути: ${dir_path}${file}`));
     });
   });
+};
+
+// @type function
+// 1 аргумент передаём опции архиватора (массив или строка)
+// 2 аргумент передаём значение пришедшее от ввода пользователя
+// 3 аргумент передаём расширение архива
+// CREATE_ARCHIVE(options, values);
+export const CREATE_ARCHIVE = (archive_option, input_values, destination_extension) => {
+  const get_date = new Date().toISOString();
+
+  const destination = `${input_values}:${get_date}.${destination_extension}`;
+  const destination_stream = fs.createWriteStream(destination);
+
+  destination_stream.on('close', function () {
+    console.log(chalk.yellow(archive_option.pointer() + ' total bytes'));
+    console.log('Архиватор был завершен, и дескриптор выходного файла закрылся.\nАрхив успешно создан.');
+  });
+
+  archive_option.on('error', function (err) {
+    throw err;
+  });
+
+  archive_option.pipe(destination_stream);
+
+  archive_option.directory(input_values);
+  archive_option.finalize();
 };

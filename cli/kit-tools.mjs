@@ -18,7 +18,7 @@ const RUNCLI = () => {
   return yarg
     .usage('Usage: $0 <command> [option]')
     .demandCommand(1)
-    .version('1.0.0')
+    .version('1.0.1')
     .alias('version', 'v')
     .command(COMMANDS)
     .option(OPTIONS)
