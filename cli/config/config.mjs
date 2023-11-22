@@ -39,23 +39,32 @@ export const UTILSCONFIG = {
       return `\n@import '../views/components/${value}/_${value}${this.extension}';\n`;
     },
   },
-  archive: {
-    tgz: {
-      extension: 'tar.gz',
-      option: PLUGIN.archiver('tar', {
-        gzip: true,
-        gzipOptions: { level: 1 },
-      }),
+  archive: [
+    {
+      options: {
+        mode: 'tgz',
+        extension: 'tar.gz',
+        option: PLUGIN.archiver('tar', {
+          gzip: true,
+          gzipOptions: { level: 1 },
+        }),
+      },
     },
-    tar: {
-      extension: 'tar',
-      option: PLUGIN.archiver('tar'),
+    {
+      options: {
+        mode: 'tar',
+        extension: 'tar',
+        option: PLUGIN.archiver('tar'),
+      },
     },
-    zip: {
-      extension: 'zip',
-      option: PLUGIN.archiver('zip'),
+    {
+      options: {
+        mode: 'zip',
+        extension: 'zip',
+        option: PLUGIN.archiver('zip'),
+      },
     },
-  },
+  ],
 };
 
 // @type function
@@ -75,27 +84,54 @@ export const CREATE_FILES = (collection, dir_path) => {
 };
 
 // @type function
-// 1 аргумент передаём опции архиватора (массив или строка)
-// 2 аргумент передаём значение пришедшее от ввода пользователя
-// 3 аргумент передаём расширение архива
-// CREATE_ARCHIVE(options, values);
-export const CREATE_ARCHIVE = (archive_option, input_values, destination_extension) => {
-  const get_date = new Date().toISOString();
+// функция создания архива, передаем в неё 3 параметра:
+// 1 - коллекцию объектов массива с параметрами для архиватора
+// 2 - опцию о расширении архива {tgz, tar, zip} (получаем из консоли)
+// 3 - имя директории, так-же получаем из консоли (то что ввёл пользователь)
+export const CREATE_ARCHIVE = (archive_option_collection, input_option, input_values) => {
+  try {
+    // в цикле перебираем массив с коллекцией объектов опций для архиватора
+    archive_option_collection.forEach((collection) => {
+      // ищем совпадение в массиве объектов с тем, что пришло от пользователя в консоли
+      const item_compare = collection.options.mode.includes(input_option);
 
-  const destination = `${input_values}:${get_date}.${destination_extension}`;
-  const destination_stream = PLUGIN.fs.createWriteStream(destination);
+      // проверяем результат
+      if (item_compare) {
+        // debug mode
+        console.log(
+          item_compare
+            ? `Успешное сравнение: ${PLUGIN.chalk.green(
+                item_compare,
+              )} - совпадает со значением пришедшим из консоли, перехожу к созданию архива...`
+            : `Неудачное сравнение: ${PLUGIN.chalk.red(
+                item_compare,
+              )} - не совпадает со значением пришедшим из консоли, останавливаю работу.`,
+        );
 
-  destination_stream.on('close', function () {
-    console.log(PLUGIN.chalk.yellow(archive_option.pointer() + ' total bytes'));
-    console.log('Архиватор был завершен, и дескриптор выходного файла закрылся.\nАрхив успешно создан.');
-  });
+        const extension = collection.options.extension;
+        const archive_option = collection.options.option;
 
-  archive_option.on('error', function (err) {
-    throw err;
-  });
+        const get_date = new Date().toISOString();
 
-  archive_option.pipe(destination_stream);
+        const destination = `${input_values}:${get_date}.${extension}`;
+        const destination_stream = PLUGIN.fs.createWriteStream(destination);
 
-  archive_option.directory(input_values);
-  archive_option.finalize();
+        destination_stream.on('close', function () {
+          console.log(PLUGIN.chalk.yellow(archive_option.pointer() + ' total bytes'));
+          console.log('Архиватор был завершен, и дескриптор выходного файла закрылся.\nАрхив успешно создан.');
+        });
+
+        archive_option.on('error', function (err) {
+          throw err;
+        });
+
+        archive_option.pipe(destination_stream);
+
+        archive_option.directory(input_values);
+        archive_option.finalize();
+      }
+    });
+  } catch (error) {
+    console.error(error);
+  }
 };

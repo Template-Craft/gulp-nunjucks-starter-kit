@@ -11,98 +11,37 @@ const create_archive = CREATE_ARCHIVE;
 
 const archiveThis = async (argv) => {
   try {
-    // коллекция режимов:
-    const archive_mode = {
-      options: argv.options === undefined || null,
-      tgz: argv.options === 'tgz',
-      tar: argv.options === 'tar',
-      zip: argv.options === 'zip',
-    };
+    const archive_mode = argv.options;
 
     // получаем пришедшее имя из консоли
     const get_folder_name = argv._[1];
 
     // debugging
-    // console.log(
-    //   `
-    //   ${archive_mode.tgz} - передан ли ключ tgz?
-    //   ${archive_mode.tar} - передан ли ключ tar?
-    //   ${archive_mode.zip} - передан ли ключ zip?
-    //   `,
-    // );
+    // console.log(`${archive_mode} - передано пользователем`);
 
-    if (archive_mode.options || get_folder_name === undefined || get_folder_name === null) {
+    if (argv.options === undefined || null || get_folder_name === undefined || get_folder_name === null) {
       console.error(
         plugin.chalk.red(
           'Для создания архива необходимо воспользоваться командой archive\nДалее передаём дополнительные команды после --options:\ntgz - для создания tar.gz архива\ntar - для создания тарболла\nzip - для создания обычного zip архива',
         ),
       );
     } else {
-      // проверка режима tgz
-      if (archive_mode.tgz) {
-        console.log(plugin.chalk.blue('передан аргумент tgz, создаю tar.gz архив...'));
+      // проверка переданных параметров {tgz, tar, zip}
+      if (archive_mode) {
+        console.log(plugin.chalk.blue(`передан аргумент ${archive_mode}, создаю архив...`));
 
-        // записываем в константу имя пришедшее из консоли
-        const find_direction = `${get_folder_name}`;
-
-        // опции архива
-        const archive_option = archive.tgz.option;
-        const extension = archive.tgz.extension;
-
-        // поиск каталога, пришедшего из консоли в виде строки
-        await plugin.fs.readdir(plugin.node_path.resolve(plugin.__dirname, find_direction), 'utf8', (error_msg) => {
+        // проверка существует ли директория переданная в консоли пользователем
+        await plugin.fs.readdir(plugin.node_path.resolve(plugin.__dirname, get_folder_name), 'utf8', (error_msg) => {
           if (error_msg) {
             console.error(plugin.chalk.red(error_msg));
           } else {
-            console.info(plugin.chalk.green(`${find_direction} - существует`));
+            console.info(plugin.chalk.green(`Директория: ${get_folder_name} - существует`));
 
-            create_archive(archive_option, get_folder_name, extension);
-          }
-        });
-      }
-
-      // проверка режима tar
-      if (archive_mode.tar) {
-        console.log(plugin.chalk.blue('передан аргумент --tar, создаю tar архив...'));
-
-        // записываем в константу имя пришедшее из консоли
-        const find_direction = `${get_folder_name}`;
-
-        // опции архива
-        const archive_option = archive.tar.option;
-        const extension = archive.tar.extension;
-
-        // поиск каталога, пришедшего из консоли в виде строки
-        await plugin.fs.readdir(plugin.node_path.resolve(plugin.__dirname, find_direction), 'utf8', (error_msg) => {
-          if (error_msg) {
-            console.error(plugin.chalk.red(error_msg));
-          } else {
-            console.info(plugin.chalk.green(`${find_direction} - существует`));
-
-            create_archive(archive_option, get_folder_name, extension);
-          }
-        });
-      }
-
-      // проверка режима zip
-      if (archive_mode.zip) {
-        console.log(plugin.chalk.blue('передан аргумент --zip, создаю zip архив...'));
-
-        // записываем в константу имя пришедшее из консоли
-        const find_direction = `${get_folder_name}`;
-
-        // опции архива
-        const archive_option = archive.zip.option;
-        const extension = archive.zip.extension;
-
-        // поиск каталога, пришедшего из консоли в виде строки
-        await plugin.fs.readdir(plugin.node_path.resolve(plugin.__dirname, find_direction), 'utf8', (error_msg) => {
-          if (error_msg) {
-            console.error(plugin.chalk.red(error_msg));
-          } else {
-            console.info(plugin.chalk.green(`${find_direction} - существует`));
-
-            create_archive(archive_option, get_folder_name, extension);
+            // функция создания архива, передаем в неё 3 параметра:
+            // 1 - коллекцию объектов массива с параметрами для архиватора
+            // 2 - опцию о расширении архива {tgz, tar, zip} (получаем из консоли)
+            // 3 - имя директории, так-же получаем из консоли (то что ввёл пользователь)
+            create_archive(archive, archive_mode, get_folder_name);
           }
         });
       }
