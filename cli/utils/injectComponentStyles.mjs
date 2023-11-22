@@ -20,7 +20,7 @@ const injectStyle = async (style) => {
     const this_stylesheet = config.component_stylesheet(find_dir_path, value);
 
     // ищем директорию с компонентом, имя получаем из командной строки.
-    await plugin.fs.readdir(plugin.nodePath.resolve(plugin.__dirname, find_dir_path), 'utf8', (err) => {
+    await plugin.fs.readdir(plugin.node_path.resolve(plugin.__dirname, find_dir_path), 'utf8', (err) => {
       if (err) {
         console.error(plugin.chalk.red(err)); // сообщаем ошибку в консоли
       } else {
@@ -36,7 +36,7 @@ const injectStyle = async (style) => {
             console.info(plugin.chalk.blue(`\n_${value}.scss - существует и является файлом`));
 
             // Добавим в конец main.scss, импорт файла стилей нашего найденного компонента
-            plugin.fs.appendFile(config.include_in, config.import(value), 'utf8', (error_msg) => {
+            plugin.fs.appendFile(config.include_in, config.import_stylesheet(value), 'utf8', (error_msg) => {
               if (error_msg) {
                 console.error(plugin.chalk.red(error_msg));
               } else {

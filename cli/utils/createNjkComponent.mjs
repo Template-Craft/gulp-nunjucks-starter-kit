@@ -42,7 +42,7 @@ const createComponent = async (name) => {
       } else {
         // тут объявляем что мы собираемся создать директорию с файлами
         await plugin.fs.mkdir(
-          plugin.nodePath.normalize(config.template.spawn_dir(name)),
+          plugin.node_path.normalize(config.template.spawn_dir(name)),
           { recursive: true },
           (err) => {
             if (err) {

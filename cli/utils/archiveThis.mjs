@@ -50,7 +50,7 @@ const archiveThis = async (argv) => {
         const extension = archive.tgz.extension;
 
         // поиск каталога, пришедшего из консоли в виде строки
-        await plugin.fs.readdir(plugin.nodePath.resolve(plugin.__dirname, find_direction), 'utf8', (error_msg) => {
+        await plugin.fs.readdir(plugin.node_path.resolve(plugin.__dirname, find_direction), 'utf8', (error_msg) => {
           if (error_msg) {
             console.error(plugin.chalk.red(error_msg));
           } else {
@@ -73,7 +73,7 @@ const archiveThis = async (argv) => {
         const extension = archive.tar.extension;
 
         // поиск каталога, пришедшего из консоли в виде строки
-        await plugin.fs.readdir(plugin.nodePath.resolve(plugin.__dirname, find_direction), 'utf8', (error_msg) => {
+        await plugin.fs.readdir(plugin.node_path.resolve(plugin.__dirname, find_direction), 'utf8', (error_msg) => {
           if (error_msg) {
             console.error(plugin.chalk.red(error_msg));
           } else {
@@ -96,7 +96,7 @@ const archiveThis = async (argv) => {
         const extension = archive.zip.extension;
 
         // поиск каталога, пришедшего из консоли в виде строки
-        await plugin.fs.readdir(plugin.nodePath.resolve(plugin.__dirname, find_direction), 'utf8', (error_msg) => {
+        await plugin.fs.readdir(plugin.node_path.resolve(plugin.__dirname, find_direction), 'utf8', (error_msg) => {
           if (error_msg) {
             console.error(plugin.chalk.red(error_msg));
           } else {
