@@ -6,11 +6,11 @@
 
 'use strict';
 
-import { PLUGIN, UTILSCONFIG, CREATE_FILES } from '../config/config.mjs';
+import { KITPLUGIN, KITCONFIG, CREATE_FILES } from '../config/config.mjs';
 
-const config = UTILSCONFIG;
+const config = KITCONFIG;
 const createFiles = CREATE_FILES;
-const plugin = PLUGIN;
+const plugin = KITPLUGIN;
 
 const createComponent = async (name) => {
   try {

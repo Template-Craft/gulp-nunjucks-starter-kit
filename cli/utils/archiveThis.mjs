@@ -2,10 +2,10 @@
 
 'use strict';
 
-import { PLUGIN, UTILSCONFIG, CREATE_ARCHIVE } from '../config/config.mjs';
+import { KITPLUGIN, KITCONFIG, CREATE_ARCHIVE } from '../config/config.mjs';
 
-const plugin = PLUGIN;
-const archive = UTILSCONFIG.archive;
+const plugin = KITPLUGIN;
+const archive = KITCONFIG.archive;
 
 const create_archive = CREATE_ARCHIVE;
 

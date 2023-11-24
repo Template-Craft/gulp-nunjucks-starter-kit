@@ -7,10 +7,10 @@
 // с помощью конструкции @import '';
 'use strict';
 
-import { PLUGIN, UTILSCONFIG } from '../config/config.mjs';
+import { KITPLUGIN, KITCONFIG } from '../config/config.mjs';
 
-const config = UTILSCONFIG.styles;
-const plugin = PLUGIN;
+const config = KITCONFIG.styles;
+const plugin = KITPLUGIN;
 
 const injectStyle = async (style) => {
   try {

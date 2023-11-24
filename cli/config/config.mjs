@@ -12,7 +12,7 @@ import chalk from 'chalk';
 const __dirname = node_path.resolve();
 
 // часто используемые плагины
-export const PLUGIN = {
+export const KITPLUGIN = {
   fs: fs,
   chalk: chalk,
   archiver: archiver,
@@ -20,7 +20,7 @@ export const PLUGIN = {
   __dirname: __dirname,
 };
 
-export const UTILSCONFIG = {
+export const KITCONFIG = {
   template: {
     extension: '.njk',
     data_dir: './src/views/data/',
@@ -44,7 +44,7 @@ export const UTILSCONFIG = {
       options: {
         mode: 'tgz',
         extension: 'tar.gz',
-        option: PLUGIN.archiver('tar', {
+        option: KITPLUGIN.archiver('tar', {
           gzip: true,
           gzipOptions: { level: 1 },
         }),
@@ -54,14 +54,14 @@ export const UTILSCONFIG = {
       options: {
         mode: 'tar',
         extension: 'tar',
-        option: PLUGIN.archiver('tar'),
+        option: KITPLUGIN.archiver('tar'),
       },
     },
     {
       options: {
         mode: 'zip',
         extension: 'zip',
-        option: PLUGIN.archiver('zip'),
+        option: KITPLUGIN.archiver('zip'),
       },
     },
   ],
@@ -73,12 +73,12 @@ export const UTILSCONFIG = {
 // @param: CREATE_FILES(collection, dir_path)
 export const CREATE_FILES = (collection, dir_path) => {
   collection.forEach((file) => {
-    PLUGIN.fs.open(`${dir_path}${PLUGIN.node_path.basename(file)}`, 'w', (error_msg) => {
+    KITPLUGIN.fs.open(`${dir_path}${KITPLUGIN.node_path.basename(file)}`, 'w', (error_msg) => {
       if (error_msg) {
-        console.error(PLUGIN.chalk.red(error_msg));
+        console.error(KITPLUGIN.chalk.red(error_msg));
       }
 
-      console.info(PLUGIN.chalk.green(`Файл компонента создан, и находится по пути: ${dir_path}${file}`));
+      console.info(KITPLUGIN.chalk.green(`Файл компонента создан, и находится по пути: ${dir_path}${file}`));
     });
   });
 };
@@ -100,10 +100,10 @@ export const CREATE_ARCHIVE = (archive_option_collection, input_option, input_va
         // debug mode
         console.log(
           item_compare
-            ? `Успешное сравнение: ${PLUGIN.chalk.green(
+            ? `Успешное сравнение: ${KITPLUGIN.chalk.green(
                 item_compare,
               )} - совпадает со значением пришедшим из консоли, перехожу к созданию архива...`
-            : `Неудачное сравнение: ${PLUGIN.chalk.red(
+            : `Неудачное сравнение: ${KITPLUGIN.chalk.red(
                 item_compare,
               )} - не совпадает со значением пришедшим из консоли, останавливаю работу.`,
         );
@@ -114,10 +114,10 @@ export const CREATE_ARCHIVE = (archive_option_collection, input_option, input_va
         const get_date = new Date().toISOString();
 
         const destination = `${input_values}:${get_date}.${extension}`;
-        const destination_stream = PLUGIN.fs.createWriteStream(destination);
+        const destination_stream = KITPLUGIN.fs.createWriteStream(destination);
 
         destination_stream.on('close', function () {
-          console.log(PLUGIN.chalk.yellow(archive_option.pointer() + ' total bytes'));
+          console.log(KITPLUGIN.chalk.yellow(archive_option.pointer() + ' total bytes'));
           console.log('Архиватор был завершен, и дескриптор выходного файла закрылся.\nАрхив успешно создан.');
         });
 
