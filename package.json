@@ -10,7 +10,9 @@
     "tool:link": "npm link",
     "dev": "gulp",
     "build": "gulp build --build",
-    "build:archive": "gulp build --build && kit-tools archive --options tgz build"
+    "build:archive:tgz": "gulp build --build && kit-tools archive --options tgz build",
+    "build:archive:tar": "gulp build --build && kit-tools archive --options tar build",
+    "build:archive:zip": "gulp build --build && kit-tools archive --options zip build"
   },
   "engines": {
     "node": "^18",
