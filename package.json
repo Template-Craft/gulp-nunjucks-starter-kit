@@ -3,40 +3,49 @@
   "version": "1.0.0",
   "description": "Инструмент для компонентного проектирования статических сайтов, как lending page так и много-страничных проектов.",
   "main": "gulpfile.mjs",
+  "bin": {
+    "kit-tools": "./cli/kit-tools.mjs"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "tool:link": "npm link",
     "dev": "gulp",
-    "build": "gulp build --build"
+    "build": "gulp build --build",
+    "build:archive:tgz": "gulp build --build && kit-tools archive --options tgz build",
+    "build:archive:tar": "gulp build --build && kit-tools archive --options tar build",
+    "build:archive:zip": "gulp build --build && kit-tools archive --options zip build"
   },
   "engines": {
-    "node": "^16 || ^18",
-    "npm": "^8 || ^9"
+    "node": "^18",
+    "npm": "^9"
   },
   "browserslist": {
-    "production": [
-      "> 1%",
-      "supports es6-module",
-      "last 6 chrome version",
-      "last 6 firefox version",
+    "stylesheets": [
+      "> 0.1% in GB and not dead",
+      "last 6 Chrome versions",
+      "last 6 Firefox versions",
+      "last 6 Edge versions",
+      "last 2 Samsung versions",
       "Firefox ESR",
-      "not dead"
+      "Safari >= 11",
+      "iOS >= 11",
+      "ie 11"
+    ],
+    "javascripts": [
+      "supports es6-module"
     ],
     "modern": [
       "last 1 chrome version",
       "last 1 firefox version"
     ],
-    "ssr": [
-      "node 16"
-    ],
     "node": [
-      "node 16"
+      "node 18"
     ]
   },
   "os": [
     "darwin",
     "linux",
     "win64",
-    "!win32"
+    "win32"
   ],
   "repository": {
     "type": "git",
@@ -63,6 +72,7 @@
     "@babel/eslint-parser": "^7.22.15",
     "@babel/preset-env": "^7.22.20",
     "@babel/register": "^7.22.15",
+    "@types/archiver": "^6.0.1",
     "@types/gulp": "^4.0.14",
     "@types/gulp-clean-css": "^4.3.2",
     "@types/gulp-concat": "^0.0.35",
@@ -71,6 +81,8 @@
     "@types/gulp-rename": "^2.0.3",
     "@types/node-notifier": "^8.0.3",
     "@types/webpack-stream": "^3.2.13",
+    "@types/yargs": "^17.0.26",
+    "archiver": "^6.0.1",
     "autoprefixer": "^10.4.16",
     "babel-loader": "^9.1.3",
     "browser-sync": "^2.29.3",

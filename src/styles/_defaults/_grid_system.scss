@@ -44,6 +44,11 @@ $GRID_BREAKPOINTS: (
   lg: 992px,
   xl: 1200px,
   xxl: 1400px,
+  desktop-large: 1900px,
+  retina: 2500px,
+  4k: 3840px,
+  5k: 5000px,
+  8k: 8000px,
 ) !default;
 
 @include _assert-ascending($GRID_BREAKPOINTS, '$GRID_BREAKPOINTS');
@@ -184,6 +189,16 @@ $CONTAINER_MAX_WIDTHS: (
   flex-wrap: wrap;
   margin-left: ($offset_one_side * -1);
   margin-right: ($offset_one_side * -1);
+
+  & > * {
+    max-width: 100%;
+    width: 100%;
+    flex-shrink: 0;
+    margin-left: $offset_one_side;
+    margin-right: $offset_one_side;
+    word-wrap: break-word;
+    box-sizing: border-box;
+  }
 }
 
 ///

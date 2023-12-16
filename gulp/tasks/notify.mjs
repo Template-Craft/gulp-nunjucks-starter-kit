@@ -21,7 +21,7 @@ export const createNotification = async () => {
     ${chalk.yellow('------------ * ------------')}
     OS: ${chalk.yellow(os.type)}
     Arch: ${chalk.blue(os.arch)}
-    Platform: ${chalk.yellow(os.platform)}
+    Platform: ${chalk.blue(os.platform)}
     ${chalk.yellow('------------ * ------------')}
     Node Version: ${chalk.green(process.env.npm_config_user_agent)}
     Mode: ${chalk.green(app.isDev ? 'Development' : 'Production')}

@@ -1,0 +1,17 @@
+<section class="first-display">
+  <div class="container">
+    <div class="row">
+      <div class="card-animals js-card-animals">
+        {% set arr = { "кошки": "2", "собака": "1", "мышей": "15" }%}
+
+        <ol>
+          {% for item, about in arr %}
+          <li>У нас есть: {{ about }} {{ item -}}</li>
+          {% endfor %}
+        </ol>
+
+        <button class="button js-btn__card-animals">кнопка</button>
+      </div>
+    </div>
+  </div>
+</section>

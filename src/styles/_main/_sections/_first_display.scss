@@ -1,0 +1,12 @@
+.first-display {
+  width: 100%;
+
+  padding: rem(40) 0;
+
+  .card-animals {
+    @include make-col;
+    @include make-size(12);
+
+    @include font-size(20px);
+  }
+}
