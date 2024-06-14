@@ -56,8 +56,7 @@ export const styles = () => {
   ];
 
   return app.gulp
-    .src(app.path.src.styles)
-    .pipe(app.plugins.gulpIf(app.isDev, app.plugins.sourcemaps.init()))
+    .src(app.path.src.styles, { sourcemaps: app.plugins.gulpIf(app.isDev, true) })
     .pipe(
       app.plugins.plumber(
         app.plugins.notify.onError({
@@ -78,7 +77,6 @@ export const styles = () => {
       ),
     )
     .pipe(app.plugins.plumber.stop())
-    .pipe(app.plugins.gulpIf(app.isDev, app.plugins.sourcemaps.write('./maps/')))
-    .pipe(app.gulp.dest(app.path.build.styles))
+    .pipe(app.gulp.dest(app.path.build.styles, { sourcemaps: app.plugins.gulpIf(app.isDev, './maps/') }))
     .pipe(app.plugins.browsersync.stream());
 };

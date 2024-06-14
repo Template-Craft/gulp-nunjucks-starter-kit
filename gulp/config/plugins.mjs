@@ -19,7 +19,6 @@ import replace from 'gulp-replace';
 import rename from 'gulp-rename';
 import beautify from 'gulp-beautify';
 import gulpIf from 'gulp-if';
-import sourcemaps from 'gulp-sourcemaps';
 
 // собираем тут все общие плагины
 export const plugins = {
@@ -30,5 +29,4 @@ export const plugins = {
   browsersync: browsersync,
   beautify: beautify,
   gulpIf: gulpIf,
-  sourcemaps: sourcemaps,
 };
