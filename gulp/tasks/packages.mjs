@@ -22,8 +22,7 @@ export const packageCss = () => {
   const cssLibsCollection = [`${app.path.nodeModules}/normalize.css/normalize.css`];
 
   return app.gulp
-    .src(cssLibsCollection)
-    .pipe(app.plugins.gulpIf(app.isDev, app.plugins.sourcemaps.init()))
+    .src(cssLibsCollection, { sourcemaps: app.plugins.gulpIf(app.isDev, true) })
     .pipe(
       app.plugins.plumber(
         app.plugins.notify.onError({
@@ -55,6 +54,5 @@ export const packageCss = () => {
       ),
     )
     .pipe(app.plugins.plumber.stop())
-    .pipe(app.plugins.gulpIf(app.isDev, app.plugins.sourcemaps.write('./maps/')))
-    .pipe(app.gulp.dest(app.path.build.styles));
+    .pipe(app.gulp.dest(app.path.build.styles, { sourcemaps: app.plugins.gulpIf(app.isDev, './maps/') }));
 };
