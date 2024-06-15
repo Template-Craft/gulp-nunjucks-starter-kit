@@ -1,5 +1,3 @@
-/* eslint-disable camelcase */
-/* eslint-disable no-unused-expressions */
 'use strict';
 
 export const btnCardAnimals = () => {

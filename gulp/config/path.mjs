@@ -21,6 +21,7 @@ export const path = {
     scripts: `${buildFolder}/scripts/`,
     images: `${buildFolder}/assets/img/`,
     fonts: `${buildFolder}/assets/fonts/`,
+    plugins: `${buildFolder}/plugins/`,
   },
   src: {
     nunjucks: `${srcFolder}/views/pages/*.+(html|njk|nunjucks|nj)`,

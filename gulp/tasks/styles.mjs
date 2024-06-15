@@ -1,5 +1,4 @@
 /* eslint-disable n/no-unpublished-import */
-/* eslint-disable import/order */
 
 //  -------------------------------------------------------------;
 //    Таск-раннер для компиляции scss/sass файлов в обычный css

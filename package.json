@@ -7,12 +7,14 @@
     "kit-tools": "./cli/kit-tools.mjs"
   },
   "scripts": {
+    "eslint:init": "npm init @eslint/config@latest",
     "tool:link": "npm link",
     "dev": "gulp",
     "build": "gulp build --build",
     "build:archive:tgz": "gulp build --build && kit-tools archive --options tgz build",
     "build:archive:tar": "gulp build --build && kit-tools archive --options tar build",
-    "build:archive:zip": "gulp build --build && kit-tools archive --options zip build"
+    "build:archive:zip": "gulp build --build && kit-tools archive --options zip build",
+    "postbuild": "gulp postBuild"
   },
   "engines": {
     "node": ">=18",
@@ -72,10 +74,13 @@
     "@babel/eslint-parser": "^7.24.7",
     "@babel/preset-env": "^7.24.7",
     "@babel/register": "^7.24.6",
+    "@eslint/compat": "^1.1.0",
+    "@eslint/eslintrc": "^3.1.0",
+    "@eslint/js": "^9.5.0",
     "@types/archiver": "^6.0.2",
+    "@types/eslint__js": "^8.42.3",
     "@types/gulp": "^4.0.17",
     "@types/gulp-clean-css": "^4.3.4",
-    "@types/gulp-concat": "^0.0.37",
     "@types/gulp-plumber": "^0.0.37",
     "@types/gulp-postcss": "^8.0.6",
     "@types/gulp-rename": "^2.0.6",
@@ -87,20 +92,17 @@
     "babel-loader": "^9.1.3",
     "browser-sync": "^3.0.2",
     "chalk": "^5.3.0",
-    "concat": "^1.0.3",
     "cssnano": "^7.0.2",
     "cssnano-preset-advanced": "^7.0.2",
     "del": "^7.1.0",
-    "eslint": "^8.50.0",
-    "eslint-config-prettier": "^9.0.0",
-    "eslint-config-standard": "^17.1.0",
-    "eslint-plugin-es-x": "^7.2.0",
-    "eslint-plugin-import": "^2.28.1",
-    "eslint-plugin-n": "^16.1.0",
-    "eslint-plugin-promise": "^6.1.1",
+    "eslint": "^9.5.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-es-x": "^7.7.0",
+    "eslint-plugin-n": "^17.9.0",
+    "eslint-plugin-promise": "^6.2.0",
+    "globals": "^15.4.0",
     "gulp": "^5.0.0",
     "gulp-beautify": "^3.0.0",
-    "gulp-concat": "^2.6.1",
     "gulp-if": "^3.0.0",
     "gulp-newer": "^1.4.0",
     "gulp-notify": "^4.0.0",
@@ -113,14 +115,19 @@
     "node-notifier": "^10.0.1",
     "postcss": "^8.4.38",
     "postcss-sort-media-queries": "^5.2.0",
-    "prettier": "^3.3.1",
-    "sass": "^1.77.4",
-    "webpack": "^5.91.0",
+    "prettier": "3.3.2",
+    "sass": "^1.77.5",
+    "webpack": "^5.92.0",
     "webpack-stream": "^7.0.0",
     "yargs": "^17.7.2"
   },
   "dependencies": {
     "normalize.css": "^8.0.1",
     "rfs": "^10.0.0"
+  },
+  "optionalDependencies": {
+    "@eslint/migrate-config": "^1.1.0",
+    "npm-check-updates": "^16.14.20",
+    "sass-migrator": "^2.0.3"
   }
 }
