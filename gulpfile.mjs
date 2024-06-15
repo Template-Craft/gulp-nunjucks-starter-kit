@@ -1,3 +1,5 @@
+/* eslint-disable n/no-unpublished-import */
+
 //  --------------------------------------------------------------------------------
 //   *
 //   * В проекте используется Gulp + Webpack + Babel + Nunjucks
@@ -18,9 +20,6 @@
 //   *  Copyright (c) 2023 NИ
 //  --------------------------------------------------------------------------------
 
-/* eslint-disable n/no-unpublished-import */
-/* eslint-disable import/order */
-// eslint-disable-next-line n/no-unpublished-import
 'use strict';
 
 import gulp from 'gulp';
@@ -39,7 +38,8 @@ import { styles } from './gulp/tasks/styles.mjs';
 import { scripts } from './gulp/tasks/scripts.mjs';
 import { fonts } from './gulp/tasks/fonts.mjs';
 import { images } from './gulp/tasks/images.mjs';
-import { packageCss } from './gulp/tasks/packages.mjs';
+import { vendors } from './gulp/tasks/packages.mjs';
+import { postbuild } from './gulp/tasks/postBuild.mjs';
 
 // Оповещения
 import { createNotification } from './gulp/tasks/notify.mjs';
@@ -64,15 +64,17 @@ function watcher() {
 
 // gulp.parallel() - параллельное выполнение задач
 // передаём сюда свои задачи (task)
-const mainTasks = gulp.parallel(templates, packageCss, styles, scripts, fonts, images);
+const mainTasks = gulp.parallel(templates, vendors, styles, scripts, fonts, images);
 
 // gulp.series()   - последовательное выполнение задач
 const dev = gulp.series(reset, mainTasks, gulp.parallel(watcher, server, createNotification));
 const build = gulp.series(reset, mainTasks, createNotification);
+const postBuild = gulp.series(postbuild);
 
 // Экспорт сценариев:
 export { dev };
 export { build };
+export { postBuild };
 
 // Выполнение сценария по умолчанию
 gulp.task('default', dev);

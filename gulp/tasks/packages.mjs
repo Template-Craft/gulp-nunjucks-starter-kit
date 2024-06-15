@@ -1,58 +1,31 @@
+/* eslint-disable no-undef */
 //  ----------------------------------------------------------------------------------------;
-//    Таск-раннер для подключения, обработки и конкатинации js и css сторонних плагинов,
-//    необходимых для для проекта.
+//    Таск-раннер для подключения, js и css сторонних плагинов, необходимых для для проекта.
 //  ---------------------------------------------------------------------------------------;
 
-/* eslint-disable n/no-unpublished-import */
-/* eslint-disable no-undef */
 'use strict';
 
-import cssnano from 'cssnano';
-import gulpConcat from 'gulp-concat';
-import gulpPostCSS from 'gulp-postcss';
+// Собираем, и перемещаем в нужную дир-рию пподключённые плагины
+export const vendors = async () => {
+  const modules = app.path.nodeModules;
+  const destination = app.path.build.plugins;
 
-// Собираем, и конкатинируем js библиотеки
-export const packagesJs = () => {};
+  function _getPluginName(name) {
+    return `${modules}/${name}/**/*.*`;
+  }
 
-// Собираем, и конкатинируем css библиотеки
-export const packageCss = () => {
-  // коллекция плагинов
-  // подключаем необходимые css плагины в этом массиве,
-  // пример: [`${app.path.nodeModules}/pathToPlugin/plugin.css`]
-  const cssLibsCollection = [`${app.path.nodeModules}/normalize.css/normalize.css`];
+  function _moveToPluginName(name) {
+    return `${destination}/${name}/`;
+  }
 
-  return app.gulp
-    .src(cssLibsCollection, { sourcemaps: app.plugins.gulpIf(app.isDev, true) })
-    .pipe(
-      app.plugins.plumber(
-        app.plugins.notify.onError({
-          title: 'CSS vendor package',
-          sound: false,
-          message: 'Error: <%= error.message %>',
-        }),
-      ),
-    )
-    .pipe(
-      gulpPostCSS([
-        cssnano({
-          preset: [
-            'default',
-            {
-              discardComments: true,
-            },
-          ],
-        }),
-      ]),
-    )
-    .pipe(gulpConcat('vendor.css'))
-    .pipe(
-      app.plugins.gulpIf(
-        app.isBuild,
-        app.plugins.rename({
-          suffix: '.min',
-        }),
-      ),
-    )
-    .pipe(app.plugins.plumber.stop())
-    .pipe(app.gulp.dest(app.path.build.styles, { sourcemaps: app.plugins.gulpIf(app.isDev, './maps/') }));
+  const pluginsCollection = await new Map([
+    [`${_getPluginName('normalize.css')}`, `${_moveToPluginName('normalize.css')}`],
+  ]);
+
+  await pluginsCollection.forEach((value, key) => {
+    let src = key;
+    let build = value;
+
+    return app.gulp.src(src).pipe(app.gulp.dest(build));
+  });
 };

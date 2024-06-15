@@ -18,14 +18,14 @@ export const createNotification = async () => {
   const buildModMessage = 'проверьте наличие папки build в родительской директории.';
 
   const consoleInfo = `
-    ${chalk.yellow('------------ * ------------')}
-    OS: ${chalk.yellow(os.type)}
-    Arch: ${chalk.blue(os.arch)}
-    Platform: ${chalk.blue(os.platform)}
-    ${chalk.yellow('------------ * ------------')}
-    Node Version: ${chalk.green(process.env.npm_config_user_agent)}
-    Mode: ${chalk.green(app.isDev ? 'Development' : 'Production')}
-    ${chalk.yellow('------------ * ------------')}
+    ${chalk.yellow('######## * ########')}
+      OS: ${chalk.yellow(os.type)}
+      Arch: ${chalk.blue(os.arch)}
+      Platform: ${chalk.blue(os.platform)}
+    ${chalk.yellow('######## * ########')}
+      Node Version: ${chalk.green(process.env.npm_config_user_agent)}
+      Mode: ${chalk.green(app.isDev ? 'Development' : 'Production')}
+    ${chalk.yellow('######## * ########')}
   `;
 
   await notifier.notify({

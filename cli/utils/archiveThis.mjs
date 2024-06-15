@@ -1,5 +1,3 @@
-/* eslint-disable camelcase */
-
 'use strict';
 
 import { KITPLUGIN, KITCONFIG, CREATE_ARCHIVE } from '../config/config.mjs';

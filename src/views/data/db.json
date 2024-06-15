@@ -2,7 +2,7 @@
   "htmlLang": "en",
   "pageName": "General page",
   "pageTitle": "Gulp nunjucks starter kit",
-  "vendorStylesheetPath": "styles/vendor.css",
+  "vendorStylesheetPath": "plugins/normalize.css/normalize.css",
   "mainStylesheetPath": "styles/main.css",
   "mainScriptPath": "scripts/main.bundle.js"
 }

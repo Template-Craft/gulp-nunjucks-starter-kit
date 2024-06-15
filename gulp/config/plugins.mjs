@@ -1,4 +1,3 @@
-/* eslint-disable import/order */
 /* eslint-disable n/no-unpublished-import */
 
 //  -----------------------------------------------------------------------------;

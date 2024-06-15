@@ -1,5 +1,4 @@
 /* eslint-disable n/no-unpublished-import */
-/* eslint-disable camelcase */
 
 'use strict';
 

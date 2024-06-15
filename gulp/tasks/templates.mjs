@@ -1,8 +1,5 @@
 /* eslint-disable n/no-unpublished-import */
-/* eslint-disable import/order */
 /* eslint-disable no-undef */
-/* eslint-disable prefer-const */
-
 //  ----------------------------------------------------------------------------------------------------------------;
 //    Таск-раннер для отслеживания nunjucks шаблонов
 //  *

@@ -6,3 +6,5 @@ build/
 
 # Files to ignore
 package-lock.json
+
+eslint.config.mjs
