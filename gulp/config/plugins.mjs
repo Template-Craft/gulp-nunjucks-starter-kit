@@ -12,7 +12,6 @@
 // Общие плагины
 import browsersync from 'browser-sync';
 
-import notify from 'gulp-notify';
 import plumber from 'gulp-plumber';
 import replace from 'gulp-replace';
 import rename from 'gulp-rename';
@@ -24,7 +23,6 @@ export const plugins = {
   replace: replace,
   rename: rename,
   plumber: plumber,
-  notify: notify,
   browsersync: browsersync,
   beautify: beautify,
   gulpIf: gulpIf,

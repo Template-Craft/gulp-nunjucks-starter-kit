@@ -39,7 +39,6 @@ import { scripts } from './gulp/tasks/scripts.mjs';
 import { fonts } from './gulp/tasks/fonts.mjs';
 import { images } from './gulp/tasks/images.mjs';
 import { vendors } from './gulp/tasks/packages.mjs';
-import { postbuild } from './gulp/tasks/postBuild.mjs';
 
 // Оповещения
 import { createNotification } from './gulp/tasks/notify.mjs';
@@ -69,12 +68,10 @@ const mainTasks = gulp.parallel(templates, vendors, styles, scripts, fonts, imag
 // gulp.series()   - последовательное выполнение задач
 const dev = gulp.series(reset, mainTasks, gulp.parallel(watcher, server, createNotification));
 const build = gulp.series(reset, mainTasks, createNotification);
-const postBuild = gulp.series(postbuild);
 
 // Экспорт сценариев:
 export { dev };
 export { build };
-export { postBuild };
 
 // Выполнение сценария по умолчанию
 gulp.task('default', dev);

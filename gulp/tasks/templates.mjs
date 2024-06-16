@@ -41,15 +41,8 @@ export const templates = () => {
   return (
     app.gulp
       .src(app.path.src.nunjucks)
-      .pipe(
-        app.plugins.plumber(
-          app.plugins.notify.onError({
-            title: 'Nunjucks template',
-            sound: false,
-            message: 'Error: <%= error.message %>',
-          }),
-        ),
-      )
+      // ловим ошибки, и выводим их в консоль
+      .pipe(app.plugins.plumber())
       // Nunjucks
       .pipe(nunjucksRender(renderOptions))
       .pipe(
@@ -67,17 +60,12 @@ export const templates = () => {
 };
 
 export const templatesData = () => {
-  return app.gulp
-    .src(app.path.src.nunjucksData)
-    .pipe(
-      app.plugins.plumber(
-        app.plugins.notify.onError({
-          title: 'Nunjacks data',
-          sound: false,
-          message: 'Error: <%= error.message %>',
-        }),
-      ),
-    )
-    .pipe(app.plugins.plumber.stop())
-    .pipe(app.plugins.browsersync.stream());
+  return (
+    app.gulp
+      .src(app.path.src.nunjucksData)
+      // ловим ошибки, и выводим их в консоль
+      .pipe(app.plugins.plumber())
+      .pipe(app.plugins.plumber.stop())
+      .pipe(app.plugins.browsersync.stream())
+  );
 };

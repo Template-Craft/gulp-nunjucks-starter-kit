@@ -54,28 +54,23 @@ export const styles = () => {
     }),
   ];
 
-  return app.gulp
-    .src(app.path.src.styles, { sourcemaps: app.plugins.gulpIf(app.isDev, true) })
-    .pipe(
-      app.plugins.plumber(
-        app.plugins.notify.onError({
-          title: 'SCSS',
-          sound: false,
-          message: 'Error: <%= error.message %>',
-        }),
-      ),
-    )
-    .pipe(sass.sync().on('error', sass.logError))
-    .pipe(gulpPostCSS(postCSSPlugins))
-    .pipe(
-      app.plugins.gulpIf(
-        app.isBuild,
-        app.plugins.rename({
-          suffix: '.min',
-        }),
-      ),
-    )
-    .pipe(app.plugins.plumber.stop())
-    .pipe(app.gulp.dest(app.path.build.styles, { sourcemaps: app.plugins.gulpIf(app.isDev, './maps/') }))
-    .pipe(app.plugins.browsersync.stream());
+  return (
+    app.gulp
+      .src(app.path.src.styles, { sourcemaps: app.plugins.gulpIf(app.isDev, true) })
+      // ловим ошибки, и выводим их в консоль
+      .pipe(app.plugins.plumber())
+      .pipe(sass.sync().on('error', sass.logError))
+      .pipe(gulpPostCSS(postCSSPlugins))
+      .pipe(
+        app.plugins.gulpIf(
+          app.isBuild,
+          app.plugins.rename({
+            suffix: '.min',
+          }),
+        ),
+      )
+      .pipe(app.plugins.plumber.stop())
+      .pipe(app.gulp.dest(app.path.build.styles, { sourcemaps: app.plugins.gulpIf(app.isDev, './maps/') }))
+      .pipe(app.plugins.browsersync.stream())
+  );
 };
