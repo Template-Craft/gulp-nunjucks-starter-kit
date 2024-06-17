@@ -41,8 +41,16 @@ export const templates = () => {
   return (
     app.gulp
       .src(app.path.src.nunjucks)
-      // ловим ошибки, и выводим их в консоль
-      .pipe(app.plugins.plumber())
+      // ловим ошибки, и выводим их в консоль и в систему
+      .pipe(
+        app.plugins.plumber({
+          errorHandler: function (error) {
+            app.errors.handler(error, app.errors.messages.njk);
+
+            console.log(error.toString());
+          },
+        }),
+      )
       // Nunjucks
       .pipe(nunjucksRender(renderOptions))
       .pipe(
