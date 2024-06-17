@@ -57,8 +57,16 @@ export const styles = () => {
   return (
     app.gulp
       .src(app.path.src.styles, { sourcemaps: app.plugins.gulpIf(app.isDev, true) })
-      // ловим ошибки, и выводим их в консоль
-      .pipe(app.plugins.plumber())
+      // ловим ошибки, и выводим их в консоль и в систему
+      .pipe(
+        app.plugins.plumber({
+          errorHandler: function (error) {
+            app.errors.handler(error, app.errors.messages.sass);
+
+            // console.log(error.toString()); // => можно не выводить, т.к. ошибки логирует sass
+          },
+        }),
+      )
       .pipe(sass.sync().on('error', sass.logError))
       .pipe(gulpPostCSS(postCSSPlugins))
       .pipe(

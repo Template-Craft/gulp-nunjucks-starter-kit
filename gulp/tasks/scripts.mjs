@@ -18,8 +18,16 @@ export const scripts = () => {
   return (
     app.gulp
       .src(app.path.src.scripts)
-      // ловим ошибки, и выводим их в консоль
-      .pipe(app.plugins.plumber())
+      // ловим ошибки, и выводим их в консоль и в систему
+      .pipe(
+        app.plugins.plumber({
+          errorHandler: function (error) {
+            app.errors.handler(error, app.errors.messages.scripts);
+
+            // console.log(error.toString()); // => можно не включать, т.к. ошибки обрабатывает webpack
+          },
+        }),
+      )
       .pipe(
         webpackStream({
           // режимы работы

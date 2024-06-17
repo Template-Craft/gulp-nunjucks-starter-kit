@@ -1,8 +1,3 @@
-/* eslint-disable camelcase */
-/* eslint-disable prefer-const */
-/* eslint-disable n/no-unpublished-import */
-/* eslint-disable import/order */
-
 // Утилита для инъекции стилей компонента в главный файл стилей
 // с помощью конструкции @import '';
 'use strict';

@@ -30,6 +30,12 @@ import { path } from './gulp/config/path.mjs';
 // Импорт общих плагинов
 import { plugins } from './gulp/config/plugins.mjs';
 
+// Импорт информации о пакете
+import { pkg } from './gulp/config/pkg.mjs';
+
+// Импорт обработчика ошибок
+import { errors } from './gulp/config/errors.mjs';
+
 // Импорт задач
 import { reset } from './gulp/tasks/reset.mjs';
 import { server } from './gulp/tasks/server.mjs';
@@ -43,13 +49,15 @@ import { vendors } from './gulp/tasks/packages.mjs';
 // Оповещения
 import { createNotification } from './gulp/tasks/notify.mjs';
 
-// Передаём значения в глобальную переменную
+// Передаём значения в глобальную переменную app
 global.app = {
   isBuild: process.argv.includes('--build'), // -> Проверяем режим продакшена
   isDev: !process.argv.includes('--build'), // -> Проверяем режим разработки
   path: path,
   gulp: gulp,
   plugins: plugins,
+  errors: errors,
+  pkg: pkg,
 };
 
 // функция наблюдатель

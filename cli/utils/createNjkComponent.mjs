@@ -1,7 +1,3 @@
-/* eslint-disable camelcase */
-/* eslint-disable import/order */
-/* eslint-disable n/no-unpublished-import */
-
 // Утилита для создания компонента
 
 'use strict';
