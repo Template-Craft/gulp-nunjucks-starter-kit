@@ -21,6 +21,18 @@ export const vendors = async () => {
     let src = key;
     let build = value;
 
-    return app.gulp.src(src).pipe(app.gulp.dest(build));
+    return app.gulp
+      .src(src)
+      .pipe(
+        app.plugins.plumber({
+          errorHandler: function (error) {
+            app.errors.handler(error, app.errors.messages.vendors);
+
+            console.log(error.toString());
+          },
+        }),
+      )
+      .pipe(app.plugins.plumber.stop())
+      .pipe(app.gulp.dest(build));
   });
 };
