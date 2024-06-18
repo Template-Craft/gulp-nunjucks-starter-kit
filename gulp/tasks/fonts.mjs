@@ -12,5 +12,15 @@ export const fonts = () => {
     .src(app.path.src.fonts, {
       encoding: false,
     })
+    .pipe(
+      app.plugins.plumber({
+        errorHandler: function (error) {
+          app.errors.handler(error, app.errors.messages.assets);
+
+          console.log(error.toString());
+        },
+      }),
+    )
+    .pipe(app.plugins.plumber.stop())
     .pipe(app.gulp.dest(app.path.build.fonts));
 };

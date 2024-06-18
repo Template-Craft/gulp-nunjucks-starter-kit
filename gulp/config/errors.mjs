@@ -22,5 +22,8 @@ export const errors = {
     sass: 'Oops! Sass errored',
     njk: 'Oops! Nunjucks template errored',
     scripts: 'Oops! Scripts errored',
+    json: 'Oops! Json errored',
+    vendors: 'Oops! Vendor plugin errored',
+    assets: 'Oops! Assets file errored',
   },
 };
