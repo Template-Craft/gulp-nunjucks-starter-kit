@@ -68,7 +68,7 @@ export const scripts = () => {
                       [
                         '@babel/preset-env',
                         {
-                          debug: app.isBuild ? false : true,
+                          debug: true,
                           corejs: 3,
                           useBuiltIns: 'usage',
                         },
