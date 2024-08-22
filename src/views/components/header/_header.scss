@@ -6,7 +6,9 @@ $header-focused-text-color: #808080;
 .header {
   @include padding(14px 0);
 
-  border-bottom: rem(1) solid $header-border-color;
+  & {
+    border-bottom: rem(1) solid $header-border-color;
+  }
 
   &[data-header-state='focused'] {
     color: $header-focused-text-color;
