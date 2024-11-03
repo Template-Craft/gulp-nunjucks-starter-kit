@@ -59,8 +59,16 @@ export const templates = () => {
           preserve_newlines: false,
         }),
       )
+      .pipe(app.plugins.gulpIf(app.isBuild, app.plugins.replace('.min.css', '.css')))
+      .pipe(app.plugins.gulpIf(app.isBuild, app.plugins.replace('.min.js', '.js')))
       .pipe(app.plugins.gulpIf(app.isBuild, app.plugins.replace('.css', '.min.css')))
       .pipe(app.plugins.gulpIf(app.isBuild, app.plugins.replace('.js', '.min.js')))
+      .pipe(
+        app.plugins.gulpIf(
+          app.isBuild,
+          app.plugins.replace('plugins/normalize/normalize.min.css', 'plugins/normalize/normalize.css'),
+        ),
+      )
       .pipe(app.plugins.plumber.stop())
       .pipe(app.gulp.dest(app.path.build.html))
       .pipe(app.plugins.browsersync.stream())

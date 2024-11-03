@@ -1,13 +1,16 @@
+@use '_defaults/all_defaults' as rfs;
+@use '_defaults/all_defaults' as func;
+
 $header-border-color: #919191;
 $header-focused-background-color: #383838;
 $header-focused-border-color: #7c7c7c;
 $header-focused-text-color: #808080;
 
 .header {
-  @include padding(14px 0);
+  @include rfs.padding(14px 0);
 
   & {
-    border-bottom: rem(1) solid $header-border-color;
+    border-bottom: func.rem(1) solid $header-border-color;
   }
 
   &[data-header-state='focused'] {

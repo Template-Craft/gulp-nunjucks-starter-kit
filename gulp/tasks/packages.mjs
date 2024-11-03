@@ -13,9 +13,7 @@ export const vendors = async () => {
   // Указываем в массиве модули которые хотим подключить в проект, использование:
   // В массиве указываем путь до модуля (node_modules) и путь до дир-рии в которую Gulp.js их положит:
   // ['pathToNodeModules/pluginName/pluginSources/**', 'pathToProdDir/pluginName/'],
-  const pluginsCollection = await new Map([
-    [`${modules}/normalize.css/normalize.css`, `${destination}/normalize.css/`],
-  ]);
+  const pluginsCollection = await new Map([[`${modules}/normalize.css/normalize.css`, `${destination}/normalize/`]]);
 
   await pluginsCollection.forEach((value, key) => {
     let src = key;

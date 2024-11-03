@@ -35,7 +35,7 @@ export const KITCONFIG = {
       return `${dir_path}/_${value}${this.extension}`;
     },
     import_stylesheet: function (value) {
-      return `\n@import '../views/components/${value}/_${value}${this.extension}';\n`;
+      return `\n@use '../views/components/${value}/_${value}${this.extension}';\n`;
     },
   },
   archive: [

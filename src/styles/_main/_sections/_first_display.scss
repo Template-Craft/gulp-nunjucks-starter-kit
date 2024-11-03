@@ -1,12 +1,16 @@
+@use '_defaults/all_defaults' as rfs;
+@use '_defaults/all_defaults' as func;
+@use '_defaults/all_defaults' as grid;
+
 .first-display {
   width: 100%;
 
-  padding: rem(40) 0;
+  padding: func.rem(40) 0;
 
   .card-animals {
-    @include make-col;
-    @include make-size(12);
+    @include grid.make-col;
+    @include grid.make-size(12);
 
-    @include font-size(20px);
+    @include rfs.font-size(20px);
   }
 }

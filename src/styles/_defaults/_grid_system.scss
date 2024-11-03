@@ -1,3 +1,5 @@
+@use 'sass:map';
+@use 'tools' as func;
 // ----------------------------------------------------------------------;
 //    гибридная сетка, вдохновлена идеями bootstrap 5.0 + smart-grid.css
 // ----------------------------------------------------------------------;
@@ -51,8 +53,8 @@ $GRID_BREAKPOINTS: (
   8k: 8000px,
 ) !default;
 
-@include _assert-ascending($GRID_BREAKPOINTS, '$GRID_BREAKPOINTS');
-@include _assert-starts-at-zero($GRID_BREAKPOINTS, '$GRID_BREAKPOINTS');
+@include func.assert-ascending($GRID_BREAKPOINTS, '$GRID_BREAKPOINTS');
+@include func.assert-starts-at-zero($GRID_BREAKPOINTS, '$GRID_BREAKPOINTS');
 
 // массив с данными для размеров точек контейнера
 $CONTAINER_MAX_WIDTHS: (
@@ -63,7 +65,7 @@ $CONTAINER_MAX_WIDTHS: (
   xxl: 1320px,
 ) !default;
 
-@include _assert-ascending($CONTAINER_MAX_WIDTHS, '$CONTAINER_MAX_WIDTHS');
+@include func.assert-ascending($CONTAINER_MAX_WIDTHS, '$CONTAINER_MAX_WIDTHS');
 
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //    Функции для распечатки точек остановы
@@ -75,7 +77,7 @@ $CONTAINER_MAX_WIDTHS: (
 /// @prop {String} breakpoint-min($name, ($breakpoints: $GRID_BREAKPOINTS))  >> breakpoint-min(sm, (xs: 0, sm: 576px, md: 768px, lg: 992px, xl: 1200px, xxl: 1400px))
 ///
 @function breakpoint-min($name, $breakpoints: $GRID_BREAKPOINTS) {
-  $min: map-get($breakpoints, $name);
+  $min: map.get($breakpoints, $name);
   @return if($min != 0, $min, null);
 }
 
@@ -91,7 +93,7 @@ $CONTAINER_MAX_WIDTHS: (
 /// @prop {String} breakpoint-max($name, ($breakpoints: $GRID_BREAKPOINTS))  >> breakpoint-max(md, (xs: 0, sm: 576px, md: 768px, lg: 992px, xl: 1200px, xxl: 1400px))
 ///
 @function breakpoint-max($name, $breakpoints: $GRID_BREAKPOINTS) {
-  $max: map-get($breakpoints, $name);
+  $max: map.get($breakpoints, $name);
   @return if($max and $max > 0, $max - 0.02, null);
 }
 
