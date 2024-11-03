@@ -1,9 +1,12 @@
+@use '_defaults/all_defaults' as rfs;
+@use '_defaults/all_defaults' as func;
+
 $footer-border-color: #919191;
 
 .footer {
-  @include padding(22px 0);
+  @include rfs.padding(22px 0);
 
   & {
-    border-top: rem(1) solid $footer-border-color;
+    border-top: func.rem(1) solid $footer-border-color;
   }
 }

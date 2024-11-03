@@ -1,17 +1,9 @@
 // Импортируем дефолтные стили выше остальных!
-@import '_defaults/_all_defaults.scss';
+@use '_defaults/_all_defaults.scss';
 
 // Подключаем файл, в который импортируем скриптом компоненты:
-@import '_components_import.scss';
+@use '_components_import.scss';
 
 // Далее, подключаем секции:
-@import '_main/_sections/_header.scss';
-@import '_main/_sections/_first_display.scss';
-
-.row {
-  @include row-flex;
-}
-
-.container {
-  @include container;
-}
+@use '_main/_sections/_header.scss';
+@use '_main/_sections/_first_display.scss';

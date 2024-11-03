@@ -1,9 +1,18 @@
-@import '../../../node_modules/rfs/scss.scss';
+// @forward - позволяет потом использовать все переменные, миксины и фун-ции подключённые в этот файл: defaults/all_defaults;
+// пример в компоненте _Header.scss
+// Пример подключения с определенным пространством имён:
+// @use @use 'defaults/all_defaults' as your_name_space;
+//
+// Пример использования:
+// @include your_name_space.padding(20px);
+
+@forward '../../../node_modules/rfs/scss.scss';
 
 // Тут импортируем стили находящиеся в родительской папке _defaults
-@import 'reset';
+@forward 'typography';
 
-@import 'typography';
-@import 'tools';
+@forward 'tools';
 
-@import 'grid_system';
+@forward 'grid_system';
+
+@forward 'reset';
