@@ -20,7 +20,7 @@ export const vendors = async () => {
     let build = value;
 
     return app.gulp
-      .src(src)
+      .src(src, { encoding: false })
       .pipe(
         app.plugins.plumber({
           errorHandler: function (error) {
