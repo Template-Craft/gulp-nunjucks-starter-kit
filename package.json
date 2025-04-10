@@ -1,6 +1,6 @@
 {
   "name": "gulp-nunjucks-starter-kit",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Инструмент для компонентного проектирования статических сайтов, как lending page так и много-страничных проектов.",
   "main": "gulpfile.mjs",
   "bin": {
