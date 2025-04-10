@@ -1,0 +1,26 @@
+@use 'defaults/_all_defaults' as *;
+
+.footer {
+  @include padding(4px 11px);
+
+  & {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+
+    align-self: baseline;
+
+    background-color: #353535;
+  }
+
+  &__content {
+    @include font-size(22px);
+
+    & {
+      font-weight: 600;
+      line-height: normal;
+
+      text-align: center;
+    }
+  }
+}

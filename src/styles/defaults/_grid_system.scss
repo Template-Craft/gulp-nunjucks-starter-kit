@@ -195,7 +195,7 @@ $CONTAINER_MAX_WIDTHS: (
   & > * {
     max-width: 100%;
     width: 100%;
-    flex-shrink: 0;
+    flex-shrink: auto;
     margin-left: $offset_one_side;
     margin-right: $offset_one_side;
     word-wrap: break-word;

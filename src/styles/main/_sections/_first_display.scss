@@ -1,0 +1,30 @@
+@use 'defaults/_all_defaults' as *;
+
+.first-display-section {
+  @include padding(22px 0 22px);
+
+  & {
+    width: 100%;
+  }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+
+    gap: rem(22);
+
+    & *:not(div, article) {
+      padding: 0;
+      margin: 0;
+
+      text-align: center;
+    }
+
+    &__header {
+      display: flex;
+      flex-direction: column;
+
+      gap: rem(8);
+    }
+  }
+}

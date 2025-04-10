@@ -1,20 +1,35 @@
 
-{% set db = getData('db') %}
+{% from "templates/_head.njk" import HTMLHead %}
 
-{% from "templates/head.njk" import head %}
+{% set stylesPathes = [
+    "vendor/normalize/normalize.css",
+    "styles/main.css"
+  ]
+%}
 
 <!doctype html>
-<html lang="{{- db.htmlLang -}}">
-  {{- head(db) -}}
+<html lang="en">
+  {{- HTMLHead(title = 'Gulp + Nunjucks starter kit', styles = stylesPathes) -}}
   <body>
-    {% include getComponent('header') %}
+    <div class="wrapper">
+      {# Import Header macro component #}
+      {% from getComponent('Header') import Header %}
+      {% set dataHeader = getData('Header') %}
 
-    <main class="sections-wrapper">
-      {% include getSection('', 'first_section') %}
-    </main>
+      {# Each json scheme with Header macro component #}
+      {% for item in dataHeader.header %}
+        {{- Header(item) -}}
+      {% endfor %}
 
-    {% include getComponent('footer') %}
+      <main class="main-sections">
+        {% include getSection('', 'first_section') %}
+      </main>
 
-    <script src="{{- db.mainScriptPath -}}"></script>
+      {# Import Header macro component #}
+      {% from getComponent('Footer') import Footer %}
+      {{- Footer() -}}
+    </div>
+
+    {% include "templates/_scripts.njk" %}
   </body>
 </html>

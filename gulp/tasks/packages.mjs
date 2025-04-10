@@ -8,7 +8,7 @@
 // Собираем, и перемещаем в нужную дир-рию пподключённые плагины
 export const vendors = async () => {
   const modules = app.path.nodeModules;
-  const destination = app.path.build.plugins;
+  const destination = app.path.build.vendor;
 
   // Указываем в массиве модули которые хотим подключить в проект, использование:
   // В массиве указываем путь до модуля (node_modules) и путь до дир-рии в которую Gulp.js их положит:

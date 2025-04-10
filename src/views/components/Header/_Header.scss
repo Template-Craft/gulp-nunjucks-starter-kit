@@ -1,0 +1,49 @@
+@use 'defaults/_all_defaults' as *;
+
+.header {
+  @include padding(4px 11px);
+
+  & {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+
+    align-self: baseline;
+
+    background-color: #353535;
+  }
+
+  ul,
+  ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  a {
+    @include font-size(18px);
+
+    & {
+      font-weight: 500;
+      line-height: normal;
+
+      text-decoration: none;
+      color: #ececec;
+    }
+  }
+
+  .header-nav {
+    @include make-col;
+    @include make-size(12);
+  }
+
+  .header-nav__list {
+    display: flex;
+    flex-wrap: wrap;
+
+    justify-content: center;
+    align-items: center;
+
+    gap: rem(14);
+  }
+}

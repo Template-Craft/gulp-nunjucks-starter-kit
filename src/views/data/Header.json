@@ -1,0 +1,20 @@
+{
+  "header": [
+    {
+      "navigation": [
+        {
+          "linkTargetRule": "_blank",
+          "href": "https://github.com/Template-Craft/gulp-nunjucks-starter-kit#readme",
+          "linkTitle": "Gulp starter kit with nunjucks",
+          "linkName": "Home"
+        },
+        {
+          "linkTargetRule": "_blank",
+          "href": "mailto:galaxyrobotix@gmail.com",
+          "linkTitle": "E-mail",
+          "linkName": "NИ"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{% macro Header(data) %}
+  <header class="header">
+    <div class="container">
+      <div class="row">
+
+        <nav class="header-nav">
+          <ul class="header-nav__list">
+            {% for navItem in data.navigation %}
+              <li class="header-nav__list-item">
+                <a target="{{- navItem.linkTargetRule -}}" href="{{- navItem.href -}}"
+                   class="header-nav__link" title="{{- navItem.linkTitle -}}">
+
+                   {{- navItem.linkName -}}
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+        </nav>
+
+      </div>
+    </div>
+  </header>
+{% endmacro %}

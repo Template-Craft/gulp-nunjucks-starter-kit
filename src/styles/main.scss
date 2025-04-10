@@ -1,9 +1,8 @@
 // Импортируем дефолтные стили выше остальных!
-@use '_defaults/_all_defaults.scss';
+@use 'defaults/_all_defaults.scss';
 
 // Подключаем файл, в который импортируем скриптом компоненты:
-@use '_components_import.scss';
+@use 'components_import.scss';
 
-// Далее, подключаем секции:
-@use '_main/_sections/_header.scss';
-@use '_main/_sections/_first_display.scss';
+// Подключаем остальные секции
+@use 'main/_sections/first_display';

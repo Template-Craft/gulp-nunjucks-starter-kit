@@ -1,0 +1,36 @@
+@use 'grid_system' as *;
+
+// Container style rules
+.container {
+  @include container;
+}
+
+// Row style rules
+.row {
+  @include row-flex;
+}
+
+// Footer bottom fixed rules --start:
+.wrapper {
+  width: 100%;
+  height: 100dvh;
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+}
+
+.main-sections {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+
+  flex-grow: 1;
+}
+
+.footer {
+  flex-shrink: 0;
+}
+// Footer bottom fixed rules --end;

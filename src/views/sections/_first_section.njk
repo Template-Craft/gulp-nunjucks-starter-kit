@@ -1,17 +1,18 @@
-<section class="first-display">
+<section class="first-display-section">
   <div class="container">
     <div class="row">
-      <div class="card-animals js-card-animals">
-        {% set arr_animals = { "cat": "2", "dog": "1", "mouse": "4" }%}
 
-        <ol>
-          {% for animal, count in arr_animals %}
-            <li>{{- animal }} : {{ count -}}</li>
-          {% endfor %}
-        </ol>
+      <article class="content">
+        <div class="content__header">
+          <h1>gulp-nunjucks-starter-kit</h1>
+          <p>Инструмент для создания статических сайтов, их проектирования с помощью шаблонизатора Nunjucks и сборки с помощью Gulp + Webpack</p>
+        </div>
 
-        <button class="button js-btn__card-animals">Click me!</button>
-      </div>
+        <div class="content__description">
+          <p>Это тестовая страница, призванная продемонстрировать работоспособность инструмента.</p>
+        </div>
+      </article>
+
     </div>
   </div>
 </section>
