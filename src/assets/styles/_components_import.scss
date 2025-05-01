@@ -1,6 +1,6 @@
 // В этот файл подключаются компоненты
 // Не трогаем файл руками, сюда подключаются стили через скрипт.
 
-@use '../views/components/Header/_Header.scss';
+@use '../../views/components/Header/_Header.scss';
 
-@use '../views/components/Footer/_Footer.scss';
+@use '../../views/components/Footer/_Footer.scss';

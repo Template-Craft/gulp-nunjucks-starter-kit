@@ -1,6 +1,3 @@
-/* eslint-disable import/order */
-/* eslint-disable camelcase */
-
 // Импортируем команды тут, ниже объединяем их в глобальную переменную COMMANDS
 
 import * as create from './commands/create.mjs';

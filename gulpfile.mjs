@@ -17,7 +17,7 @@
 //   * Каталог в котором работаем с исходниками -> /src
 //   * Каталог в котором собирается проект      -> /build
 //   *
-//   *  Copyright (c) 2023 NИ
+//   *  Copyright (c) 2023-2025 NИ
 //  --------------------------------------------------------------------------------
 
 'use strict';
@@ -71,15 +71,27 @@ function watcher() {
 
 // gulp.parallel() - параллельное выполнение задач
 // передаём сюда свои задачи (task)
-const mainTasks = gulp.parallel(templates, vendors, styles, scripts, fonts, images);
+const mainTasks = gulp.parallel(vendors, templates, styles, scripts, fonts, images);
 
 // gulp.series()   - последовательное выполнение задач
 const dev = gulp.series(reset, mainTasks, gulp.parallel(watcher, server, createNotification));
 const build = gulp.series(reset, mainTasks, createNotification);
 
 // Экспорт сценариев:
-export { dev };
-export { build };
+export { dev, build };
 
 // Выполнение сценария по умолчанию
 gulp.task('default', dev);
+
+// Задачи для их одиночного использования в целях тестирования.
+// Вызов в режиме dev
+// gulp test:<taskName>
+// *
+// Вызов в режиме build
+// gulp test:<taskName> --build
+gulp.task('test:vendors', vendors);
+gulp.task('test:templates', templates);
+gulp.task('test:styles', styles);
+gulp.task('test:scripts', scripts);
+gulp.task('test:fonts', fonts);
+gulp.task('test:images', images);

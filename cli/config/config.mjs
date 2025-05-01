@@ -30,12 +30,12 @@ export const KITCONFIG = {
   styles: {
     extension: '.scss',
     component_path: './src/views/components/',
-    include_in: './src/styles/_components_import.scss',
+    include_in: './src/assets/styles/_components_import.scss',
     component_stylesheet: function (dir_path, value) {
       return `${dir_path}/_${value}${this.extension}`;
     },
     import_stylesheet: function (value) {
-      return `\n@use '../views/components/${value}/_${value}${this.extension}';\n`;
+      return `\n@use '../../views/components/${value}/_${value}${this.extension}';\n`;
     },
   },
   archive: [

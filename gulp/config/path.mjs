@@ -17,7 +17,7 @@ const nodeModules = './node_modules';
 export const path = {
   build: {
     html: `${buildFolder}/`,
-    styles: `${buildFolder}/styles/`,
+    styles: `${buildFolder}/assets/styles/`,
     scripts: `${buildFolder}/scripts/`,
     images: `${buildFolder}/assets/img/`,
     fonts: `${buildFolder}/assets/fonts/`,
@@ -27,7 +27,7 @@ export const path = {
     nunjucks: `${srcFolder}/views/pages/*.+(html|njk|nunjucks|nj)`,
     nunjucksRenderSrcFolder: `${srcFolder}/views/`,
     nunjucksData: `${srcFolder}/views/data/**/*.json`,
-    styles: `${srcFolder}/styles/main.scss`,
+    styles: `${srcFolder}/assets/styles/main.scss`,
     scripts: `${srcFolder}/scripts/main/app.mjs`,
     images: `${srcFolder}/assets/img/**/*.{jpg,jpeg,png,gif,tiff,svg,webp}`,
     fonts: `${srcFolder}/assets/fonts/**/*.{woff,woff2,ttf}`,
@@ -35,7 +35,7 @@ export const path = {
   watch: {
     nunjucks: `${srcFolder}/views/**/*.+(html|njk|nunjucks|nj)`,
     nunjucksData: `${srcFolder}/views/data/**/*.json`,
-    styles: [`${srcFolder}/styles/**/*.{scss,sass}`, `${srcFolder}/views/components/**/*.{scss,sass}`],
+    styles: [`${srcFolder}/assets/styles/**/*.{scss,sass}`, `${srcFolder}/views/components/**/*.{scss,sass}`],
     scripts: [`${srcFolder}/scripts/main/**/*.{js,mjs}`, `${srcFolder}/views/components/**/*.{js,mjs}`],
     images: `${srcFolder}/assets/img/**/*.{jpg,jpeg,png,gif,tiff,svg,webp}`,
   },

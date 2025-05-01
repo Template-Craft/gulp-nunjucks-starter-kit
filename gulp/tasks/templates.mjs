@@ -66,7 +66,7 @@ export const templates = () => {
       .pipe(
         app.plugins.gulpIf(
           app.isBuild,
-          app.plugins.replace('plugins/normalize/normalize.min.css', 'plugins/normalize/normalize.css'),
+          app.plugins.replace('vendor/normalize/normalize.min.css', 'vendor/normalize/normalize.css'),
         ),
       )
       .pipe(app.plugins.plumber.stop())

@@ -6,7 +6,7 @@
 // Пример использования:
 // @include your_name_space.padding(20px);
 
-@forward '../../../node_modules/rfs/scss.scss';
+@forward '../../../../node_modules/rfs/scss.scss';
 
 // Тут импортируем стили находящиеся в родительской папке _defaults
 @forward 'typography';
