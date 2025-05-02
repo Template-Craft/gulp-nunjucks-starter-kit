@@ -115,7 +115,7 @@ export const CREATE_ARCHIVE = (archive_option_collection, input_option, input_va
         const archive_option = collection.options.option;
 
         const current_date = new Date();
-        const get_date = current_date.toLocaleDateString();
+        const get_date = `${current_date.toLocaleDateString()}-${current_date.toLocaleTimeString()}`;
 
         const destination = `${input_values}:${get_date}.${extension}`;
         const destination_stream = KITSYS.fs.createWriteStream(destination);
