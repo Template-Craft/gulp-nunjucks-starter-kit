@@ -3,5 +3,6 @@
 import * as create from './commands/create.mjs';
 import * as inject from './commands/inject.mjs';
 import * as archive_this from './commands/archive_this.mjs';
+import * as convert from './commands/converter.mjs';
 
-export const COMMANDS = [create, inject, archive_this];
+export const COMMANDS = [create, inject, archive_this, convert];

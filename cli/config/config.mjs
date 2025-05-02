@@ -2,11 +2,13 @@
 
 'use strict';
 
-import fs from 'fs';
+import * as fs from 'node:fs';
+import * as fsPromises from 'node:fs/promises';
 import node_path from 'node:path';
 
 import archiver from 'archiver';
 import chalk from 'chalk';
+import svg64 from 'svg64';
 
 const __dirname = node_path.resolve();
 
@@ -14,11 +16,13 @@ const __dirname = node_path.resolve();
 export const KITPLUGIN = {
   chalk: chalk,
   archiver: archiver,
+  svg64: svg64,
 };
 
 // часто используемые системные и прочие API Node.js
 export const KITSYS = {
   fs: fs,
+  fsPromises: fsPromises,
   node_path: node_path,
   __dirname: __dirname,
 };
