@@ -34,7 +34,7 @@ const archiveThis = async (argv) => {
           if (error_msg) {
             console.error(plugin.chalk.red(error_msg));
           } else {
-            console.info(plugin.chalk.green(`Директория: ${get_folder_name} - существует`));
+            console.info(plugin.chalk.green(`Директория: ${get_folder_name} - существует, создаю архив`));
 
             // функция создания архива, передаем в неё 3 параметра:
             // 1 - коллекцию объектов массива с параметрами для архиватора
