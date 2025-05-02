@@ -2,10 +2,11 @@
 // с помощью конструкции @import '';
 'use strict';
 
-import { KITPLUGIN, KITCONFIG } from '../config/config.mjs';
+import { KITSYS, KITPLUGIN, KITCONFIG } from '../config/config.mjs';
 
 const config = KITCONFIG.styles;
 const plugin = KITPLUGIN;
+const system = KITSYS;
 
 const injectStyle = async (style) => {
   try {
@@ -15,13 +16,13 @@ const injectStyle = async (style) => {
     const this_stylesheet = config.component_stylesheet(find_dir_path, value);
 
     // ищем директорию с компонентом, имя получаем из командной строки.
-    await plugin.fs.readdir(plugin.node_path.resolve(plugin.__dirname, find_dir_path), 'utf8', (err) => {
+    await system.fs.readdir(system.node_path.resolve(system.__dirname, find_dir_path), 'utf8', (err) => {
       if (err) {
         console.error(plugin.chalk.red(err)); // сообщаем ошибку в консоли
       } else {
         console.info(plugin.chalk.green(`Каталог существует и найден: ${find_dir_path}`));
 
-        plugin.fs.stat(`${this_stylesheet}`, (error_msg, status) => {
+        system.fs.stat(`${this_stylesheet}`, (error_msg, status) => {
           if (error_msg) {
             console.error(plugin.chalk.red(error_msg));
           }
@@ -31,7 +32,7 @@ const injectStyle = async (style) => {
             console.info(plugin.chalk.blue(`\n_${value}.scss - существует и является файлом`));
 
             // Добавим в конец main.scss, импорт файла стилей нашего найденного компонента
-            plugin.fs.appendFile(config.include_in, config.import_stylesheet(value), 'utf8', (error_msg) => {
+            system.fs.appendFile(config.include_in, config.import_stylesheet(value), 'utf8', (error_msg) => {
               if (error_msg) {
                 console.error(plugin.chalk.red(error_msg));
               } else {

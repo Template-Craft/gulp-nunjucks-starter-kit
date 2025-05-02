@@ -12,9 +12,13 @@ const __dirname = node_path.resolve();
 
 // часто используемые плагины
 export const KITPLUGIN = {
-  fs: fs,
   chalk: chalk,
   archiver: archiver,
+};
+
+// часто используемые системные и прочие API Node.js
+export const KITSYS = {
+  fs: fs,
   node_path: node_path,
   __dirname: __dirname,
 };
@@ -72,7 +76,7 @@ export const KITCONFIG = {
 // @param: CREATE_FILES(collection, dir_path)
 export const CREATE_FILES = (collection, dir_path) => {
   collection.forEach((file) => {
-    KITPLUGIN.fs.open(`${dir_path}${KITPLUGIN.node_path.basename(file)}`, 'w', (error_msg) => {
+    KITSYS.fs.open(`${dir_path}${KITSYS.node_path.basename(file)}`, 'w', (error_msg) => {
       if (error_msg) {
         console.error(KITPLUGIN.chalk.red(error_msg));
       }
@@ -110,10 +114,11 @@ export const CREATE_ARCHIVE = (archive_option_collection, input_option, input_va
         const extension = collection.options.extension;
         const archive_option = collection.options.option;
 
-        const get_date = new Date().toISOString();
+        const current_date = new Date();
+        const get_date = current_date.toLocaleDateString();
 
         const destination = `${input_values}:${get_date}.${extension}`;
-        const destination_stream = KITPLUGIN.fs.createWriteStream(destination);
+        const destination_stream = KITSYS.fs.createWriteStream(destination);
 
         destination_stream.on('close', function () {
           console.log(KITPLUGIN.chalk.yellow(archive_option.pointer() + ' total bytes'));

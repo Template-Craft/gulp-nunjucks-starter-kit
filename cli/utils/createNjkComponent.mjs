@@ -2,16 +2,17 @@
 
 'use strict';
 
-import { KITPLUGIN, KITCONFIG, CREATE_FILES } from '../config/config.mjs';
+import { KITSYS, KITPLUGIN, KITCONFIG, CREATE_FILES } from '../config/config.mjs';
 
 const config = KITCONFIG;
 const createFiles = CREATE_FILES;
 const plugin = KITPLUGIN;
+const system = KITSYS;
 
 const createComponent = async (name) => {
   try {
     // проверка на дубликаты
-    const exists = plugin.fs.existsSync(config.template.spawn_dir(name));
+    const exists = system.fs.existsSync(config.template.spawn_dir(name));
 
     // передадим в переменную до расширения файла,
     // имя, пришедшее из функции, и подставим его.
@@ -37,8 +38,8 @@ const createComponent = async (name) => {
         console.error(plugin.chalk.red(`Ошибка: Компонент ${name} существует! Попробуйте другое имя`));
       } else {
         // тут объявляем что мы собираемся создать директорию с файлами
-        await plugin.fs.mkdir(
-          plugin.node_path.normalize(config.template.spawn_dir(name)),
+        await system.fs.mkdir(
+          system.node_path.normalize(config.template.spawn_dir(name)),
           { recursive: true },
           (err) => {
             if (err) {
