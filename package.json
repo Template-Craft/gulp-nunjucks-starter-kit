@@ -4,16 +4,15 @@
   "description": "Инструмент для компонентного проектирования статических сайтов, как lending page так и много-страничных проектов.",
   "main": "gulpfile.mjs",
   "bin": {
-    "kit-tools": "./cli/kit-tools.mjs"
+    "cli-tools": "./cli-app/cli-tools.mjs"
   },
   "scripts": {
     "eslint:init": "npm init @eslint/config@latest",
-    "tool": "npm exec kit-tools",
     "dev": "gulp",
     "build": "gulp build --build",
-    "build:archive:tgz": "gulp build --build && node ./cli/kit-tools.mjs archive --options tgz build",
-    "build:archive:tar": "gulp build --build && node ./cli/kit-tools.mjs archive --options tar build",
-    "build:archive:zip": "gulp build --build && node ./cli/kit-tools.mjs archive --options zip build",
+    "build:archive:tgz": "gulp build --build && node ./cli-app/cli-tools.mjs archive -o tgz -p build",
+    "build:archive:tar": "gulp build --build && node ./cli-app/cli-tools.mjs archive -o tar -p build",
+    "build:archive:zip": "gulp build --build && node ./cli-app/cli-tools.mjs archive -o zip -p build",
     "ncu": "ncu",
     "ncu:interactive": "ncu --interactive",
     "ncu:interactive:formatgroup": "ncu --interactive --format group",

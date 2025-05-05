@@ -1,7 +1,5 @@
 /* eslint-disable n/no-unpublished-import */
 
-'use strict';
-
 import * as fs from 'node:fs';
 import * as fsPromises from 'node:fs/promises';
 import node_path from 'node:path';

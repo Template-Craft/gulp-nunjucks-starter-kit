@@ -1,7 +1,4 @@
 // Утилита для создания компонента
-
-'use strict';
-
 import { KITSYS, KITPLUGIN, KITCONFIG, CREATE_FILES } from '../config/config.mjs';
 
 const config = KITCONFIG;
@@ -9,8 +6,11 @@ const createFiles = CREATE_FILES;
 const plugin = KITPLUGIN;
 const system = KITSYS;
 
-const createComponent = async (name) => {
+const createComponent = async (argv) => {
   try {
+    // Получаем содержимое команд пришедшее от пользователя.
+    const name = argv.component;
+
     // проверка на дубликаты
     const exists = system.fs.existsSync(config.template.spawn_dir(name));
 
@@ -24,27 +24,29 @@ const createComponent = async (name) => {
     const component_data = [`${name}.json`];
 
     // проверяем на пустышку
-    if (name === undefined) {
+    if (name === undefined || null || name === '') {
       console.error(
         plugin.chalk.red(
           `Ошибка: Для создания компонента необходимо использовать один из двух ключей: \n${plugin.chalk.blue(
-            '-n',
-          )} или ${plugin.chalk.blue('--name')} передать имя после ключа!`,
+            '-c',
+          )} или ${plugin.chalk.blue('--component')} передать имя после ключа!`,
         ),
       );
     } else {
       // проверяем на дубликат
       if (exists === true) {
-        console.error(plugin.chalk.red(`Ошибка: Компонент ${name} существует! Попробуйте другое имя`));
+        console.error(
+          plugin.chalk.red(
+            `Внимание!\nКомпонент ${name} существует! Компонент не будет создан, попробуйте другое название.`,
+          ),
+        );
       } else {
         // тут объявляем что мы собираемся создать директорию с файлами
         await system.fs.mkdir(
           system.node_path.normalize(config.template.spawn_dir(name)),
           { recursive: true },
-          (err) => {
-            if (err) {
-              console.error(plugin.chalk.red(err));
-            }
+          (error_msg) => {
+            if (error_msg) throw error_msg;
 
             console.info(plugin.chalk.yellow('------ * component * ------'));
             console.info(plugin.chalk.gray(`Каталог компонента создан: ${config.template.spawn_dir(name)}`));
