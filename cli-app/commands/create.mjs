@@ -2,8 +2,11 @@
 import createComponent from '../utils/createNjkComponent.mjs';
 
 export const command = 'create';
-export const describe =
-  'Создание njk компонента. Принимает опцию -c или --component после которой необходимо передать имя создоваемого компонента.';
+export const describe = `
+  Создание njk компонента.
+
+  Принимает опцию -c или --component после которой необходимо передать имя создоваемого компонента.
+  `.trim();
 
 export const builder = (yargs) => {
   // Опция для передачи названия компонента
