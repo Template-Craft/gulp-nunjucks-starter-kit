@@ -5,7 +5,11 @@ export const command = 'create';
 export const describe = `
   Создание njk компонента.
 
-  Принимает опцию -c или --component после которой необходимо передать имя создоваемого компонента.
+  Опции:
+    -c или --component для указания названия создаваемого компонента.
+
+  Полная команда:
+    $ node ./cli-app/cli-tools.mjs create -c Header
   `.trim();
 
 export const builder = (yargs) => {

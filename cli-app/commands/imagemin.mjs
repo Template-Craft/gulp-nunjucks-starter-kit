@@ -15,7 +15,7 @@ export const describe = `
     svg   - для оптимизации .svg;
     webp  - для оптимизации .webp;
 
-  Ниже приведена полная команда вызванная из корня проекта:
+  Полная команда:
     $ node ./cli-app/cli-tools.mjs imagemin -min jpeg -p ./src/assets/img
 `.trim();
 
