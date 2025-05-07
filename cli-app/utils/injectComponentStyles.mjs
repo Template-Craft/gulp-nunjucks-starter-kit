@@ -2,7 +2,7 @@
 // с помощью конструкции @import '';
 import { KITSYS, KITPLUGIN, KITCONFIG } from '../config/config.mjs';
 
-const config = KITCONFIG.styles;
+const cfg = KITCONFIG.styles;
 const plugin = KITPLUGIN;
 const system = KITSYS;
 
@@ -10,8 +10,8 @@ const injectStyle = async (argv) => {
   try {
     const value = argv.style; // переопределяем переменную, для красоты кода.
 
-    const find_dir_path = `${config.component_path}${value}`;
-    const this_stylesheet = config.component_stylesheet(find_dir_path, value);
+    const find_dir_path = `${cfg.component_path}${value}`;
+    const this_stylesheet = cfg.component_stylesheet(find_dir_path, value);
 
     // Проверяем передачу аргумента и не пустая ли там строка
     if (value === undefined || null || value === '') {
@@ -31,11 +31,11 @@ const injectStyle = async (argv) => {
               console.info(plugin.chalk.blue(`\n_${value}.scss - является файлом`));
 
               // Добавим в конец main.scss, импорт файла стилей нашего найденного компонента
-              system.fs.appendFile(config.include_in, config.import_stylesheet(value), 'utf8', (error_msg) => {
+              system.fs.appendFile(cfg.include_in, cfg.import_stylesheet(value), 'utf8', (error_msg) => {
                 if (error_msg) throw error_msg;
                 else {
                   console.info(
-                    plugin.chalk.blue(`\nФайл ${this_stylesheet}: \nУспешно импортирован в файл: ${config.include_in}`),
+                    plugin.chalk.blue(`\nФайл ${this_stylesheet}: \nУспешно импортирован в файл: ${cfg.include_in}`),
                   );
                 }
               });
