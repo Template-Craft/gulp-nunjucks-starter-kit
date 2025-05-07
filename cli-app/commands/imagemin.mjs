@@ -1,51 +1,85 @@
 // команда imagemin - для оптимизации изображений, используется imagemin и прочие плагины.
 
+import imageOptimization from '../utils/imageOptimization.mjs';
+
 export const command = 'imagemin';
 export const describe = `
   Оптимизация изображений с помощью imagemin.
+  Для оптимизации указываем путь до дир-рии с изображениями.
 
   Опции:
-    -min или --minify для указания аргументов, название аргумента = название плагина imagemin.
-    -p или --path глобальная опция для указания пути до дир-рии.
+    -m или --minify для указания аргументов, название аргумента = название плагина imagemin.
+    -c или --convert для выбора формата конвертации изображения.
+    -i или --input опция для указания пути до дир-рии исходников.
+    -o или --output опция для указания пути до выходного каталога куда будут сложены оптимизированные файлы.
 
   Аргументы:
     gif   - для оптимизации .gif;
     jpeg  - для оптимизации .jpeg;
     png   - для оптимизации .png;
     svg   - для оптимизации .svg;
-    webp  - для оптимизации .webp;
+    webp  - для конвертации jpg,png в .webp (работает с опцией -con или --convert);
 
   Полная команда:
-    $ node ./cli-app/cli-tools.mjs imagemin -min jpeg -p ./src/assets/img
+    $ node ./cli-app/cli-tools.mjs imagemin -m jpeg -p ./src/assets/img
 `.trim();
 
 export const builder = (yargs) => {
   // Опция для выбора режима работы
   yargs.option('minify', {
-    alias: 'min',
+    alias: 'm',
     type: 'string',
-    choises: ['gif', 'jpeg', 'png', 'svg', 'webp'],
+    choises: ['gif', 'jpeg', 'png', 'svg', 'all'],
     describe: `
-      после ввода -min или --minify, выберите какой формат изображений нужно оптимизировать.
+      после ввода -m или --minify, выберите какой формат изображений нужно оптимизировать.
 
       доступные опции:
         gif   - для оптимизации .gif;
         jpeg  - для оптимизации .jpeg;
         png   - для оптимизации .png;
         svg   - для оптимизации .svg;
-        webp  - для оптимизации .webp;
+        all   - для оптимизации всех вышеперечисленных форматов;
+    `.trim(),
+  });
+
+  yargs.option('input', {
+    alias: 'i',
+    type: 'string',
+    describe: `
+      после ввода -i или --input укажите путь до дир-рии исходников.
+    `.trim(),
+  });
+
+  yargs.option('output', {
+    alias: 'o',
+    type: 'string',
+    describe: `
+      после ввода -o или --output укажите путь до дир-рии в которую необходимо сложить оптимизированные изображения.
+    `.trim(),
+  });
+
+  // Опция по конвертации изображений в разные форматы
+  yargs.option('convert', {
+    alias: 'c',
+    type: 'string',
+    choises: ['webp'],
+    describe: `
+      после ввода -c или --convert, выберите в какой формат изображение необходимо переконвертировать.
+
+      доступные опции:
+        webp - для конвертации jpg,png в webp формат;
     `.trim(),
   });
 
   // необходимые опции для работы команды, иначе ошибка
   yargs.demandOption(
-    ['minify', 'path'],
+    ['minify', 'input', 'output'],
     'Необходимо указать опцию с аргументом и путь до дир-рии оптимизируемых объектов.',
   );
 };
 
-// export const handler = function (argv) {
-//   argv.output = ;
+export const handler = function (argv) {
+  argv.output = imageOptimization(argv);
 
-//   console.log(argv);
-// }
+  // console.log('handler:\n', argv);
+};

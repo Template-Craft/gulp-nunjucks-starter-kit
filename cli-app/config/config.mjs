@@ -70,6 +70,48 @@ export const KITCONFIG = {
       },
     },
   ],
+  assets: {
+    src_path: './src/assets',
+    dest_path: './build/assets',
+  },
+  // параметры для svgo
+  svgocfg: {
+    js2svg: {
+      indent: 2, // number
+      pretty: false, // boolean
+    },
+    plugins: [
+      // Читай документацию: https://svgo.dev/docs/plugins/
+      'convertColors',
+      'convertOneStopGradients',
+      'mergeStyles',
+      'removeComments',
+      'removeDesc',
+      'removeEditorsNSData',
+      'removeEmptyAttrs',
+      'removeEmptyContainers',
+      'sortAttrs',
+      'sortDefsChildren',
+      {
+        name: ['removeViewBox'],
+        active: false, // выключено по умолчанию https://svgo.dev/docs/plugins/removeViewBox/
+      },
+      // {
+      //   name: 'removeAttrs',
+      //   params: {
+      //     // attrs: 'stroke', // fill|stroke
+      //     preserveCurrentColor: 'currentcolor',
+      //   },
+      // },
+    ],
+  },
+  // параметры для jpegtran
+  jpegtrancfg: {
+    progressive: true,
+  },
+  pngquantcfg: {
+    quality: [0.4, 0.6],
+  },
 };
 
 // @type function
