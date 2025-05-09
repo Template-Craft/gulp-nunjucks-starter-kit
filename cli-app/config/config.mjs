@@ -112,6 +112,12 @@ export const KITCONFIG = {
   pngquantcfg: {
     quality: [0.4, 0.6],
   },
+  webpcfg: {
+    quality: 75,
+    method: 5,
+    lossless: false, // by default
+    nearLossless: false, // by default
+  },
 };
 
 // @type function

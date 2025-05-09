@@ -14,54 +14,56 @@ import { KITPLUGIN, KITCONFIG } from '../config/config.mjs';
 const plugin = KITPLUGIN;
 const cfg = KITCONFIG;
 
+// TODO: На свежую голову пересмотреть код, мб нужно будет оптимизировать.
+
 const imageOptimization = async (arvg) => {
   try {
     // debugging
     // console.log('imageOptimization:\n', arvg);
 
     // arguments collection:
-    const cmdArguments = {
-      cmd: arvg.minify,
+    const cmdsOpt = {
+      cmd: arvg._[0], // команда imagemin
+      minifyCMD: arvg.minify,
+      convertCMD: arvg.convert,
       input: arvg.input,
       output: arvg.output,
     };
 
-    // Проверка на пустые, отсутствующие и т.д. команды
-    if (
-      cmdArguments.cmd === undefined ||
-      null ||
-      cmdArguments.cmd === '' ||
-      cmdArguments.input === '' ||
-      cmdArguments.output === '' ||
-      cmdArguments.input === undefined ||
-      cmdArguments.output === undefined ||
-      null
-    ) {
-      console.error(
-        `
-        ${plugin.chalk.red(`Ошибка!`)}
+    const command = cmdsOpt.cmd;
+    const input = cmdsOpt.input;
+    const output = cmdsOpt.output;
 
-        Пустой аргумент команды, или путь.
-        Получена команда: ${plugin.chalk.green(cmdArguments.cmd)}
-        Исходные изображения: ${plugin.chalk.yellow(cmdArguments.input)}
-        Оптимизированные изображения: ${plugin.chalk.green(cmdArguments.output)}
-        `.trim(),
-      );
-    } else {
+    // Проверка аргументов для оптимизатора и конвертора
+    if (
+      (command === 'imagemin' && cmdsOpt.minifyCMD !== undefined && cmdsOpt.minifyCMD !== '') ||
+      (cmdsOpt.convertCMD !== undefined && cmdsOpt.convertCMD !== '' && input !== '' && output !== '')
+    ) {
+      // Вывод информации в консоль
       console.log(plugin.chalk.bgBlue(';----------------------------------------------------:'));
       console.log('Получены данные для оптимизации:');
-      console.log(`Аргумент команды:  ${plugin.chalk.green(cmdArguments.cmd)}`.trim());
-      console.log(`Исходные изображения:  ${plugin.chalk.yellow(cmdArguments.input)}`.trim());
-      console.log(`Оптимизированные изображения:  ${plugin.chalk.green(cmdArguments.output)}`.trim());
+      console.log(`Получена команда: ${plugin.chalk.green(command)}`.trim());
+
+      if (cmdsOpt.minifyCMD !== undefined && cmdsOpt.minifyCMD !== '') {
+        console.log(
+          `Аргументы команды: ${plugin.chalk.green(cmdsOpt.minifyCMD !== false ? `--minify="${cmdsOpt.minifyCMD}"` : undefined)}`.trim(),
+        );
+      }
+
+      if (cmdsOpt.convertCMD !== undefined && cmdsOpt.convertCMD !== '') {
+        console.log(
+          `Аргументы команды: ${plugin.chalk.green(cmdsOpt.convertCMD !== false ? `--convert="${cmdsOpt.convertCMD}"` : undefined)}`.trim(),
+        );
+      }
+
+      console.log(`Исходные изображения: ${plugin.chalk.yellow(input)}`.trim());
+      console.log(`Оптимизированные изображения: ${plugin.chalk.green(output)}`.trim());
       console.log(plugin.chalk.bgBlue(';----------------------------------------------------:'));
 
-      const input = cmdArguments.input;
-      const output = cmdArguments.output;
-
+      // code
       // обрабатываем наши аргументы
-      if (cmdArguments.cmd === 'all') {
+      if (cmdsOpt.minifyCMD === 'all') {
         const files = await imagemin([`${input}/*.{jpg,jpeg,png,svg,gif}`], {
-          // destination: system.node_path.resolve(system.__dirname, destination),
           destination: output,
           plugins: [
             imageminJPEGtran(cfg.jpegtrancfg),
@@ -75,9 +77,8 @@ const imageOptimization = async (arvg) => {
       }
 
       // gif
-      if (cmdArguments.cmd === 'gif') {
+      if (cmdsOpt.minifyCMD === 'gif') {
         const files = await imagemin([`${input}/*.gif`], {
-          // destination: system.node_path.resolve(system.__dirname, destination),
           destination: output,
           plugins: [imageminGIFsicle()],
         });
@@ -86,9 +87,8 @@ const imageOptimization = async (arvg) => {
       }
 
       // jpeg,jpg
-      if (cmdArguments.cmd === 'jpeg') {
+      if (cmdsOpt.minifyCMD === 'jpeg') {
         const files = await imagemin([`${input}/*.{jpeg,jpg}`], {
-          // destination: system.node_path.resolve(system.__dirname, destination),
           destination: output,
           plugins: [imageminJPEGtran(cfg.jpegtrancfg)],
         });
@@ -97,9 +97,8 @@ const imageOptimization = async (arvg) => {
       }
 
       // png
-      if (cmdArguments.cmd === 'png') {
+      if (cmdsOpt.minifyCMD === 'png') {
         const files = await imagemin([`${input}/*.png`], {
-          // destination: system.node_path.resolve(system.__dirname, destination),
           destination: output,
           plugins: [imageminPNGquant(cfg.pngquantcfg)],
         });
@@ -107,15 +106,32 @@ const imageOptimization = async (arvg) => {
         console.log('Оптимизация:\n', files);
       }
 
-      if (cmdArguments.cmd === 'svg') {
+      if (cmdsOpt.minifyCMD === 'svg') {
         const files = await imagemin([`${input}/*.svg`], {
-          // destination: system.node_path.resolve(system.__dirname, destination),
           destination: output,
           plugins: [imageminSVGO(cfg.svgocfg)],
         });
 
         console.log('Оптимизация:\n', files);
       }
+
+      // Конвертация в webp
+      // проверим аргумент, конвертируем все виды изображений в webp
+      if (cmdsOpt.convertCMD === 'webp') {
+        const files = await imagemin([`${input}/*.{jpg,jpeg,png}`], {
+          destination: `${output}/webp-converting/`,
+          plugins: [imageminWEBP(cfg.webpcfg)],
+        });
+
+        console.log('Конвертация:\n', files);
+      }
+    } else {
+      console.error(
+        `
+          ${plugin.chalk.red(`Ошибка!`)}
+
+          Передан пустой аргумент или путь.`.trim(),
+      );
     }
   } catch (error) {
     console.error(error.message);

@@ -19,9 +19,10 @@ export const describe = `
     png   - для оптимизации .png;
     svg   - для оптимизации .svg;
     webp  - для конвертации jpg,png в .webp (работает с опцией -con или --convert);
+    all   - для оптимизации всех форматов (кроме .webp);
 
   Полная команда:
-    $ node ./cli-app/cli-tools.mjs imagemin -m jpeg -p ./src/assets/img
+    $ node ./cli-app/cli-tools.mjs imagemin -m jpeg --input="./src/assets/img" --output="./build/assets/img"
 `.trim();
 
 export const builder = (yargs) => {
@@ -73,8 +74,8 @@ export const builder = (yargs) => {
 
   // необходимые опции для работы команды, иначе ошибка
   yargs.demandOption(
-    ['minify', 'input', 'output'],
-    'Необходимо указать опцию с аргументом и путь до дир-рии оптимизируемых объектов.',
+    ['input', 'output'],
+    'Необходимо указать опцию с аргументами и пути до дир-рии оптимизируемых объектов и до дир-рии в которую необходимо поместить оптимизированные изображения.',
   );
 };
 
