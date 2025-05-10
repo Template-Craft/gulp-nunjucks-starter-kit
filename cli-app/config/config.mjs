@@ -70,10 +70,6 @@ export const KITCONFIG = {
       },
     },
   ],
-  assets: {
-    src_path: './src/assets',
-    dest_path: './build/assets',
-  },
   // параметры для svgo
   svgocfg: {
     js2svg: {
@@ -109,9 +105,11 @@ export const KITCONFIG = {
   jpegtrancfg: {
     progressive: true,
   },
+  // параметры для pngcuant
   pngquantcfg: {
     quality: [0.4, 0.6],
   },
+  // параметры для webp
   webpcfg: {
     quality: 75,
     method: 5,

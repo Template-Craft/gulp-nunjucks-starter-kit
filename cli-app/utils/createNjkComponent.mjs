@@ -1,7 +1,7 @@
 // Утилита для создания компонента
 import { KITSYS, KITPLUGIN, KITCONFIG, CREATE_FILES } from '../config/config.mjs';
 
-const config = KITCONFIG;
+const cfg = KITCONFIG;
 const createFiles = CREATE_FILES;
 const plugin = KITPLUGIN;
 const system = KITSYS;
@@ -12,15 +12,11 @@ const createComponent = async (argv) => {
     const name = argv.component;
 
     // проверка на дубликаты
-    const exists = system.fs.existsSync(config.template.spawn_dir(name));
+    const exists = system.fs.existsSync(cfg.template.spawn_dir(name));
 
     // передадим в переменную до расширения файла,
     // имя, пришедшее из функции, и подставим его.
-    const files_collection = [
-      `${name}${config.template.extension}`,
-      `${name}.mjs`,
-      `_${name}${config.styles.extension}`,
-    ];
+    const files_collection = [`${name}${cfg.template.extension}`, `${name}.mjs`, `_${name}${cfg.styles.extension}`];
     const component_data = [`${name}.json`];
 
     // проверяем на пустышку
@@ -43,19 +39,19 @@ const createComponent = async (argv) => {
       } else {
         // тут объявляем что мы собираемся создать директорию с файлами
         await system.fs.mkdir(
-          system.node_path.normalize(config.template.spawn_dir(name)),
+          system.node_path.normalize(cfg.template.spawn_dir(name)),
           { recursive: true },
           (error_msg) => {
             if (error_msg) throw error_msg;
 
             console.info(plugin.chalk.yellow('------ * component * ------'));
-            console.info(plugin.chalk.gray(`Каталог компонента создан: ${config.template.spawn_dir(name)}`));
+            console.info(plugin.chalk.gray(`Каталог компонента создан: ${cfg.template.spawn_dir(name)}`));
 
             // тут создаём файл данных компонента:
-            createFiles(component_data, config.template.data_dir);
+            createFiles(component_data, cfg.template.data_dir);
 
             // тут создаём папку компонента, с файлами переданными в массиве files_collection
-            createFiles(files_collection, config.template.spawn_dir(name));
+            createFiles(files_collection, cfg.template.spawn_dir(name));
           },
         );
       }
