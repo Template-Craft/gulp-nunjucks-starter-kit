@@ -1,5 +1,5 @@
 // команда import -s --style style_name
-import injectStyle from '../utils/injectComponentStyles.mjs';
+import injectComponentStyleApp from '../utils/injectComponentStyleApp.mjs';
 
 export const command = 'import';
 export const describe = `
@@ -29,6 +29,6 @@ export const builder = (yargs) => {
 };
 
 export const handler = function (argv) {
-  argv.output = injectStyle(argv);
+  argv.output = injectComponentStyleApp(argv);
   // console.log(argv);
 };

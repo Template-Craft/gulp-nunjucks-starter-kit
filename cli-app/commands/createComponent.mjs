@@ -1,5 +1,5 @@
 // команда creat -c или --component component_name
-import createComponent from '../utils/createNjkComponent.mjs';
+import createComponentApp from '../utils/createComponentApp.mjs';
 
 export const command = 'create';
 export const describe = `
@@ -28,6 +28,6 @@ export const builder = (yargs) => {
 };
 
 export const handler = function (argv) {
-  argv.output = createComponent(argv);
+  argv.output = createComponentApp(argv);
   // console.log(argv);
 };

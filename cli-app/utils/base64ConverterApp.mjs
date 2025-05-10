@@ -4,7 +4,7 @@ import { KITSYS, KITPLUGIN } from '../config/config.mjs';
 const plugin = KITPLUGIN;
 const system = KITSYS;
 
-const svgToBase64Converter = async (argv) => {
+const base64ConverterApp = async (argv) => {
   try {
     // Получаем содержимое команд пришедшее от пользователя.
     const converter_mode = argv.mode;
@@ -119,4 +119,4 @@ const svgToBase64Converter = async (argv) => {
   }
 };
 
-export default svgToBase64Converter;
+export default base64ConverterApp;

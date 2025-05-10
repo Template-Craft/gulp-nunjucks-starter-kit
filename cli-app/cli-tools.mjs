@@ -6,6 +6,8 @@
  * https://yargs.js.org/docs/
  */
 
+'use strict';
+
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 
@@ -15,7 +17,7 @@ import { COMMANDS } from './commands/index.mjs';
 import { GLOBALOPTIONS } from './options/global.mjs';
 
 yargApp
-  .version('1.0.1')
+  .version('1.1.0')
   .alias('v', 'version')
   .usage('Usage: $0 <command> [option]')
   .command(COMMANDS)

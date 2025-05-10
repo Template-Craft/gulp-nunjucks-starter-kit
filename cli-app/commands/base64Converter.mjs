@@ -1,8 +1,8 @@
 // команда convert
 
-import svgToBase64Converter from '../utils/svgToBase64.mjs';
+import base64ConverterApp from '../utils/base64ConverterApp.mjs';
 
-export const command = 'svgToBase64';
+export const command = 'base64Converter';
 export const describe = `
   Конвертер svg в base64.
 
@@ -15,7 +15,7 @@ export const describe = `
     all - путь указывается до дир-рии с файлами svg. После конвертации в base64 в этом режиме информация не выводится в консоль, она выводится в текстовый файл!
 
   Полная команда:
-  $ node ./cli-app/cli-tools.mjs convert -m="single" -p="./src/assets/img/yourSvg.svg"`.trim();
+  $ node ./cli-app/cli-tools.mjs base64Converter -m="single" -p="./src/assets/img/yourSvg.svg"`.trim();
 
 export const builder = (yargs) => {
   // Опция для указания формата кодирования, всей дир-рии или только одного файла
@@ -37,6 +37,6 @@ export const builder = (yargs) => {
 };
 
 export const handler = function (argv) {
-  argv.output = svgToBase64Converter(argv);
+  argv.output = base64ConverterApp(argv);
   // console.log(argv);
 };

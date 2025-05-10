@@ -14,7 +14,7 @@ import { KITPLUGIN, KITCONFIG } from '../config/config.mjs';
 const plugin = KITPLUGIN;
 const cfg = KITCONFIG;
 
-const imageOptimization = async (arvg) => {
+const imageminApp = async (arvg) => {
   try {
     // debugging
     // console.log('imageOptimization:\n', arvg);
@@ -165,4 +165,4 @@ const imageOptimization = async (arvg) => {
   }
 };
 
-export default imageOptimization;
+export default imageminApp;

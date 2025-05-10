@@ -1,6 +1,6 @@
 // команда imagemin - для оптимизации изображений, используется imagemin и прочие плагины.
 
-import imageOptimization from '../utils/imageOptimization.mjs';
+import imageminApp from '../utils/imageminApp.mjs';
 
 export const command = 'imagemin';
 export const describe = `
@@ -80,7 +80,7 @@ export const builder = (yargs) => {
 };
 
 export const handler = function (argv) {
-  argv.output = imageOptimization(argv);
+  argv.output = imageminApp(argv);
 
   // console.log('handler:\n', argv);
 };

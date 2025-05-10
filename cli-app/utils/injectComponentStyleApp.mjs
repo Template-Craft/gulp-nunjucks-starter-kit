@@ -6,7 +6,7 @@ const cfg = KITCONFIG.styles;
 const plugin = KITPLUGIN;
 const system = KITSYS;
 
-const injectStyle = async (argv) => {
+const injectComponentStyleApp = async (argv) => {
   try {
     const value = argv.style; // переопределяем переменную, для красоты кода.
 
@@ -51,4 +51,4 @@ const injectStyle = async (argv) => {
   }
 };
 
-export default injectStyle;
+export default injectComponentStyleApp;

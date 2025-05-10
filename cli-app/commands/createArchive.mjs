@@ -1,6 +1,6 @@
 // команда archive -o или --options {tar, tgz, zip} -p или --path your_path
 
-import archiveThis from '../utils/archiveThis.mjs';
+import createArchiveApp from '../utils/createArchiveApp.mjs';
 
 export const command = 'archive';
 export const describe = `
@@ -44,7 +44,7 @@ export const builder = (yargs) => {
 };
 
 export const handler = (argv) => {
-  argv.output = archiveThis(argv);
+  argv.output = createArchiveApp(argv);
 
   // Debug
   // console.log(argv);

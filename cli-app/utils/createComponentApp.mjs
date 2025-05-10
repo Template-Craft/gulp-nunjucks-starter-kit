@@ -6,7 +6,7 @@ const createFiles = CREATE_FILES;
 const plugin = KITPLUGIN;
 const system = KITSYS;
 
-const createComponent = async (argv) => {
+const createComponentApp = async (argv) => {
   try {
     // Получаем содержимое команд пришедшее от пользователя.
     const name = argv.component;
@@ -61,4 +61,4 @@ const createComponent = async (argv) => {
   }
 };
 
-export default createComponent;
+export default createComponentApp;
