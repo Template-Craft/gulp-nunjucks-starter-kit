@@ -9,6 +9,8 @@
 > Примечание:
 > _весь список зависимостей можно посмотреть в файле `package.json`._
 
+Репозиторий переведён в режим "Шаблонного репозитория", подробности можно посмотреть [тут](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template)
+
 ---
 
 ## Установка
@@ -21,6 +23,8 @@
 
 #### Установка Node.js
 
+_Для работы необходимо выполнить следующие шаги:_
+
 1. Установите в свою систему с официального сайта [NodeJS](https://nodejs.org/en/) или с помощью [NVM](https://github.com/nvm-sh/nvm#installing-and-updating) (Node Version Manager)
 
 2. Установите `gulp` глобально (т.е. для всей системы):
@@ -29,9 +33,43 @@
 npm i --global gulp-cli
 ```
 
-3. После установки необходимого, перейдите в папку со скачанным проектом
+3. Клонируйте репозиторий:
 
-4. Установите необходимые зависимости инструмента, находясь в родительском каталоге проекта и введя в терминал команду: `npm i`
+```bash
+git clone https://github.com/Template-Craft/gulp-nunjucks-starter-kit.git
+```
+
+4. Или создайте шаблон репозитория подробнее смотрите в [справке](https://cli.github.com/manual/gh_repo_create). Для этого в системе должен быть установлен инструмент github-cli [инструкция тут](https://github.com/cli/cli/blob/trunk/docs/install_linux.md), а так же вы должны быть авторизованы.
+
+`Создание репозитория в интерактивном режиме:`
+
+```bash
+gh repo create
+```
+
+> Создайте новый удалённый репозиторий на основе этого репозитория (используя его как шаблон) и клонируйте его локально:
+
+```bash
+gh repo create MyBestProject --public --template https://github.com/Template-Craft/gulp-nunjucks-starter-kit.git
+```
+
+> Клонируйте локально только что созданный репозиторий:
+
+```bash
+gh repo clone YourGithubName/MyBestProject path_to_dir
+```
+
+> Или используйте объединённую команду для создания и копирования репозитория:
+
+```bash
+gh repo create MyBestProject --public --template https://github.com/Template-Craft/gulp-nunjucks-starter-kit.git && gh repo clone YourGithubName/MyBestProject path_to_dir
+```
+
+Где YourGithubName/MyBestProject - это адрес вашего репозитория, YourGithubName - имя использованное в профиле Github
+
+5. После установки необходимого, перейдите в папку со скачанным проектом
+
+6. Установите необходимые зависимости инструмента, находясь в родительском каталоге проекта и введя в терминал команду: `npm i`
 
 ---
 
