@@ -118,6 +118,13 @@ export const KITCONFIG = {
   },
 };
 
+// функция помощник, созданная для прокидывания ошибок
+export function errorThrower(msg) {
+  if (typeof msg === 'string') throw new Error(msg.trim());
+
+  throw new Error(msg);
+}
+
 // @type function
 // 1 аргументом передаём массив с коллекцией файлов
 // 2 аргументом передаём путь до дир-рии, в которой создаём объекты
@@ -126,7 +133,8 @@ export const CREATE_FILES = (collection, dir_path) => {
   collection.forEach((file) => {
     KITSYS.fs.open(`${dir_path}${KITSYS.node_path.basename(file)}`, 'w', (error_msg) => {
       if (error_msg) {
-        console.error(KITPLUGIN.chalk.red(error_msg));
+        // console.error(KITPLUGIN.chalk.red(error_msg));
+        errorThrower(error_msg);
       }
 
       console.info(KITPLUGIN.chalk.green(`Файл компонента создан, и находится по пути: ${dir_path}${file}`));
@@ -174,7 +182,7 @@ export const CREATE_ARCHIVE = (archive_option_collection, input_option, input_va
         });
 
         archive_option.on('error', function (err) {
-          throw err;
+          errorThrower(err);
         });
 
         archive_option.pipe(destination_stream);

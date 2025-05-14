@@ -1,5 +1,5 @@
 // Утилита для конвертации svg в base64 и вывода результата в консоль.
-import { KITSYS, KITPLUGIN } from '../config/config.mjs';
+import { KITSYS, KITPLUGIN, errorThrower } from '../config/config.mjs';
 
 const plugin = KITPLUGIN;
 const system = KITSYS;
@@ -23,11 +23,20 @@ const base64ConverterApp = async (argv) => {
 
       console.log(`Передан аргумент: ${plugin.chalk.green(mode)}`);
 
+      // Не пропускаем пустой путь.
+      if (path === undefined || path === '') {
+        errorThrower(`
+          Ошибка!
+
+          Отсутвует путь.
+          `);
+      }
+
       // Режим single (конвертация одного файла и вывод информации в консоль)
       if (mode === 'single') {
         // Читаем файлы
         system.fs.readFile(system.node_path.resolve(system.__dirname, path), 'utf8', (error_msg, file) => {
-          if (error_msg) throw error_msg;
+          if (error_msg) errorThrower(error_msg);
 
           console.log(plugin.chalk.bgYellow('--------- [Результат конвертации] ---------'));
           console.log(`\n${plugin.chalk.dim(base64FromSVG(file))}\n`);
@@ -39,81 +48,82 @@ const base64ConverterApp = async (argv) => {
       if (mode === 'all') {
         // Читаем каталог
         system.fs.readdir(system.node_path.resolve(system.__dirname, path), 'utf8', (error_msg, files) => {
-          if (error_msg) throw error_msg;
-          else {
-            console.info(plugin.chalk.green(`Директория: ${path} - существует, вывожу данные:`));
+          if (error_msg) errorThrower(error_msg);
 
-            // Удаляем файл converter_output_filename, перед записью новых данных
-            system.fs.unlink(converter_output_path, (error_msg) => {
-              if (error_msg)
-                console.error(
-                  plugin.chalk.yellow(
-                    `Внимание: не найден файл или дир-рия - ${converter_output_path}\nПропуск удаления...`,
-                  ),
-                );
-              else {
-                console.log(plugin.chalk.green(`${converter_output_filename} - файл был удалён`));
-                console.log(plugin.chalk.dim('########################'));
-              }
-            });
+          console.info(plugin.chalk.green(`Директория: ${path} - существует, вывожу данные:`));
 
-            // Кол-во всех файлов
-            const fileCounter = files.length;
-            console.log(plugin.chalk.dim('########################'));
-            console.log(plugin.chalk.yellow(`Кол-во файлов в директории: ${fileCounter}`));
+          // Удаляем файл converter_output_filename, перед записью новых данных
+          system.fs.unlink(converter_output_path, (error_msg) => {
+            if (error_msg) {
+              const unlinkErrorMsg = `
+              Внимание!
 
-            // Считаем кол-во svg файлов, и выводим информацию в консоль.
-            let svgFilesCollectionArr = [];
+              Не найден файл или дир-рия - ${converter_output_path}
+              Пропуск удаления...`;
 
-            // Применяем фильтр к файлам, и записываем в .txt файл результаты работы конвертора только svg файлов.
-            files.filter((file) => {
-              // Получаем расширение файлов
-              const ext = system.node_path.extname(file);
+              console.error(unlinkErrorMsg);
+            } else {
+              console.log(plugin.chalk.green(`${converter_output_filename} - предыдущий файл был удалён.`));
+              console.log(plugin.chalk.green('Создаём новый, и записываем данные:'));
+              console.log(plugin.chalk.dim('########################'));
+            }
+          });
 
-              if (ext === '.svg') {
-                const filePath = `${path}${file}`;
-                // Запишем информацию о кол-ве svg файлов в пустой массив.
-                svgFilesCollectionArr.push(filePath);
+          // Кол-во всех файлов
+          const fileCounter = files.length;
+          console.log(plugin.chalk.dim('########################'));
+          console.log(plugin.chalk.yellow(`Кол-во файлов в директории: ${fileCounter}`));
 
-                // Читаем файлы
-                system.fs.readFile(system.node_path.resolve(system.__dirname, filePath), 'utf8', (error_msg, file) => {
-                  if (error_msg) throw error_msg;
-                  else {
-                    // Данные для записи в .txt файл:
-                    const data = `
+          // Считаем кол-во svg файлов, и выводим информацию в консоль.
+          let svgFilesCollectionArr = [];
+
+          // Применяем фильтр к файлам, и записываем в .txt файл результаты работы конвертора только svg файлов.
+          files.filter((file) => {
+            // Получаем расширение файлов
+            const ext = system.node_path.extname(file);
+
+            if (ext === '.svg') {
+              const filePath = `${path}${file}`;
+              // Запишем информацию о кол-ве svg файлов в пустой массив.
+              svgFilesCollectionArr.push(filePath);
+
+              // Читаем файлы
+              system.fs.readFile(system.node_path.resolve(system.__dirname, filePath), 'utf8', (error_msg, file) => {
+                if (error_msg) errorThrower(error_msg);
+
+                // Данные для записи в .txt файл:
+                const data = `
                           ####\n\nSVG файл: ${filePath}\nРезультат конвертации:\n${base64FromSVG(file)}\n\n####
                         `.trim();
 
-                    // Записываем полученные данные в текстовый документ
-                    system.fs.writeFile(converter_output_path, data, { encoding: 'utf8', flag: 'a' }, (error_msg) => {
-                      if (error_msg) throw error_msg;
+                // Записываем полученные данные в текстовый документ
+                system.fs.writeFile(converter_output_path, data, { encoding: 'utf8', flag: 'a' }, (error_msg) => {
+                  if (error_msg) errorThrower(error_msg);
 
-                      console.log(
-                        plugin.chalk.green(`Файл: ${filePath} конвертирован и записан в ${converter_output_filename}`),
-                      );
-                    });
-                  }
+                  console.log(
+                    plugin.chalk.green(`Файл: ${filePath} конвертирован и записан в ${converter_output_filename}`),
+                  );
                 });
-              }
-            });
+              });
+            }
+          });
 
-            // Выведем информацию о кол-ве svg файлов
-            console.log(plugin.chalk.yellow(`Кол-во svg: ${svgFilesCollectionArr.length}`));
-            console.log(plugin.chalk.dim('########################'));
-            console.log(plugin.chalk.bgYellow('--------- [Результат конвертации] ---------'));
-          }
+          // Выведем информацию о кол-ве svg файлов
+          console.log(plugin.chalk.yellow(`Кол-во svg: ${svgFilesCollectionArr.length}`));
+          console.log(plugin.chalk.dim('########################'));
+          console.log(plugin.chalk.bgYellow('--------- [Результат конвертации] ---------'));
         });
       }
     };
 
     // Проверяем путь и аргумент
     if (converter_mode === undefined && get_files_path === undefined) {
-      console.error(
-        `${plugin.chalk.red('Ошибка!\nОтсутствует аргумент или путь.')}\nАргумент: ${converter_mode}\nПуть: ${get_files_path}`,
-      );
-    } else {
-      await converter(get_files_path, converter_mode);
+      const argumentErrorMsg = `${plugin.chalk.red('Ошибка!\nОтсутствует аргумент или путь.')}\nАргумент: ${converter_mode}\nПуть: ${get_files_path}`;
+
+      errorThrower(argumentErrorMsg);
     }
+
+    await converter(get_files_path, converter_mode);
   } catch (error) {
     console.error(error.message);
   }

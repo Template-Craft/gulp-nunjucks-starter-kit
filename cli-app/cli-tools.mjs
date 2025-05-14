@@ -17,7 +17,7 @@ import { COMMANDS } from './commands/index.mjs';
 import { GLOBALOPTIONS } from './options/global.mjs';
 
 yargApp
-  .version('1.1.0')
+  .version('1.1.1')
   .alias('v', 'version')
   .usage('Usage: $0 <command> [option]')
   .command(COMMANDS)

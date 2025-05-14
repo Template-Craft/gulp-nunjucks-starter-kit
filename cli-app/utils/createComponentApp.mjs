@@ -1,5 +1,5 @@
 // Утилита для создания компонента
-import { KITSYS, KITPLUGIN, KITCONFIG, CREATE_FILES } from '../config/config.mjs';
+import { KITSYS, KITPLUGIN, KITCONFIG, CREATE_FILES, errorThrower } from '../config/config.mjs';
 
 const cfg = KITCONFIG;
 const createFiles = CREATE_FILES;
@@ -19,43 +19,47 @@ const createComponentApp = async (argv) => {
     const files_collection = [`${name}${cfg.template.extension}`, `${name}.mjs`, `_${name}${cfg.styles.extension}`];
     const component_data = [`${name}.json`];
 
-    // проверяем на пустышку
+    // проверка на пустышку
     if (name === undefined || null || name === '') {
-      console.error(
-        plugin.chalk.red(
-          `Ошибка: Для создания компонента необходимо использовать один из двух ключей: \n${plugin.chalk.blue(
-            '-c',
-          )} или ${plugin.chalk.blue('--component')} передать имя после ключа!`,
-        ),
-      );
-    } else {
-      // проверяем на дубликат
-      if (exists === true) {
-        console.error(
-          plugin.chalk.red(
-            `Внимание!\nКомпонент ${name} существует! Компонент не будет создан, попробуйте другое название.`,
-          ),
-        );
-      } else {
-        // тут объявляем что мы собираемся создать директорию с файлами
-        await system.fs.mkdir(
-          system.node_path.normalize(cfg.template.spawn_dir(name)),
-          { recursive: true },
-          (error_msg) => {
-            if (error_msg) throw error_msg;
+      const nameErrorMsg = `
+        Ошибка!
 
-            console.info(plugin.chalk.yellow('------ * component * ------'));
-            console.info(plugin.chalk.gray(`Каталог компонента создан: ${cfg.template.spawn_dir(name)}`));
+        Для создания компонента необходимо использовать один из двух ключей:
+          ${plugin.chalk.blue('-c')} или ${plugin.chalk.blue('--component')} передать имя после ключа!
+      `;
 
-            // тут создаём файл данных компонента:
-            createFiles(component_data, cfg.template.data_dir);
-
-            // тут создаём папку компонента, с файлами переданными в массиве files_collection
-            createFiles(files_collection, cfg.template.spawn_dir(name));
-          },
-        );
-      }
+      errorThrower(nameErrorMsg);
     }
+
+    // проверка на дубликат
+    if (exists === true) {
+      const existErrorMsg = `
+        Внимание!
+
+        Компонент ${name} существует!
+        Пропуск создания компонента, попробуйте другое название.
+        `;
+
+      errorThrower(existErrorMsg);
+    }
+
+    // тут объявляем что мы собираемся создать директорию с файлами
+    await system.fs.mkdir(
+      system.node_path.normalize(cfg.template.spawn_dir(name)),
+      { recursive: true },
+      (error_msg) => {
+        if (error_msg) errorThrower(error_msg);
+
+        console.info(plugin.chalk.yellow('------ * component * ------'));
+        console.info(plugin.chalk.gray(`Каталог компонента создан: ${cfg.template.spawn_dir(name)}`));
+
+        // тут создаём файл данных компонента:
+        createFiles(component_data, cfg.template.data_dir);
+
+        // тут создаём папку компонента, с файлами переданными в массиве files_collection
+        createFiles(files_collection, cfg.template.spawn_dir(name));
+      },
+    );
   } catch (error) {
     console.error(error.message);
   }
