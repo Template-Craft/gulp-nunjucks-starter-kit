@@ -11,6 +11,7 @@ import webpackStream from 'webpack-stream';
 
 import nodePath from 'path';
 import { fileURLToPath } from 'url';
+import { settings } from '../config/settings.mjs';
 
 const __dirname = nodePath.dirname(fileURLToPath(import.meta.url));
 
@@ -33,7 +34,8 @@ export const scripts = () => {
           // режимы работы
           mode: app.isBuild ? 'production' : 'development',
           watch: false,
-          devtool: app.isBuild ? false : 'source-map',
+          devtool: app.isBuild ? false : 'eval-cheap-module-source-map',
+          cache: app.isBuild ? false : { type: 'filesystem' },
 
           // выходящие файлы
           output: {
@@ -64,11 +66,13 @@ export const scripts = () => {
                 use: {
                   loader: 'babel-loader',
                   options: {
+                    cacheDirectory: true,
+                    cacheCompression: true,
                     presets: [
                       [
                         '@babel/preset-env',
                         {
-                          debug: true,
+                          debug: settings.debug ? true : false,
                           corejs: 3,
                           useBuiltIns: 'usage',
                         },
@@ -89,10 +93,10 @@ export const scripts = () => {
                *   # -> import component from 'Components/component_folder_name/component_name';
                */
 
-              Module: nodePath.resolve(__dirname, '/node_modules/'),
-              Components: nodePath.resolve(__dirname, '/src/views/components/'),
+              Module: nodePath.resolve(process.cwd(), 'node_modules/'),
+              Components: nodePath.resolve(process.cwd(), 'src/views/components/'),
             },
-            extensions: ['', '.js', '.mjs', '.cjs'],
+            extensions: ['.js', '.mjs'],
           },
         }),
         webpack,

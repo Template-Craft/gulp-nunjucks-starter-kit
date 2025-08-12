@@ -1,0 +1,9 @@
+{
+  "htmlLang": "en",
+  "siteTitle": "Gulp + Nunjucks starter kit",
+  "stylesheetsPaths": [
+    "vendor/normalize/normalize.css",
+    "assets/styles/main.css"
+  ],
+  "scriptsPaths": ["scripts/main.bundle.js"]
+}

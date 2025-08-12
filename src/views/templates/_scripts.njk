@@ -1,1 +1,5 @@
-<script src="scripts/main.bundle.js"></script>
+{% set siteData = getData('Global') %}
+
+{% for path in siteData.scriptsPaths %}
+  <script src="{{- path -}}"></script>
+{% endfor %}

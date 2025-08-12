@@ -10,7 +10,7 @@ export const server = () => {
   app.plugins.browsersync.init({
     watch: true,
     notify: false,
-    posrt: 8080,
+    port: 8080,
     server: {
       baseDir: `${app.path.build.html}`,
     },

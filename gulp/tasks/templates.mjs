@@ -9,18 +9,24 @@
 
 'use strict';
 
-import nunjucksRender from 'gulp-nunjucks-render';
-
 // nodejs standart function
 import fs from 'fs';
+import nodePath from 'node:path';
 
-export const templates = () => {
+import nunjucksRender from 'gulp-nunjucks-render';
+
+import { buildDependencyMap } from '../utils/buildDependencyMap.mjs';
+import { getSectionNameFromPath } from '../utils/getSectionName.mjs';
+
+export const templates = async (changedFile = undefined) => {
   // Опции рендера для nunjucks:
   const renderOptions = {
-    path: app.path.src.nunjucksRenderSrcFolder,
-    watch: true,
+    path: app.path.src.nunjucksIndexDir,
+    watch: false,
     noCache: true,
+
     manageEnv: function (env) {
+      // Глобальные фильтры/функции
       env.addGlobal('getData', (name) => {
         const dataPath = `./src/views/data/${name}.json`;
         let result = JSON.parse(fs.readFileSync(dataPath));
@@ -38,26 +44,250 @@ export const templates = () => {
     },
   };
 
+  // Переработаем логику по аналогии с styles.mjs таском
+  // normalize input
+  if (changedFile && typeof changedFile !== 'string') {
+    changedFile = changedFile.path || undefined;
+  }
+
+  // Инициализация запуска
+  const isInitialRun = !changedFile;
+
+  // Точечная пересборка страниц
+  const changeType = detectChangeType(changedFile);
+  const filesToRender = isInitialRun ? app.path.src.nunjucksPages : await resolveRenderTargets(changeType, changedFile);
+
+  return runRender(filesToRender, renderOptions);
+};
+
+// Определяем тип события
+function detectChangeType(changedFile) {
+  if (!changedFile) return 'full';
+
+  // Точечная пересборка страниц по json, с учётом обработки global,json, common.json и т.п. перестраивающие весь проект
+  const ext = nodePath.extname(changedFile);
+
+  // Json
+  const isJson = ext === '.json';
+  const isGlobalJson = ['Global.json', 'Common.json'].includes(nodePath.basename(changedFile));
+
+  // Для поддержки windows
+  const normalizedPath = changedFile.replace(/\\/g, '/');
+
+  // Nunjucks
+  const isPage = normalizedPath.includes('views/pages/');
+  const isSection = normalizedPath.includes('views/sections/');
+  const isComponent = normalizedPath.includes('views/components/');
+  const isTemplates = normalizedPath.includes('views/templates/');
+
+  // Проверки
+  if (isJson && isGlobalJson) return 'global-json';
+  if (isJson) return 'component-json';
+  if (isPage) return 'page';
+  if (isSection || isComponent || isTemplates) return 'template';
+
+  return 'unknown';
+}
+
+// Выполняем действия по типу изменения:
+async function resolveRenderTargets(changedType, changedFile) {
+  const basename = changedFile ? nodePath.basename(changedFile, '.json') : '';
+  const relatedPage = `${app.path.src.nunjucksIndexDir}pages/${basename}.njk`;
+
+  switch (changedType) {
+    case 'component-json': {
+      // Сначала проверим, является ли это привязанной страницей напрямую (index.json -> index.njk)
+      if (fs.existsSync(relatedPage)) {
+        console.log(
+          `[${app.plugins.chalk.blue('Nunjucks')}] (Обновлён JSON ${app.plugins.chalk.magenta(basename)} -> пересборка только страницы "${basename}.njk"`,
+        );
+        return relatedPage;
+      }
+
+      // Обновляем dependencyMap и ищем связи по имени JSON
+      const dependencyMap = await buildDependencyMap({
+        includeComponents: true,
+        includeSections: true,
+        includeTemplates: true,
+      });
+
+      const componentPages = dependencyMap.components?.get(basename) || [];
+      const sectionPages = dependencyMap.sections?.get(basename) || [];
+      const templatePages = dependencyMap.templates?.get(basename) || [];
+
+      const affectedPages = [...new Set([...componentPages, ...sectionPages, ...templatePages])];
+
+      if (affectedPages.length > 0) {
+        console.log(
+          `[${app.plugins.chalk.blue('Nunjucks')}] Обновлён JSON ${app.plugins.chalk.magenta(basename)} -> связан с сущностью -> пересборка ${app.plugins.chalk.magenta(affectedPages.length)} файла(ов):`,
+          affectedPages
+            .map((f) => app.plugins.chalk.magenta(nodePath.relative(app.path.src.nunjucksIndexDir, f)))
+            .join(', '),
+        );
+        return affectedPages;
+      }
+
+      // Fallback - полная пересборка
+      console.log(
+        `[${app.plugins.chalk.blue('Nunjucks')}] Обновлён JSON ${app.plugins.chalk.magenta(basename)} -> нет связей -> пересборка всех страниц`,
+      );
+      return app.path.src.nunjucksPages;
+    }
+
+    case 'global-json':
+      console.log(
+        `[${app.plugins.chalk.blue('Nunjucks')}] Обновлён глобальный JSON (${app.plugins.chalk.magenta(nodePath.basename(changedFile))}) -> пересборка всех страниц`,
+      );
+      return app.path.src.nunjucksPages;
+
+    case 'page':
+      console.log(
+        `[${app.plugins.chalk.blue('Nunjucks')}] Обновлён шаблон страницы -> пересборка "${app.plugins.chalk.magenta(nodePath.basename(changedFile))}"`,
+      );
+      return changedFile;
+
+    case 'template': {
+      const isComponent = changedFile.includes('/views/components/');
+      const isSection = changedFile.includes('/views/sections/');
+      const isTemplate = changedFile.includes('/views/templates/');
+
+      const componentName = isComponent ? nodePath.basename(nodePath.dirname(changedFile)) : null;
+      const sectionName = isSection ? getSectionNameFromPath(changedFile) : null;
+      const templateName = isTemplate ? nodePath.basename(changedFile, '.njk') : null;
+
+      const dependencyMap = await buildDependencyMap({
+        includeComponents: isComponent,
+        includeSections: isComponent || isSection || isTemplate,
+        includeTemplates: isTemplate,
+      });
+
+      const allPages = new Set();
+
+      // Компоненты
+      if (isComponent && componentName) {
+        const componentUsers = dependencyMap.components?.get(componentName) || [];
+
+        for (const file of componentUsers) {
+          if (file.includes('/views/pages/')) {
+            allPages.add(file);
+          }
+        }
+
+        for (const file of componentUsers) {
+          if (file.includes('/views/sections/')) {
+            const sectionName = getSectionNameFromPath(file);
+
+            // console.log(
+            //   `[${app.plugins.chalk.yellow('DEBUG')}] Проверка секции: "${sectionName}" -> страниц:`,
+            //   dependencyMap.sections?.get(sectionName),
+            // );
+
+            const sectionUsers = dependencyMap.sections?.get(sectionName) || [];
+
+            for (const page of sectionUsers) {
+              if (page.includes('/views/pages/')) {
+                allPages.add(page);
+              }
+            }
+          }
+        }
+
+        console.log(
+          `[${app.plugins.chalk.blue('Nunjucks')}] Обновлён компонент "${app.plugins.chalk.magenta(componentName)}" -> пересборка файла(ов):`,
+          [...allPages]
+            .map((f) => app.plugins.chalk.magenta(nodePath.relative(app.path.src.nunjucksIndexDir, f)))
+            .join(', ') || '(нет)',
+        );
+
+        return allPages.size > 0 ? [...allPages] : app.path.src.nunjucksPages;
+      }
+
+      // Секции
+      if (isSection && sectionName) {
+        const sectionUsers = dependencyMap.sections?.get(sectionName) || [];
+
+        for (const file of sectionUsers) {
+          if (file.includes('/views/pages/')) {
+            allPages.add(file);
+          }
+        }
+
+        console.log(
+          `[${app.plugins.chalk.blue('Nunjucks')}] Обновлена секция "${app.plugins.chalk.magenta(sectionName)}" -> пересборка файла(ов):`,
+          [...allPages]
+            .map((f) => app.plugins.chalk.magenta(nodePath.relative(app.path.src.nunjucksIndexDir, f)))
+            .join(', ') || '(нет)',
+        );
+
+        return allPages.size > 0 ? [...allPages] : app.path.src.nunjucksPages;
+      }
+
+      // Шаблоны
+      if (isTemplate && templateName) {
+        const templateUsers = dependencyMap.templates?.get(templateName) || [];
+
+        for (const file of templateUsers) {
+          if (file.includes('/views/pages/')) {
+            allPages.add(file);
+          }
+
+          if (file.includes('/views/sections/')) {
+            const sectionName = getSectionNameFromPath(file);
+            const sectionUsers = dependencyMap.sections?.get(sectionName) || [];
+
+            for (const page of sectionUsers) {
+              if (page.includes('/views/pages/')) {
+                allPages.add(page);
+              }
+            }
+          }
+        }
+
+        console.log(
+          `[${app.plugins.chalk.blue('Nunjucks')}] Обновлён шаблон "${app.plugins.chalk.magenta(templateName)}" -> пересборка файла(ов):`,
+          [...allPages]
+            .map((f) => app.plugins.chalk.magenta(nodePath.relative(app.path.src.nunjucksIndexDir, f)))
+            .join(', ') || '(нет)',
+        );
+
+        return allPages.size > 0 ? [...allPages] : app.path.src.nunjucksPages;
+      }
+
+      console.log(
+        `[${app.plugins.chalk.blue('Nunjucks')}] Обновление "${app.plugins.chalk.magenta(changedFile)}" -> нет связей, пересборка всех страниц`,
+      );
+
+      return app.path.src.nunjucksPages;
+    }
+
+    case 'full':
+    case 'unknown':
+    default:
+      console.log(
+        `[${app.plugins.chalk.blue('Nunjucks')}] Неизвестное изменение или полный рендер -> пересборка всех страниц`,
+      );
+      return app.path.src.nunjucksPages;
+  }
+}
+
+// Функция рендера nunjucks в html
+function runRender(srcPath, renderOptions) {
   return (
     app.gulp
-      .src(app.path.src.nunjucks)
+      .src(srcPath, { allowEmpty: true })
       // ловим ошибки, и выводим их в консоль и в систему
-      .pipe(
-        app.plugins.plumber({
-          errorHandler: function (error) {
-            app.errors.handler(error, app.errors.messages.njk);
-
-            console.log(error.toString());
-          },
-        }),
-      )
+      .pipe(app.plugins.plumber({ errorHandler }))
       // Nunjucks
       .pipe(nunjucksRender(renderOptions))
+      // в Dev режиме форматирование HTML убираем
       .pipe(
-        app.plugins.beautify.html({
-          indent_size: 2,
-          preserve_newlines: false,
-        }),
+        app.plugins.gulpIf(
+          app.isBuild,
+          app.plugins.beautify.html({
+            indent_size: 2,
+            preserve_newlines: false,
+          }),
+        ),
       )
       .pipe(app.plugins.gulpIf(app.isBuild, app.plugins.replace('.min.css', '.css')))
       .pipe(app.plugins.gulpIf(app.isBuild, app.plugins.replace('.min.js', '.js')))
@@ -71,25 +301,12 @@ export const templates = () => {
       )
       .pipe(app.plugins.plumber.stop())
       .pipe(app.gulp.dest(app.path.build.html))
-      .pipe(app.plugins.browsersync.stream())
+      .pipe(app.plugins.browsersync.reload({ stream: true }))
   );
-};
+}
 
-export const templatesData = () => {
-  return (
-    app.gulp
-      .src(app.path.src.nunjucksData)
-      // ловим ошибки, и выводим их в консоль и в систему
-      .pipe(
-        app.plugins.plumber({
-          errorHandler: function (error) {
-            app.errors.handler(error, app.errors.messages.json);
-
-            console.log(error.toString());
-          },
-        }),
-      )
-      .pipe(app.plugins.plumber.stop())
-      .pipe(app.plugins.browsersync.stream())
-  );
-};
+// Функция с выводом ошибок для plumber
+function errorHandler(error) {
+  app.errors.handler(error, app.errors.messages.njk);
+  console.error(error.toString());
+}

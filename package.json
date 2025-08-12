@@ -20,8 +20,8 @@
     "sass:migrator:imports": "sass-migrator module --load-path --migrate-deps ./src/styles/**/*.scss ./src/views/components/**/*.scss"
   },
   "engines": {
-    "node": ">=18",
-    "npm": ">=9"
+    "node": ">=20",
+    "npm": ">=10"
   },
   "browserslist": {
     "stylesheets": [
@@ -43,14 +43,14 @@
       "last 1 firefox version"
     ],
     "node": [
-      "node 18"
+      "node 20"
     ]
   },
   "os": [
     "darwin",
     "linux",
     "win64",
-    "win32"
+    "!win32"
   ],
   "repository": {
     "type": "git",
@@ -102,6 +102,7 @@
     "eslint-plugin-es-x": "^8.7.0",
     "eslint-plugin-n": "^17.20.0",
     "eslint-plugin-promise": "^7.2.1",
+    "fast-glob": "^3.3.3",
     "globals": "^16.3.0",
     "gulp": "^5.0.1",
     "gulp-beautify": "^3.0.0",

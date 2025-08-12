@@ -11,6 +11,7 @@ export const fonts = () => {
   return app.gulp
     .src(app.path.src.fonts, {
       encoding: false,
+      since: app.gulp.lastRun(fonts),
     })
     .pipe(
       app.plugins.plumber({

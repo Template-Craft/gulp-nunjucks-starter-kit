@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /* eslint-disable n/no-unpublished-import */
 
 //  --------------------------------------------------------------------------------
@@ -22,10 +23,13 @@
 
 'use strict';
 
+import nodePath from 'node:path';
+
 import gulp from 'gulp';
 
 // Импорт путей
 import { path } from './gulp/config/path.mjs';
+import { settings } from './gulp/config/settings.mjs';
 
 // Импорт общих плагинов
 import { plugins } from './gulp/config/plugins.mjs';
@@ -39,7 +43,7 @@ import { errors } from './gulp/config/errors.mjs';
 // Импорт задач
 import { reset } from './gulp/tasks/reset.mjs';
 import { server } from './gulp/tasks/server.mjs';
-import { templates, templatesData } from './gulp/tasks/templates.mjs';
+import { templates } from './gulp/tasks/templates.mjs';
 import { styles } from './gulp/tasks/styles.mjs';
 import { scripts } from './gulp/tasks/scripts.mjs';
 import { fonts } from './gulp/tasks/fonts.mjs';
@@ -48,6 +52,12 @@ import { vendors } from './gulp/tasks/packages.mjs';
 
 // Оповещения
 import { createNotification } from './gulp/tasks/notify.mjs';
+
+// Кэш зависимостей
+import { buildDependencyMap } from './gulp/utils/buildDependencyMap.mjs';
+import { setDependencyCache } from './gulp/utils/dependencyCache.mjs';
+import { updateDependencyMap } from './gulp/utils/updateDependencyMap.mjs';
+import { getSectionNameFromPath } from './gulp/utils/getSectionName.mjs';
 
 // Передаём значения в глобальную переменную app
 global.app = {
@@ -60,21 +70,76 @@ global.app = {
   pkg: pkg,
 };
 
+// Автосоздание кэша и карты зависимостей при старте (для nunjucks)
+async function initDependencyCacheIfNeeded() {
+  if (!settings.cache.autoRebuild) return;
+
+  console.log(`[${app.plugins.chalk.magenta('Cache')}] Инициализация кэша зависимостей...`);
+
+  const result = await buildDependencyMap({
+    includeComponents: true,
+    includeSections: true,
+    includeTemplates: true,
+  });
+
+  setDependencyCache(result);
+}
+
 // функция наблюдатель
 function watcher() {
-  gulp.watch(path.watch.nunjucks, templates);
-  gulp.watch(path.watch.nunjucksData, gulp.parallel(templatesData, templates)).on('change', plugins.browsersync.reload);
-  gulp.watch(path.watch.styles, styles);
+  // Отслеживаем изменения nunjucks компонентов и json данных
+  gulp.watch([path.watch.nunjucksData, path.watch.nunjucks]).on('change', async (filePath) => {
+    console.log(`[${app.plugins.chalk.blue('Nunjucks watcher')}] Changed:`, app.plugins.chalk.magenta(filePath));
+
+    // Унифицированная нормализация
+    const normalized = filePath.replace(/\\/g, '/');
+    const isComponent = normalized.includes('/components/');
+    const isSection = normalized.includes('/sections/');
+    const isTemplate = normalized.includes('/templates/');
+
+    const name = isComponent
+      ? nodePath.basename(nodePath.dirname(filePath))
+      : isSection
+        ? getSectionNameFromPath(filePath)
+        : isTemplate
+          ? nodePath.basename(filePath, '.njk')
+          : null;
+
+    // Инкрементальное обновление dependencyMap
+    if (name) {
+      await updateDependencyMap({
+        type: isComponent ? 'component' : isSection ? 'section' : 'template',
+        name: name,
+      });
+    }
+
+    // Триггерим шаблоны (точечная/полная пересборка определяется внутри)
+    templates(filePath);
+  });
+
+  gulp.watch(path.watch.styles).on('change', (filePath) => {
+    console.log(`[${app.plugins.chalk.blue('SASS watcher')}] Changed:`, app.plugins.chalk.magenta(filePath));
+
+    // Триггерим стили
+    styles(filePath);
+  });
+
   gulp.watch(path.watch.scripts, scripts);
   gulp.watch(path.watch.images, images);
 }
 
 // gulp.parallel() - параллельное выполнение задач
 // передаём сюда свои задачи (task)
-const mainTasks = gulp.parallel(vendors, templates, styles, scripts, fonts, images);
+const mainTasks = gulp.parallel(vendors, styles, templates, scripts, fonts, images);
 
 // gulp.series()   - последовательное выполнение задач
-const dev = gulp.series(reset, mainTasks, gulp.parallel(watcher, server, createNotification));
+const dev = gulp.series(
+  reset,
+  // создаём кэш зависимостей при старте сборки
+  initDependencyCacheIfNeeded,
+  mainTasks,
+  gulp.parallel(watcher, server, createNotification),
+);
 const build = gulp.series(reset, mainTasks, createNotification);
 
 // Экспорт сценариев:
@@ -82,16 +147,3 @@ export { dev, build };
 
 // Выполнение сценария по умолчанию
 gulp.task('default', dev);
-
-// Задачи для их одиночного использования в целях тестирования.
-// Вызов в режиме dev
-// gulp test:<taskName>
-// *
-// Вызов в режиме build
-// gulp test:<taskName> --build
-gulp.task('test:vendors', vendors);
-gulp.task('test:templates', templates);
-gulp.task('test:styles', styles);
-gulp.task('test:scripts', scripts);
-gulp.task('test:fonts', fonts);
-gulp.task('test:images', images);

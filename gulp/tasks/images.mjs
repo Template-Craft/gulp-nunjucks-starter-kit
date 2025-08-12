@@ -13,6 +13,7 @@ export const images = () => {
       encoding: false,
       buffer: true,
       removeBOM: false,
+      since: app.gulp.lastRun(images),
     })
     .pipe(
       app.plugins.plumber({

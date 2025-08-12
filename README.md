@@ -1,5 +1,9 @@
 # gulp-nunjucks-starter-kit
 
+_Актуальные изменения смотри в [CHANGELOG.md](https://github.com/Template-Craft/gulp-nunjucks-starter-kit/blob/develop/CHANGELOG.md) и на странице релиза._
+
+_Более подробно про новшества: [build-system.ru.md](https://github.com/Template-Craft/gulp-nunjucks-starter-kit/blob/develop/build-system.ru.md)_
+
 <p>
   Инструмент для создания статических сайтов, и их проектирования с помощью шаблонизатора Nunjucks и сборки с помощью Gulp+Webpack используется компонентный подход + разделение данных от разметки.
 </p>
@@ -19,7 +23,7 @@
 
 > Рекомендуемые версии node.js (проект тестировался именно на нижеследующих версиях node.js):
 
-`lts/hydrogen` или выше
+`lts/iron` или выше
 
 #### Установка Node.js
 

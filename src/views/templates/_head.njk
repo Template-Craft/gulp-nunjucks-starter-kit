@@ -1,20 +1,23 @@
-{% macro HTMLHead(title, styles) %}
+{% macro HTMLHead() %}
+  {% set siteData = getData('Global') %}
+
   <head>
     <meta charset="UTF-8"/>
     <meta name="viewport"content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
-    <title>{{ title }}</title>
+
+    <title> {{- siteData.siteTitle -}} </title>
 
     <meta name="msapplication-tap-highlight" content="no"/> <!-- for Chrome on Android -->
     <meta name="mobile-web-app-capable" content="yes"/>
-    <meta name="application-name" lang="en" content="{{ title }}"/> <!-- for Safari on iOS -->
+    <meta name="application-name" lang="en" content="{{- siteData.siteTitle -}}"/> <!-- for Safari on iOS -->
     <meta name="apple-mobile-web-app-capable" content="yes"/>
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-    <meta name="apple-mobile-web-app-title" content="{{ title }}"/>
+    <meta name="apple-mobile-web-app-title" content="{{- siteData.siteTitle -}}"/>
 
     <meta name="theme-color" content="#FFFFFF"/>
 
-    {% for path in styles %}
+    {% for path in siteData.stylesheetsPaths %}
       <link rel="stylesheet" href="{{- path -}}"/>
     {% endfor %}
 

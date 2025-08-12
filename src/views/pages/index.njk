@@ -1,15 +1,11 @@
 
 {% from "templates/_head.njk" import HTMLHead %}
 
-{% set stylesPathes = [
-    "vendor/normalize/normalize.css",
-    "assets/styles/main.css"
-  ]
-%}
+{% set siteData = getData('Global') %}
 
 <!doctype html>
-<html lang="en">
-  {{- HTMLHead(title = 'Gulp + Nunjucks starter kit', styles = stylesPathes) -}}
+<html lang="{{- siteData.htmlLang -}}">
+  {{- HTMLHead() -}}
   <body>
     <div class="wrapper">
       {# Import Header macro component #}
