@@ -67,3 +67,7 @@
   - ускоренного JS‑пайплайна (sourcemaps + persistent cache),
   - уменьшения лишнего I/O в поисках и ассетах.
 - Паритет скорости и поведения для лендингов и многостраничных проектов.
+
+## 2025.08.12.1 - 2025-08-12
+
+> *FIXED*: Ошибка нейминга в yagrs choises вместо choices [commit](https://github.com/Template-Craft/gulp-nunjucks-starter-kit/commit/68cdca62530adaa486a6f5319604e9840d783685)
