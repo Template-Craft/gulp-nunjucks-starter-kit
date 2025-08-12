@@ -30,7 +30,7 @@ export const builder = (yargs) => {
   yargs.option('minify', {
     alias: 'm',
     type: 'string',
-    choises: ['gif', 'jpeg', 'png', 'svg', 'all'],
+    choices: ['gif', 'jpeg', 'png', 'svg', 'all'],
     describe: `
       после ввода -m или --minify, выберите какой формат изображений нужно оптимизировать.
 

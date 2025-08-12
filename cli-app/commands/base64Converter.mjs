@@ -22,7 +22,7 @@ export const builder = (yargs) => {
   yargs.option('mode', {
     alias: 'm',
     type: 'string',
-    choises: ['single', 'all'],
+    choices: ['single', 'all'],
     describe: `
       после ввода -m или --mode, выберите режим работы декодера.
 
