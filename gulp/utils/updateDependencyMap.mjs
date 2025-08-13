@@ -77,6 +77,6 @@ export async function updateDependencyMap({ type, name }) {
   const label = isComponent ? 'component' : isSection ? 'section' : 'template';
 
   console.log(
-    `[${app.plugins.chalk.blue('DependencyMap')}] Инкрементально обновлён "${app.plugins.chalk.magenta(name)}" (${app.plugins.chalk.magenta(label)}) → файлов: ${app.plugins.chalk.magenta(usedBy.size)}`,
+    `[${app.plugins.chalk.blue('DependencyMap')}] Инкрементально обновлён "${app.plugins.chalk.magenta(label)}" -> файлов: ${app.plugins.chalk.magenta(usedBy.size)}`,
   );
 }
