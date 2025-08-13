@@ -51,7 +51,7 @@ import { images } from './gulp/tasks/images.mjs';
 import { vendors } from './gulp/tasks/packages.mjs';
 
 // Оповещения
-import { createNotification } from './gulp/tasks/notify.mjs';
+import { createNotification, send as notifySend } from './gulp/tasks/notify.mjs';
 
 // Кэш зависимостей
 import { buildDependencyMap } from './gulp/utils/buildDependencyMap.mjs';
@@ -129,18 +129,56 @@ function watcher() {
 }
 
 // gulp.parallel() - параллельное выполнение задач
+// gulp.series()   - последовательное выполнение задач
+
 // передаём сюда свои задачи (task)
 const mainTasks = gulp.parallel(vendors, styles, templates, scripts, fonts, images);
 
-// gulp.series()   - последовательное выполнение задач
-const dev = gulp.series(
-  reset,
-  // создаём кэш зависимостей при старте сборки
-  initDependencyCacheIfNeeded,
-  mainTasks,
-  gulp.parallel(watcher, server, createNotification),
-);
-const build = gulp.series(reset, mainTasks, createNotification);
+// const failstart = () => {
+//   throw new Error('Тестовая фатальная ошибка старта');
+// };
+
+const dev = (callback) => {
+  const run = gulp.series(
+    reset,
+    // failstart,
+    // создаём кэш зависимостей при старте сборки
+    initDependencyCacheIfNeeded,
+    mainTasks,
+    gulp.parallel(watcher, server),
+  );
+
+  run((error) => {
+    if (error) {
+      // Сбой при старте -> выводим ошибку в оповещениях
+      notifySend('Gulp ошибка старта', error.message ?? String(error), 4);
+      return callback(error);
+    }
+
+    // Успешный запуск
+    return callback();
+  });
+};
+
+const build = (callback) => {
+  const run = gulp.series(
+    reset,
+    // failstart,
+    mainTasks,
+  );
+
+  run((error) => {
+    if (error) {
+      // Сбой при старте -> выводим ошибку в оповещениях
+      notifySend('Gulp ошибка сборки', error.message ?? String(error), 4);
+      return callback(error);
+    }
+
+    // Успешный запуск -> приветственный баннер
+    createNotification();
+    return callback();
+  });
+};
 
 // Экспорт сценариев:
 export { dev, build };

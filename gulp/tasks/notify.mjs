@@ -1,3 +1,4 @@
+/* eslint-disable n/no-unpublished-import */
 /* eslint-disable no-undef */
 
 //  ---------------------------------------------------------------------;
@@ -7,7 +8,17 @@
 
 'use strict';
 
-export const createNotification = async () => {
+export function send(title, message, timeout = 4) {
+  app.plugins.notifier.notify({
+    title: title,
+    message: message,
+    sound: false,
+    timeout: timeout,
+    'app-name': app.pkg.appName,
+  });
+}
+
+export const createNotification = () => {
   const devModMessage = 'проект запущен, хорошего кодинга!';
   const buildModMessage = 'проверьте наличие папки build в родительской директории.';
 
@@ -31,13 +42,7 @@ export const createNotification = async () => {
     ${app.pkg.informderFooter}
   `;
 
-  await app.plugins.notifier.notify({
-    title: app.isDev ? 'Привет мир!' : 'Сборка завершена',
-    message: app.isDev ? `${devModMessage}` : `${buildModMessage}`,
-    sound: false,
-    timeout: 4,
-    'app-name': `${app.pkg.appName}`,
-  });
+  send(app.isDev ? 'Привет мир!' : 'Сборка завершена', app.isDev ? devModMessage : buildModMessage, 4);
 
   console.info(consoleInfo);
 };
