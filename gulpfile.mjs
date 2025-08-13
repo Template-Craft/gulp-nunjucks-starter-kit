@@ -49,6 +49,7 @@ import { scripts } from './gulp/tasks/scripts.mjs';
 import { fonts } from './gulp/tasks/fonts.mjs';
 import { images } from './gulp/tasks/images.mjs';
 import { vendors } from './gulp/tasks/packages.mjs';
+import { monitor } from './gulp/tasks/monitor.mjs';
 
 // Оповещения
 import { createNotification, send as notifySend } from './gulp/tasks/notify.mjs';
@@ -145,7 +146,7 @@ const dev = (callback) => {
     // создаём кэш зависимостей при старте сборки
     initDependencyCacheIfNeeded,
     mainTasks,
-    gulp.parallel(watcher, server),
+    gulp.parallel(watcher, server, monitor),
   );
 
   run((error) => {
