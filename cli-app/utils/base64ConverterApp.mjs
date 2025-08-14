@@ -23,7 +23,7 @@ const base64ConverterApp = async (argv) => {
       // Не пропускаем пустой путь.
       if (path === undefined || path === '') {
         errorThrower(`
-          Ошибка!
+          ${plugin.chalk.bgRedBright.white('Ошибка!')}
 
           Отсутвует путь.
           `);
@@ -115,7 +115,13 @@ const base64ConverterApp = async (argv) => {
 
     // Проверяем путь и аргумент
     if (converter_mode === undefined && get_files_path === undefined) {
-      const argumentErrorMsg = `${plugin.chalk.red('Ошибка!\nОтсутствует аргумент или путь.')}\nАргумент: ${converter_mode}\nПуть: ${get_files_path}`;
+      const argumentErrorMsg = `
+        ${plugin.chalk.bgRedBright.white('Ошибка!')}
+
+        Отсутствует аргумент или путь.
+          Аргумент: ${converter_mode}
+          Путь: ${get_files_path}
+      `;
 
       errorThrower(argumentErrorMsg);
     }

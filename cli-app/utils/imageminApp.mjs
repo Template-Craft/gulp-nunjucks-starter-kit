@@ -62,7 +62,7 @@ const imageminApp = async (argv) => {
     ) {
       errorThrower(
         `
-        Ошибка!
+        ${plugin.chalk.bgRedBright.white('Ошибка!')}
 
         Отсутствуют пути до файлов, либо передан не верный аргумент или опция команды imagemin:
         `,

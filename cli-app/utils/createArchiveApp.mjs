@@ -27,7 +27,7 @@ const createArchiveApp = async (argv) => {
     ) {
       const badOptionErrorMsg = plugin.chalk.yellow(
         `
-          Ошибка!
+          ${plugin.chalk.bgRedBright.white('Ошибка!')}
 
           Для создания архива необходимо воспользоваться командой archive
           Далее передаём дополнительные команды после -o или --options:
