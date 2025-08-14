@@ -1,7 +1,5 @@
 // команда archive -o или --options {tar, tgz, zip} -p или --path your_path
 
-import createArchiveApp from '../utils/createArchiveApp.mjs';
-
 export const command = 'archive';
 export const describe = `
     Архивирование файлов и директорий проекта.
@@ -28,7 +26,7 @@ export const builder = (yargs) => {
     type: 'string',
     choices: ['tgz', 'tar', 'zip'], // выбор дополнительных опций
     describe: `
-      после ввода -o или --options, выберите в каком формате необходимо создать архив.
+      после ввода -o или --options, введите в каком формате необходимо создать архив.
 
       Аргументы опции:
         tgz - создаст архив с расширением tar.gz;
@@ -43,8 +41,9 @@ export const builder = (yargs) => {
   );
 };
 
-export const handler = (argv) => {
-  argv.output = createArchiveApp(argv);
+export const handler = async (argv) => {
+  const { default: createArchiveApp } = await import('../utils/createArchiveApp.mjs');
+  await createArchiveApp(argv);
 
   // Debug
   // console.log(argv);

@@ -1,6 +1,7 @@
 // команда imagemin - для оптимизации изображений, используется imagemin и прочие плагины.
 
-import imageminApp from '../utils/imageminApp.mjs';
+import { KITSYS } from '../config/config.mjs';
+const node_path = KITSYS.node_path;
 
 export const command = 'imagemin';
 export const describe = `
@@ -32,7 +33,7 @@ export const builder = (yargs) => {
     type: 'string',
     choices: ['gif', 'jpeg', 'png', 'svg', 'all'],
     describe: `
-      после ввода -m или --minify, выберите какой формат изображений нужно оптимизировать.
+      после ввода -m или --minify, введите опцию какой формат изображений нужно оптимизировать.
 
       доступные опции:
         gif   - для оптимизации .gif;
@@ -46,26 +47,26 @@ export const builder = (yargs) => {
   yargs.option('input', {
     alias: 'i',
     type: 'string',
-    describe: `
-      после ввода -i или --input укажите путь до дир-рии исходников.
-    `.trim(),
+    describe: 'Путь до каталога с изображениями.',
+    // приводим значение к абсолютному пути, чтобы utils не думали о платформе
+    coerce: (p) => (p ? node_path.resolve(p) : p),
   });
 
   yargs.option('output', {
     alias: 'o',
     type: 'string',
-    describe: `
-      после ввода -o или --output укажите путь до дир-рии в которую необходимо сложить оптимизированные изображения.
-    `.trim(),
+    describe: 'Путь до выходного каталога.',
+    // приводим значение к абсолютному пути, чтобы utils не думали о платформе
+    coerce: (p) => (p ? node_path.resolve(p) : p),
   });
 
   // Опция по конвертации изображений в разные форматы
   yargs.option('convert', {
     alias: 'c',
     type: 'string',
-    choises: ['webp'],
+    choices: ['webp'],
     describe: `
-      после ввода -c или --convert, выберите в какой формат изображение необходимо переконвертировать.
+      после ввода -c или --convert, введите в какой формат конвертировать (например, webp).
 
       доступные опции:
         webp - для конвертации jpg,png в webp формат;
@@ -73,14 +74,12 @@ export const builder = (yargs) => {
   });
 
   // необходимые опции для работы команды, иначе ошибка
-  yargs.demandOption(
-    ['input', 'output'],
-    'Необходимо указать опцию с аргументами и пути до дир-рии оптимизируемых объектов и до дир-рии в которую необходимо поместить оптимизированные изображения.',
-  );
+  yargs.demandOption(['input', 'output'], 'Необходимо указать опции с путями: --input (или -i) и --output (или -o)');
 };
 
-export const handler = function (argv) {
-  argv.output = imageminApp(argv);
+export const handler = async (argv) => {
+  const { default: imageminApp } = await import('../utils/imageminApp.mjs');
+  await imageminApp(argv);
 
   // console.log('handler:\n', argv);
 };

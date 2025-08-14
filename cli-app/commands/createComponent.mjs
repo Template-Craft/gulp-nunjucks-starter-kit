@@ -1,5 +1,4 @@
 // команда creat -c или --component component_name
-import createComponentApp from '../utils/createComponentApp.mjs';
 
 export const command = 'create';
 export const describe = `
@@ -27,7 +26,9 @@ export const builder = (yargs) => {
   );
 };
 
-export const handler = function (argv) {
-  argv.output = createComponentApp(argv);
+export const handler = async (argv) => {
+  const { default: createComponentApp } = await import('../utils/createComponentApp.mjs');
+  await createComponentApp(argv);
+
   // console.log(argv);
 };

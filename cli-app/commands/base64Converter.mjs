@@ -1,7 +1,5 @@
 // команда convert
 
-import base64ConverterApp from '../utils/base64ConverterApp.mjs';
-
 export const command = 'base64Converter';
 export const describe = `
   Конвертер svg в base64.
@@ -36,7 +34,9 @@ export const builder = (yargs) => {
   yargs.demandOption(['mode', 'path'], 'Пожалуйста укажите режим работы конвертора и путь до конвертируемого объекта.');
 };
 
-export const handler = function (argv) {
-  argv.output = base64ConverterApp(argv);
+export const handler = async (argv) => {
+  const { default: base64ConverterApp } = await import('../utils/base64ConverterApp.mjs');
+  await base64ConverterApp(argv);
+
   // console.log(argv);
 };
