@@ -189,14 +189,8 @@ export const CREATE_ARCHIVE = (archive_option_collection, input_option, input_va
         const destination_stream = KITSYS.fs.createWriteStream(destination);
 
         destination_stream.on('close', function () {
-          try {
-            const bytes = typeof archive_option.pointer === 'function' ? archive_option.pointer() : 0;
-
-            console.log(KITPLUGIN.chalk.yellow(bytes + ' total bytes'));
-            console.log(`Архиватор завершён. Архив создан: ${destination}`);
-          } catch (error) {
-            console.error(error);
-          }
+          console.log(KITPLUGIN.chalk.yellow(archive_option.pointer() + ' total bytes'));
+          console.log('Архиватор был завершен, и дескриптор выходного файла закрылся.\nАрхив успешно создан.');
         });
 
         archive_option.on('error', function (err) {
