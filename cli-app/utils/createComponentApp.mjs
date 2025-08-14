@@ -10,56 +10,72 @@ import {
 const createComponentApp = async (argv) => {
   try {
     // Получаем содержимое команд пришедшее от пользователя.
-    const name = argv.component;
+    const name = String(argv.component ?? '').trim();
+
+    if (!name) {
+      return errorThrower(`
+        ${plugin.chalk.bgRedBright.white('Ошибка!')}
+
+        Не передано имя компонента.
+        Пример:
+        $ node ./cli-app/cli-tools.mjs create -c Header
+        `);
+    }
+
+    // Разрешаем: латиница/цифры/_/- ; начинаться с буквы
+    if (!/^[A-Za-z][A-Za-z0-9_-]*$/.test(name)) {
+      return errorThrower(`
+          Некорректное имя компонента "${name}".
+          Разрешены: латинские буквы, цифры, "_" и "-"; имя должно начинаться с буквы.
+        `);
+    }
+
+    // пути
+    const component_dir = cfg.template.spawn_dir(name);
+    const data_dir = cfg.template.data_dir;
+
+    const component_dir_absolute = system.node_path.resolve(component_dir);
+    const data_dir_absolute = system.node_path.resolve(data_dir);
 
     // проверка на дубликаты
-    const exists = system.fs.existsSync(cfg.template.spawn_dir(name));
+    try {
+      const st = await system.fsPromises.stat(component_dir_absolute);
 
-    // передадим в переменную до расширения файла,
-    // имя, пришедшее из функции, и подставим его.
-    const files_collection = [`${name}${cfg.template.extension}`, `${name}.mjs`, `_${name}${cfg.styles.extension}`];
+      if (st.isDirectory()) {
+        return errorThrower(`Компонент ${name} уже существует: ${component_dir_absolute}`);
+      } else {
+        return errorThrower(`Путь существует, но это не директория: ${component_dir_absolute}`);
+      }
+    } catch (error) {
+      // ENOENT - директории нет, можно создавать; прочее - пробрасываем
+      if (error.code !== 'ENOENT') return errorThrower(error);
+    }
+
+    // Гарантируем наличие директорий
+    await system.fsPromises.mkdir(component_dir_absolute, { recursive: true });
+    await system.fsPromises.mkdir(data_dir_absolute, { recursive: true });
+
+    // Списки файлов для генерации
+    const files_collection = [
+      // Шаблон компонента: <name>.njk
+      `${name}${cfg.template.extension}`,
+      // Модуль js компонента: <name>.mjs
+      `${name}.mjs`,
+      // SCSS partial компонента: _<name>.scss
+      `_${name}${cfg.styles.extension}`,
+    ];
+
+    // Файл данных компонента: <name>.json
     const component_data = [`${name}.json`];
 
-    // проверка на пустышку
-    if (name === undefined || null || name === '') {
-      const nameErrorMsg = `
-        Ошибка!
+    // Создаём файлы CREATE_FILES создаёт пустые файлы по именам из массивов
+    createFiles(component_data, data_dir);
+    createFiles(files_collection, component_dir);
 
-        Для создания компонента необходимо использовать один из двух ключей:
-          ${plugin.chalk.blue('-c')} или ${plugin.chalk.blue('--component')} передать имя после ключа!
-      `;
-
-      errorThrower(nameErrorMsg);
-    }
-
-    // проверка на дубликат
-    if (exists === true) {
-      const existErrorMsg = `
-        Внимание!
-
-        Компонент ${name} существует!
-        Пропуск создания компонента, попробуйте другое название.
-        `;
-
-      errorThrower(existErrorMsg);
-    }
-
-    // тут объявляем что мы собираемся создать директорию с файлами
-    await system.fs.mkdir(
-      system.node_path.normalize(cfg.template.spawn_dir(name)),
-      { recursive: true },
-      (error_msg) => {
-        if (error_msg) errorThrower(error_msg);
-
-        console.info(plugin.chalk.yellow('------ * component * ------'));
-        console.info(plugin.chalk.gray(`Каталог компонента создан: ${cfg.template.spawn_dir(name)}`));
-
-        // тут создаём файл данных компонента:
-        createFiles(component_data, cfg.template.data_dir);
-
-        // тут создаём папку компонента, с файлами переданными в массиве files_collection
-        createFiles(files_collection, cfg.template.spawn_dir(name));
-      },
+    console.log(
+      plugin.chalk.green(
+        `Компонент "${name}" успешно создан в: ${component_dir_absolute}\nДанные: ${data_dir_absolute}/${name}.json`,
+      ),
     );
   } catch (error) {
     console.error(error.message);

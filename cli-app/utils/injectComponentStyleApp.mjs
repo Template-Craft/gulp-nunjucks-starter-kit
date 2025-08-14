@@ -1,55 +1,58 @@
 // Утилита для инъекции стилей компонента в главный файл стилей
-// с помощью конструкции @import '';
+// с помощью конструкции @use '';
+
 import { KITSYS as system, KITPLUGIN as plugin, KITCONFIG as cfg, errorThrower } from '../config/config.mjs';
 
 const injectComponentStyleApp = async (argv) => {
   try {
-    const value = argv.style; // переопределяем переменную, для красоты кода.
-
-    const find_dir_path = `${cfg.styles.component_path}${value}`;
-    const this_stylesheet = cfg.styles.component_stylesheet(find_dir_path, value);
+    // Валидируем имя компонента (не пусто)
+    const raw = argv.style;
+    const value = String(raw ?? '').trim();
 
     // Проверяем передачу аргумента и не пустая ли там строка
-    if (value === undefined || null || value === '') {
+    if (!value) {
       const nameErrorMsg = `
-        Ошибка!
+        ${plugin.chalk.bgRedBright.white('Ошибка!')}
 
-        Передана пустая строка или ничего не передано: ${value}`;
+        Не передано имя компонента. Пример:
+        $ node ./cli-app/cli-tools.mjs import -s Header`;
 
       errorThrower(nameErrorMsg);
     }
 
-    // ищем директорию с компонентом, имя получаем из командной строки.
-    await system.fs.readdir(system.node_path.resolve(system.__dirname, find_dir_path), 'utf8', (error_msg) => {
-      if (error_msg) errorThrower(error_msg);
+    // Формируем пути
+    const component_dir = `${cfg.styles.component_path}${value}`;
+    const stylesheet_path = cfg.styles.component_stylesheet(component_dir, value);
+    const index_path = cfg.styles.include_in;
 
-      console.info(plugin.chalk.green(`Каталог существует и найден: ${find_dir_path}`));
+    // Проверяем наличие SCSS-файла компонента
+    const style_abs = system.node_path.resolve(stylesheet_path);
+    const st = await system.fsPromises.stat(style_abs).catch(() => null);
 
-      system.fs.stat(`${this_stylesheet}`, (error_msg, status) => {
-        if (error_msg) errorThrower(error_msg);
+    if (!st || !st.isFile()) {
+      return errorThrower(`
+          ${plugin.chalk.bgRedBright.white('Ошибка!')}
 
-        // Это файл?
-        if (status.isFile()) {
-          console.info(plugin.chalk.blue(`\n_${value}.scss - является файлом`));
+          Не найден файл стилей компонента:
+          ${style_abs}
+        `);
+    }
 
-          // Добавим в конец main.scss, импорт файла стилей нашего найденного компонента
-          system.fs.appendFile(cfg.styles.include_in, cfg.styles.import_stylesheet(value), 'utf8', (error_msg) => {
-            if (error_msg) errorThrower(error_msg);
+    // Подготовка строки импорта и исключение дублей
+    const import_line = cfg.styles.import_stylesheet(value); // генерирует строку вида: @use '../../views/components/<name>/_<name>.scss';
+    const index_abs = system.node_path.resolve(index_path);
 
-            console.info(
-              plugin.chalk.blue(`\nФайл ${this_stylesheet}: \nУспешно импортирован в файл: ${cfg.styles.include_in}`),
-            );
-          });
-        } else {
-          const isFileErrorMsg = `
-              Ошибка!
+    const current = await system.fsPromises.readFile(index_abs, 'utf8').catch(() => '');
 
-              ${value} - объект не является файлом.`;
+    if (current.includes(import_line)) {
+      console.warn(plugin.chalk.yellow(`Импорт уже существует, пропуск: ${import_line}`));
 
-          errorThrower(isFileErrorMsg);
-        }
-      });
-    });
+      return;
+    }
+
+    // Добавляем импорт
+    await system.fsPromises.appendFile(index_abs, import_line, 'utf8');
+    console.log(plugin.chalk.green(`Добавлен импорт: ${import_line}`));
   } catch (error) {
     console.error(error.message);
   }
