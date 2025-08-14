@@ -49,24 +49,25 @@ export const KITCONFIG = {
       options: {
         mode: 'tgz',
         extension: 'tar.gz',
-        option: KITPLUGIN.archiver('tar', {
-          gzip: true,
-          gzipOptions: { level: 1 },
-        }),
+        make: () =>
+          KITPLUGIN.archiver('tar', {
+            gzip: true,
+            gzipOptions: { level: 1 },
+          }),
       },
     },
     {
       options: {
         mode: 'tar',
         extension: 'tar',
-        option: KITPLUGIN.archiver('tar'),
+        make: () => KITPLUGIN.archiver('tar'),
       },
     },
     {
       options: {
         mode: 'zip',
         extension: 'zip',
-        option: KITPLUGIN.archiver('zip'),
+        make: () => KITPLUGIN.archiver('zip'),
       },
     },
   ],
@@ -168,17 +169,34 @@ export const CREATE_ARCHIVE = (archive_option_collection, input_option, input_va
         );
 
         const extension = collection.options.extension;
-        const archive_option = collection.options.option;
+        const archive_option = collection.options.make();
+
+        // Безопасные пути для архива (абсолютные пути архивируемой директории)
+        const srcAbs = KITSYS.node_path.resolve(input_values);
+        const base = KITSYS.node_path.basename(srcAbs);
+
+        // Проектный корень и единый каталог архивов
+        // Архив всегда лежит в '<PROJECT_ROOT>/archives'
+        const PROJECT_ROOT = KITSYS.__dirname;
+
+        const outDir = KITSYS.node_path.join(PROJECT_ROOT, `archives`);
+        KITSYS.fs.mkdirSync(outDir, { recursive: true });
 
         const current_date = new Date();
-        const get_date = `${current_date.toLocaleDateString()}-${current_date.toLocaleTimeString()}`;
+        const stamp = `${current_date.toLocaleDateString()}-${current_date.toLocaleTimeString()}`;
 
-        const destination = `${input_values}:${get_date}.${extension}`;
+        const destination = KITSYS.node_path.join(outDir, `${base}-${stamp.replace(/[:.]/g, '-')}.${extension}`);
         const destination_stream = KITSYS.fs.createWriteStream(destination);
 
         destination_stream.on('close', function () {
-          console.log(KITPLUGIN.chalk.yellow(archive_option.pointer() + ' total bytes'));
-          console.log('Архиватор был завершен, и дескриптор выходного файла закрылся.\nАрхив успешно создан.');
+          try {
+            const bytes = typeof archive_option.pointer === 'function' ? archive_option.pointer() : 0;
+
+            console.log(KITPLUGIN.chalk.yellow(bytes + ' total bytes'));
+            console.log(`Архиватор завершён. Архив создан: ${destination}`);
+          } catch (error) {
+            console.error(error);
+          }
         });
 
         archive_option.on('error', function (err) {
@@ -187,7 +205,27 @@ export const CREATE_ARCHIVE = (archive_option_collection, input_option, input_va
 
         archive_option.pipe(destination_stream);
 
-        archive_option.directory(input_values);
+        // Игнорируем всё под 'archives/**'
+        const ignorePatterns = [];
+
+        // Если архивируем корень проекта, то игнорируем:
+        // PROJECT_ROOT/archives/**, PROJECT_ROOT/node_modules/**, PROJECT_ROOT/.git/**
+        if (srcAbs === PROJECT_ROOT) {
+          ignorePatterns.push('archives/**', 'node_modules/**', '.git/**');
+
+          // исключаем и конкретный файл архива, если он попадает в cwd
+          const outRel = KITSYS.node_path.relative(srcAbs, destination);
+
+          if (outRel && !outRel.startsWith('..') && !KITSYS.node_path.isAbsolute(outRel)) {
+            ignorePatterns.push(outRel);
+          }
+        }
+
+        // Используем archive.glob вместо directory, чтобы применить ignorePatterns
+        // dot: true - захватываем скрытые файлы (например .env), если нужно
+        // prefix: base/ > внутри архива корневой каталог будет называться как исходная папка
+        archive_option.glob('**/*', { cwd: srcAbs, dot: true, ignore: ignorePatterns }, { prefix: `${base}/` });
+
         archive_option.finalize();
       }
     });

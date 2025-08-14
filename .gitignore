@@ -11,6 +11,10 @@ build/
 # Ignore package-lock.json file
 #package-lock.json
 
+# Ignore archives directory
+archives/
+archives/**
+
 # Ignore archives
 *.tar.gz
 *.tar
