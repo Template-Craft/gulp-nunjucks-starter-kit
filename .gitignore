@@ -15,6 +15,9 @@ build/
 archives/
 archives/**
 
+# Ignore converting directory
+base64Convert/
+
 # Ignore archives
 *.tar.gz
 *.tar

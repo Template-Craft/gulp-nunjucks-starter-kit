@@ -119,6 +119,10 @@ export const KITCONFIG = {
   },
 };
 
+// Проектный корень и единый каталог архивов
+// Архив всегда лежит в '<PROJECT_ROOT>/archives'
+export const PROJECT_ROOT = KITSYS.__dirname;
+
 // функция помощник, созданная для прокидывания ошибок
 export function errorThrower(msg) {
   if (typeof msg === 'string') throw new Error(msg.trim());
@@ -174,10 +178,6 @@ export const CREATE_ARCHIVE = (archive_option_collection, input_option, input_va
         // Безопасные пути для архива (абсолютные пути архивируемой директории)
         const srcAbs = KITSYS.node_path.resolve(input_values);
         const base = KITSYS.node_path.basename(srcAbs);
-
-        // Проектный корень и единый каталог архивов
-        // Архив всегда лежит в '<PROJECT_ROOT>/archives'
-        const PROJECT_ROOT = KITSYS.__dirname;
 
         const outDir = KITSYS.node_path.join(PROJECT_ROOT, `archives`);
         KITSYS.fs.mkdirSync(outDir, { recursive: true });
