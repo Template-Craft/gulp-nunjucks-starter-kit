@@ -9,10 +9,7 @@ import imageminGIFsicle from 'imagemin-gifsicle';
 import imageminSVGO from 'imagemin-svgo';
 import imageminWEBP from 'imagemin-webp';
 
-import { KITPLUGIN, KITCONFIG, errorThrower } from '../config/config.mjs';
-
-const plugin = KITPLUGIN;
-const cfg = KITCONFIG;
+import { KITPLUGIN as plugin, KITCONFIG as cfg, errorThrower } from '../config/config.mjs';
 
 const imageminApp = async (argv) => {
   try {

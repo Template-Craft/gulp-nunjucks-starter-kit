@@ -1,10 +1,11 @@
 // Утилита для создания компонента
-import { KITSYS, KITPLUGIN, KITCONFIG, CREATE_FILES, errorThrower } from '../config/config.mjs';
-
-const cfg = KITCONFIG;
-const createFiles = CREATE_FILES;
-const plugin = KITPLUGIN;
-const system = KITSYS;
+import {
+  KITSYS as system,
+  KITPLUGIN as plugin,
+  KITCONFIG as cfg,
+  CREATE_FILES as createFiles,
+  errorThrower,
+} from '../config/config.mjs';
 
 const createComponentApp = async (argv) => {
   try {

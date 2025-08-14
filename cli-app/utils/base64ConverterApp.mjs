@@ -1,8 +1,5 @@
 // Утилита для конвертации svg в base64 и вывода результата в консоль.
-import { KITSYS, KITPLUGIN, errorThrower } from '../config/config.mjs';
-
-const plugin = KITPLUGIN;
-const system = KITSYS;
+import { KITSYS as system, KITPLUGIN as plugin, errorThrower } from '../config/config.mjs';
 
 const base64ConverterApp = async (argv) => {
   try {
