@@ -86,3 +86,23 @@
 > _FIXED_ Добавлен монитор ресурсов как отдельный таск для gulp, присылает оповещения при нагрузке на RAM/CPU. Настройки лежат в **gulp/config/settings.mjs** [commit](https://github.com/Template-Craft/gulp-nunjucks-starter-kit/commit/b36ddc7db1a1b3ba1dceb7c5018ebcaeb15b75da)
 
 > _FIXED_ Мелкая правка в **gulp/utils/updateDependencyMap.mjs** неправильный лог [commit](https://github.com/Template-Craft/gulp-nunjucks-starter-kit/commit/ff139b563d6cb3c0d2ef1620484809a77fd05118)
+
+## 2025.08.12.3 - 2025-08-14/2025-08-15
+
+> _FIXED_ Небольшая правка файла .nvmrc - соответствие с заявленным описанием в readme.md и настройками engine в package.json [commit](https://github.com/Template-Craft/gulp-nunjucks-starter-kit/commit/3e5178e7a5ce65573a857f58ef95229427e16868)
+
+> _FIXED_ Исправлена ошибка choises - choices. В командах handler теперь асинхронная с динамическим импортом модуля необходимого для данной команды. В глобальной опции и в imagemin coerce - теперь нормализует пути. [](https://github.com/Template-Craft/gulp-nunjucks-starter-kit/commit/55c61b3684bb20c357f3b318e77fd2af4f4f687b)
+
+> \_FIXED\_\_ Нормализация путей при создании архивов + защита от рекурсивного архивирования при вводе команды: `node ./cli-app/cli-tools.mjs archive -o tgz -p ./` или `node ./cli-app/cli-tools.mjs archive -o tgz -p .`. Так же архивы теперь создаются внутри директории `archives/` в корне проекта. [commit](https://github.com/Template-Craft/gulp-nunjucks-starter-kit/commit/ee4bf3f6090c5e7ff66efcd5224fa35039a0d064)
+
+> _FIXED_ Небольшие фиксы во всех утилитах для cli-app + описание возможности архивации корневой директории для модуля: cli-app/utils/createArchiveApp.mjs [commit](https://github.com/Template-Craft/gulp-nunjucks-starter-kit/commit/127e5ae81a460215fba425090c44ed6346ac6471)
+
+> _FIXED_ откат изменений нормализации путей из коммита: 55c61b3684bb20c357f3b318e77fd2af4f4f687b для cli-app/options/global.mjs [commit](https://github.com/Template-Craft/gulp-nunjucks-starter-kit/commit/fec7e628f600d09822ecd2baba77fb7844eb9904)
+
+> _UPD_ Единый перехват ошибок + команда по умолчанию для вывода справочной информации по `cli-app` если было запущено без аргументов. [commit](https://github.com/Template-Craft/gulp-nunjucks-starter-kit/commit/6085defd6769c2a2504c83f572079674ad4a13d3)
+
+> _FIXED_ Переход на fsPromises и упрощение кодовой базы модулей + более строгая защита и защита повторного импорта в cli-app/utils/injectComponentStyleApp.mjs, а в cli-app/utils/createComponentApp.mjs регулярка с разрешёнными именами компонентов - имя должно начинаться с буквы [commit](https://github.com/Template-Craft/gulp-nunjucks-starter-kit/commit/0c8c2adc016774363212450f06b4d36dd340e68b)
+
+> \_FIXED\_\_ Откат к прежней .on('close') в CREATE_ARCHIVE() [commit](https://github.com/Template-Craft/gulp-nunjucks-starter-kit/commit/118b32ee125314dd8229a64a2fe5399694264a59)
+
+> \_FIXED\_\_ Небольшое косметическое обновление вывода ошибки. [commit](https://github.com/Template-Craft/gulp-nunjucks-starter-kit/commit/2cea51140fc5b35ca5ff243238be4904b9832987)
