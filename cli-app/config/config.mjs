@@ -134,17 +134,17 @@ export function errorThrower(msg) {
 // 1 аргументом передаём массив с коллекцией файлов
 // 2 аргументом передаём путь до дир-рии, в которой создаём объекты
 // @param: CREATE_FILES(collection, dir_path)
-export const CREATE_FILES = (collection, dir_path) => {
-  collection.forEach((file) => {
-    KITSYS.fs.open(`${dir_path}${KITSYS.node_path.basename(file)}`, 'w', (error_msg) => {
-      if (error_msg) {
-        // console.error(KITPLUGIN.chalk.red(error_msg));
-        errorThrower(error_msg);
-      }
+export const CREATE_FILES = async (collection, dir_path) => {
+  await Promise.all(
+    collection.map(async (file) => {
+      const target = KITSYS.node_path.join(dir_path, KITSYS.node_path.basename(file));
 
-      console.info(KITPLUGIN.chalk.green(`Файл компонента создан, и находится по пути: ${dir_path}${file}`));
-    });
-  });
+      await KITSYS.fsPromises.mkdir(KITSYS.node_path.dirname(target), { recursive: true });
+      await KITSYS.fsPromises.writeFile(target, '', 'utf8'); // пустая заготовка
+
+      console.info(KITPLUGIN.chalk.yellowBright(`Файл компонента создан: ${target}`));
+    }),
+  );
 };
 
 // @type function

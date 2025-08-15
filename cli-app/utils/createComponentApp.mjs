@@ -37,14 +37,18 @@ const createComponentApp = async (argv) => {
     const component_dir_absolute = system.node_path.resolve(component_dir);
     const data_dir_absolute = system.node_path.resolve(data_dir);
 
+    // Для логов
+    const component_out_dir_log = system.node_path.join(component_dir, system.node_path.basename(name));
+    const data_out_dir_log = system.node_path.join(data_dir, system.node_path.basename(name));
+
     // проверка на дубликаты
     try {
       const st = await system.fsPromises.stat(component_dir_absolute);
 
       if (st.isDirectory()) {
-        return errorThrower(`Компонент ${name} уже существует: ${component_dir_absolute}`);
+        return errorThrower(`Компонент ${name} уже существует: ${component_out_dir_log}`);
       } else {
-        return errorThrower(`Путь существует, но это не директория: ${component_dir_absolute}`);
+        return errorThrower(`Путь существует, но это не директория: ${component_out_dir_log}`);
       }
     } catch (error) {
       // ENOENT - директории нет, можно создавать; прочее - пробрасываем
@@ -69,12 +73,12 @@ const createComponentApp = async (argv) => {
     const component_data = [`${name}.json`];
 
     // Создаём файлы CREATE_FILES создаёт пустые файлы по именам из массивов
-    createFiles(component_data, data_dir);
-    createFiles(files_collection, component_dir);
+    await createFiles(component_data, data_dir);
+    await createFiles(files_collection, component_dir);
 
     console.log(
       plugin.chalk.green(
-        `Компонент "${name}" успешно создан в: ${component_dir_absolute}\nДанные: ${data_dir_absolute}/${name}.json`,
+        `Компонент "${name}" успешно создан в: ${component_out_dir_log}\nДанные: ${data_out_dir_log}.json`,
       ),
     );
   } catch (error) {
