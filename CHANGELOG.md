@@ -110,3 +110,9 @@
 ## 2025.08.12.4 - 2025-08-15
 
 > _FIXED_ Модуль `cli-app/utils/base64ConverterApp.mjs` теперь тоже переписан с использованием fsPromises. А результат конвертации в режиме "all" теперь создаёт директорию "base64Convert" (прописана в .gitignore) в корне проекта, затем помещает туда текстовый файл с результатом. PROJECT_ROOT - в `cli-app/config/config.mjs` теперь экспортируема. [commit](https://github.com/Template-Craft/gulp-nunjucks-starter-kit/commit/4f9f8c41cb014ea2b8cc5fd67b927df1a06ba8d9)
+
+## 2025.08.12.5 - 2025-08-15
+
+> _FIXED_ Обновление CREATE_FILES - переписана функция, теперь полностью асинхронная и с fsPromises. [commit](https://github.com/Template-Craft/gulp-nunjucks-starter-kit/commit/aaf1d8918b9edf6bc3a3b93be79f2f0748f0fce1)
+
+> _FIXED_ код модуля приведён в единый стиль принятый для cli-app [commit](https://github.com/Template-Craft/gulp-nunjucks-starter-kit/commit/2486db5a06f0fefb4fa37ca96134ce1a1a94300f)
