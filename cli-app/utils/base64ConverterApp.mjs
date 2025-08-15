@@ -10,14 +10,14 @@ const base64FromSVG = (data) => plugin.svg64(data);
 /**
  * Конвертация одного файла (mode=single)
  */
-async function convertSingle(userPath) {
-  const absFile = system.node_path.resolve(system.__dirname, userPath);
-  const st = await system.fsPromises.stat(absFile).catch(() => null);
+async function convertSingle(user_path) {
+  const abs_file = system.node_path.resolve(system.__dirname, user_path);
+  const st = await system.fsPromises.stat(abs_file).catch(() => null);
   if (!st || !st.isFile()) {
-    return errorThrower(`Файл не найден: ${absFile}`);
+    return errorThrower(`Файл не найден: ${abs_file}`);
   }
 
-  const svg = await system.fsPromises.readFile(absFile, TXT);
+  const svg = await system.fsPromises.readFile(abs_file, TXT);
   console.log(plugin.chalk.bgYellow('--------- [Результат конвертации] ---------'));
   console.log(`\n${plugin.chalk.dim(base64FromSVG(svg))}\n`);
   console.log(plugin.chalk.yellow('Скопируйте код из вывода и используйте его в HTML/CSS.'));
@@ -26,51 +26,52 @@ async function convertSingle(userPath) {
 /**
  * Конвертация всех SVG в каталоге (mode=all)
  */
-async function convertAll(userDir) {
-  const absDir = system.node_path.resolve(system.__dirname, userDir);
-  const st = await system.fsPromises.stat(absDir).catch(() => null);
+async function convertAll(user_dir) {
+  const abs_dir = system.node_path.resolve(system.__dirname, user_dir);
+  const st = await system.fsPromises.stat(abs_dir).catch(() => null);
+
   if (!st || !st.isDirectory()) {
-    return errorThrower(`Директория не найдена: ${absDir}`);
+    return errorThrower(`Директория не найдена: ${abs_dir}`);
   }
 
   // Путь для файла результатов в PROJECT_ROOT каталоге
   const out_dir = system.node_path.join(root_dir, `base64Convert`);
   system.fs.mkdirSync(out_dir, { recursive: true });
 
-  const outPath = system.node_path.join(out_dir, OUTPUT_FILE);
+  const out_path = system.node_path.join(out_dir, OUTPUT_FILE);
 
   // Переинициализируем файл результатов: rm (force) → пустая запись
-  await system.fsPromises.rm(outPath, { force: true }).catch(() => {});
-  await system.fsPromises.writeFile(outPath, '', TXT);
+  await system.fsPromises.rm(out_path, { force: true }).catch(() => {});
+  await system.fsPromises.writeFile(out_path, '', TXT);
 
   // Читаем каталог «умно» (с типами)
-  const entries = await system.fsPromises.readdir(absDir, { withFileTypes: true });
-  const svgEntries = entries.filter((d) => d.isFile() && system.node_path.extname(d.name).toLowerCase() === '.svg');
+  const entries = await system.fsPromises.readdir(abs_dir, { withFileTypes: true });
+  const svg_entries = entries.filter((d) => d.isFile() && system.node_path.extname(d.name).toLowerCase() === '.svg');
 
-  console.info(plugin.chalk.green(`Директория: ${userDir} — существует, начинаю конвертацию.`));
+  console.info(plugin.chalk.green(`Директория: ${user_dir} — существует, начинаю конвертацию.`));
   console.log(plugin.chalk.dim('########################'));
   console.log(plugin.chalk.yellow(`Всего файлов: ${entries.length}`));
-  console.log(plugin.chalk.yellow(`SVG файлов:   ${svgEntries.length}`));
+  console.log(plugin.chalk.yellow(`SVG файлов:   ${svg_entries.length}`));
   console.log(plugin.chalk.dim('########################'));
   console.log(plugin.chalk.bgYellow('--------- [Результат конвертации] ---------'));
 
   // Последовательно (чтобы не взрывать память при больших папках)
-  for (const d of svgEntries) {
-    const relFile = system.node_path.join(userDir, d.name); // для лога
-    const absFile = system.node_path.join(absDir, d.name); // для чтения
+  for (const d of svg_entries) {
+    const relative_file = system.node_path.join(user_dir, d.name); // для лога
+    const abs_file = system.node_path.join(abs_dir, d.name); // для чтения
 
-    const svg = await system.fsPromises.readFile(absFile, TXT);
+    const svg = await system.fsPromises.readFile(abs_file, TXT);
     const block = [
       '####',
-      `SVG файл: ${relFile}`,
+      `SVG файл: ${relative_file}`,
       'Результат конвертации:',
       base64FromSVG(svg),
       '####',
       '', // пустая строка-разделитель
     ].join('\n');
 
-    await system.fsPromises.appendFile(outPath, block, TXT);
-    console.log(plugin.chalk.green(`Файл: ${relFile} конвертирован и записан в ${OUTPUT_FILE}`));
+    await system.fsPromises.appendFile(out_path, block, TXT);
+    console.log(plugin.chalk.green(`Файл: ${relative_file} конвертирован и записан в ${OUTPUT_FILE}`));
   }
 
   console.info(plugin.chalk.magenta(`Проверьте наличие файла "${OUTPUT_FILE}" в "${out_dir}"`));
@@ -106,7 +107,7 @@ const base64ConverterApp = async (argv) => {
       await convertAll(input);
     }
   } catch (error) {
-    console.error(error?.message ?? String(error));
+    console.error(error.message);
   }
 };
 
