@@ -60,6 +60,58 @@ export const templates = async (changedFile = undefined) => {
   return runRender(filesToRender, renderOptions);
 };
 
+// Приводит список произвольных файлов (страницы/секции/шаблоны)
+// к списку страниц. Секции и шаблоны разворачиваются по dependencyMap
+function expandFilesToPages(files, dependencyMap) {
+  const result = new Set();
+  const list = Array.isArray(files) ? files : [files];
+
+  for (const f of list) {
+    if (!f || typeof f !== 'string') continue;
+    const n = f.replace(/\\/g, '/');
+
+    if (n.includes('/views/pages/')) {
+      result.add(f);
+      continue;
+    }
+
+    if (n.includes('/views/sections/')) {
+      const sectionName = getSectionNameFromPath(n);
+      const users = dependencyMap.sections?.get(sectionName) || [];
+
+      for (const u of users) {
+        if (u.replace(/\\/g, '/').includes('/views/pages/')) result.add(u);
+      }
+
+      continue;
+    }
+
+    if (n.includes('/views/templates/')) {
+      const templateName = nodePath.basename(n, '.njk');
+      const users = dependencyMap.templates?.get(templateName) || [];
+
+      for (const u of users) {
+        const un = u.replace(/\\/g, '/');
+
+        if (un.includes('/views/pages/')) {
+          result.add(u);
+        } else if (un.includes('/views/sections/')) {
+          const sname = getSectionNameFromPath(un);
+          const su = dependencyMap.sections?.get(sname) || [];
+
+          for (const p of su) {
+            if (p.replace(/\\/g, '/').includes('/views/pages/')) result.add(p);
+          }
+        }
+      }
+
+      continue;
+    }
+  }
+
+  return [...result];
+}
+
 // Определяем тип события
 function detectChangeType(changedFile) {
   if (!changedFile) return 'full';
@@ -115,16 +167,17 @@ async function resolveRenderTargets(changedType, changedFile) {
       const sectionPages = dependencyMap.sections?.get(basename) || [];
       const templatePages = dependencyMap.templates?.get(basename) || [];
 
-      const affectedPages = [...new Set([...componentPages, ...sectionPages, ...templatePages])];
+      const rawTargets = [...new Set([...componentPages, ...sectionPages, ...templatePages])];
+      const pageTargets = expandFilesToPages(rawTargets, dependencyMap);
 
-      if (affectedPages.length > 0) {
+      if (pageTargets.length > 0) {
         console.log(
-          `[${app.plugins.chalk.blue('Nunjucks')}] Обновлён JSON ${app.plugins.chalk.magenta(basename)} -> связан с сущностью -> пересборка ${app.plugins.chalk.magenta(affectedPages.length)} файла(ов):`,
-          affectedPages
+          `[${app.plugins.chalk.blue('Nunjucks')}] Обновлён JSON ${app.plugins.chalk.magenta(basename)} -> связан с сущностью -> пересборка ${app.plugins.chalk.magenta(pageTargets.length)} файла(ов):`,
+          pageTargets
             .map((f) => app.plugins.chalk.magenta(nodePath.relative(app.path.src.nunjucksIndexDir, f)))
             .join(', '),
         );
-        return affectedPages;
+        return pageTargets;
       }
 
       // Fallback - полная пересборка
