@@ -10,7 +10,7 @@
 
 C версии **v2025.08.12** сборка работает **инкрементально**:
 
-_Более подробно про новшества: [build-system.ru.md](https://github.com/Template-Craft/gulp-nunjucks-starter-kit/blob/develop/build-system.ru.md)_
+_Более подробно про новшества: [build-system.ru.md](https://github.com/Ko2doo/acfp_redesign_2025/blob/develop/build-system.ru.md)_
 
 | Что меняется                                            | Что пересобирается                                                                     |
 | ------------------------------------------------------- | -------------------------------------------------------------------------------------- |
