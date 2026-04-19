@@ -7,7 +7,7 @@
 **Внимание!**
 
 > CLI инструмент вынесен в отдельный пакет на [npm.js](https://www.npmjs.com/package/@galaxyrobot1x/nsk-tools?activeTab=readme), теперь это отдельная опциональная утилита.
-> Для установки воспользуйтесь командой: `bash $ npm i -D @galaxyrobot1x/nsk-tools`
+> Для установки воспользуйтесь командой: `npm i -D @galaxyrobot1x/nsk-tools`
 
 <br>
 

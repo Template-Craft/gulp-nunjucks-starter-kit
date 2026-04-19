@@ -1,18 +1,15 @@
 {
   "name": "gulp-nunjucks-starter-kit",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Инструмент для компонентного проектирования статических сайтов, как lending page так и много-страничных проектов.",
   "main": "gulpfile.mjs",
-  "bin": {
-    "cli-tools": "./cli-app/cli-tools.mjs"
-  },
   "scripts": {
     "eslint:init": "npm init @eslint/config@latest",
     "dev": "gulp",
     "build": "gulp build --build",
-    "build:archive:tgz": "gulp build --build && npx nsk-tools archive -o tgz -p build",
-    "build:archive:tar": "gulp build --build && npx nsk-tools archive -o tar -p build",
-    "build:archive:zip": "gulp build --build && npx nsk-tools archive -o zip -p build",
+    "build:archive:tgz": "gulp build --build && npx nsk-tools create archive -o tgz -p build",
+    "build:archive:tar": "gulp build --build && npx nsk-tools create archive -o tar -p build",
+    "build:archive:zip": "gulp build --build && npx nsk-tools create archive -o zip -p build",
     "ncu": "ncu",
     "ncu:interactive": "ncu --interactive",
     "ncu:interactive:formatgroup": "ncu --interactive --format group",
