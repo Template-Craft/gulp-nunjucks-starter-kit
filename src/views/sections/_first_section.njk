@@ -3,13 +3,15 @@
     <div class="row">
 
       <article class="content">
+        {% set sectionData = getData('first_section') %}
+
         <div class="content__header">
-          <h1>gulp-nunjucks-starter-kit</h1>
-          <p>Инструмент для создания статических сайтов, их проектирования с помощью шаблонизатора Nunjucks и сборки с помощью Gulp + Webpack</p>
+          <h1> {{- sectionData.title -}} </h1>
+          <p> {{- sectionData.description -}} </p>
         </div>
 
         <div class="content__description">
-          <p>Это тестовая страница, призванная продемонстрировать работоспособность инструмента.</p>
+          <p> {{- sectionData.about -}} </p>
         </div>
       </article>
 

@@ -19,6 +19,7 @@ export async function updateDependencyMap({ type, name }) {
 
   if (!cache || !type || !name) return;
 
+  if (type === 'template') name = name.replace(/^_/, '');
   // проверка типов
   const isComponent = type === 'component';
   const isSection = type === 'section';

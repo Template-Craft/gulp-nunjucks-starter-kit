@@ -17,6 +17,7 @@ import nunjucksRender from 'gulp-nunjucks-render';
 
 import { buildDependencyMap } from '../utils/buildDependencyMap.mjs';
 import { getSectionNameFromPath } from '../utils/getSectionName.mjs';
+import { getTemplateName } from '../utils/getTemplateName.mjs';
 
 export const templates = async (changedFile = undefined) => {
   // Опции рендера для nunjucks:
@@ -40,6 +41,7 @@ export const templates = async (changedFile = undefined) => {
         }
       });
       env.addGlobal('getComponent', (file) => `components/${file}/${file}.njk`);
+      env.addGlobal('getTemplate', (file) => `templates/_${file}.njk`);
       env.addFilter('jsonParse', (value) => JSON.parse(value));
     },
   };
@@ -87,7 +89,7 @@ function expandFilesToPages(files, dependencyMap) {
     }
 
     if (n.includes('/views/templates/')) {
-      const templateName = nodePath.basename(n, '.njk');
+      const templateName = getTemplateName(n);
       const users = dependencyMap.templates?.get(templateName) || [];
 
       for (const u of users) {
@@ -206,7 +208,7 @@ async function resolveRenderTargets(changedType, changedFile) {
 
       const componentName = isComponent ? nodePath.basename(nodePath.dirname(changedFile)) : null;
       const sectionName = isSection ? getSectionNameFromPath(changedFile) : null;
-      const templateName = isTemplate ? nodePath.basename(changedFile, '.njk') : null;
+      const templateName = isTemplate ? getTemplateName(changedFile) : null;
 
       const dependencyMap = await buildDependencyMap({
         includeComponents: isComponent,

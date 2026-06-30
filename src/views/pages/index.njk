@@ -1,5 +1,5 @@
 
-{% from "templates/_head.njk" import HTMLHead %}
+{% from getTemplate('head') import HTMLHead %}
 
 {% set siteData = getData('Global') %}
 
@@ -26,6 +26,6 @@
       {{- Footer() -}}
     </div>
 
-    {% include "templates/_scripts.njk" %}
+    {% include getTemplate('scripts') %}
   </body>
 </html>

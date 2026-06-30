@@ -1,231 +1,225 @@
 # gulp-nunjucks-starter-kit
 
-<p>
-  Инструмент для создания статических сайтов, и их проектирования с помощью шаблонизатора Nunjucks и сборки с помощью Gulp+Webpack используется компонентный подход + разделение данных от разметки.
-</p>
+> **Architecture-first Starter Kit focused on maintainable frontend development with Nunjucks.**
 
-**Внимание!**
+## Why this project exists
 
-> CLI инструмент вынесен в отдельный пакет на [npm.js](https://www.npmjs.com/package/@galaxyrobot1x/nsk-tools?activeTab=readme), теперь это отдельная опциональная утилита.
-> Для установки воспользуйтесь командой: `npm i -D @galaxyrobot1x/nsk-tools`
+Most build systems focus on automating development tasks such as compiling templates, processing stylesheets, bundling JavaScript or running a development server.
 
-<br>
+As projects grow, however, the primary challenge is rarely the tooling itself. Long-term maintainability depends on architecture: project structure, reusable components, data organization and dependency management.
 
-## Точечная пересборка (Incremental Build)
+**gulp-nunjucks-starter-kit** was created as the result of years of refining an architectural approach across real-world projects.
 
-C версии **v2025.08.12** сборка работает **инкрементально**:
-
-_Более подробно про новшества: [build-system.ru.md](https://github.com/Ko2doo/acfp_redesign_2025/blob/develop/build-system.ru.md)_
-
-| Что меняется                                            | Что пересобирается                                                                     |
-| ------------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| **Nunjucks** <br>страница / компонент / секция / шаблон | Только страницы, реально затронутые изменением (вычисляется через карту зависимостей). |
-| **JSON-данные** для страницы                            | Одна соответствующая страница.                                                         |
-| **JSON** компонента/секции/шаблона                      | Страницы, которые используют эту сущность.                                             |
-| **SCSS-partial**                                        | Точный репак `main.scss`; в dev без `cssnano`, в build — с минификацией.               |
-| **Картинки / шрифты**                                   | Копируются исключительно изменённые файлы (`since: lastRun`).                          |
-
-### Как это работает
-
-1. **Карта зависимостей** (`components <-> sections <-> templates <-> pages`) создаётся при первом запуске dev-сессии и хранится в памяти.
-2. Любое изменение файла проходит через «детектор» (`detectChangeType`) > находим все страницы, которые реально нужно перерендерить.
-3. Для стилей точечный ререндер = одна сборка `main.scss` (парсится за миллисекунды, потому что `cssnano` выключен в dev).
-4. Для ассетов задействуется `since: lastRun(task)`, так что копируется только новое.
-
-> **Зачем:** проект с 14 + страницами и десятками секций перестаёт «собираться полностью» после каждой правки. Горячий отклик в dev остаётся < 300 мс, а использование RAM/CPU контролируется монитором.
-
-### Что помнить
-
-- Изменения в `Global.json` / `Common.json` ⇒ полная пересборка (логично: эти данные видят все страницы).
-- Правило проекта: файлы в `templates/` **не вызывают** компонентов — поэтому `findComponentUsages` игнорирует `templates/**`, что экономит время поиска.
-
-## Монитор ресурсов (RAM / CPU)
-
-В режиме разработки запускается вспомогательный таск **`monitor`**.
-Он раз в 10 секунд снимает показатели процесса Gulp (RAM и CPU) и, при превышении порогов, выводит предупреждение в консоль **и системное уведомление**.
-
-| Порог           | Значение по умолчанию | Настраивается                    |
-| --------------- | --------------------- | -------------------------------- |
-| RAM             | 1500 MB               | `settings.monitor.maxMemoryMB`   |
-| CPU             | 250 %\*с за 10 с      | `settings.monitor.maxCpuPercent` |
-| Интервал опроса | 10 000 мс             | `settings.monitor.intervalMs`    |
-
-Отключить монитор можно флагом `--no-monitor` (`npm run dev -- --no-monitor`).
-
-## Оповещения
-
-Оповещения фатальной ошибки при старте, и успешного старта/сборки проекта теперь выводятся правильно.
-
-> Примечание:
-
-_Актуальные изменения смотри в [CHANGELOG.md](https://github.com/Template-Craft/gulp-nunjucks-starter-kit/blob/develop/CHANGELOG.md) и на странице релиза._
-
-Репозиторий переведён в режим "Шаблонного репозитория", подробности можно посмотреть [тут](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template)
+Rather than introducing a new development methodology, the project formalizes proven architectural patterns and provides a build system that supports them.
 
 ---
 
-## Установка
+## Architecture First
 
-#### Версия Node.js
+The core principle of this project is simple:
 
-> Рекомендуемые версии node.js (проект тестировался именно на нижеследующих версиях node.js):
+> **Architecture defines the tools — not the other way around.**
 
-`lts/iron` или выше
+Gulp, Nunjucks and every other technology used in this project are implementation details of a larger architectural vision.
 
-#### Установка Node.js
-
-_Для работы необходимо выполнить следующие шаги:_
-
-1. Установите в свою систему с официального сайта [NodeJS](https://nodejs.org/en/) или с помощью [NVM](https://github.com/nvm-sh/nvm#installing-and-updating) (Node Version Manager)
-
-2. Установите `gulp` глобально (т.е. для всей системы):
-
-```bash
-npm i --global gulp-cli
+```text
+Architecture
+      │
+      ▼
+Project Structure
+      │
+      ▼
+Naming Conventions
+      │
+      ▼
+Template API
+      │
+      ▼
+Dependency Graph
+      │
+      ▼
+Incremental Build
+      │
+      ▼
+Development Experience
 ```
 
-3. Клонируйте репозиторий:
-
-```bash
-git clone https://github.com/Template-Craft/gulp-nunjucks-starter-kit.git
-```
-
-4. Или создайте шаблон репозитория подробнее смотрите в [справке](https://cli.github.com/manual/gh_repo_create). Для этого в системе должен быть установлен инструмент github-cli [инструкция тут](https://github.com/cli/cli/blob/trunk/docs/install_linux.md), а так же вы должны быть авторизованы.
-
-`Создание репозитория в интерактивном режиме:`
-
-```bash
-gh repo create
-```
-
-> Создайте новый удалённый репозиторий на основе этого репозитория (используя его как шаблон) и клонируйте его локально:
-
-```bash
-gh repo create MyBestProject --public --template https://github.com/Template-Craft/gulp-nunjucks-starter-kit.git
-```
-
-> Клонируйте локально только что созданный репозиторий:
-
-```bash
-gh repo clone YourGithubName/MyBestProject path_to_dir
-```
-
-> Или используйте объединённую команду для создания и копирования репозитория:
-
-```bash
-gh repo create MyBestProject --public --template https://github.com/Template-Craft/gulp-nunjucks-starter-kit.git && gh repo clone YourGithubName/MyBestProject path_to_dir
-```
-
-Где YourGithubName/MyBestProject - это адрес вашего репозитория, YourGithubName - имя использованное в профиле Github
-
-5. После установки необходимого, перейдите в папку со скачанным проектом
-
-6. Установите необходимые зависимости инструмента, находясь в родительском каталоге проекта и введя в терминал команду: `npm i`
+The Starter Kit is built around this idea, ensuring that every part of the development workflow follows the same architectural principles.
 
 ---
 
-## Использование
+## Features
 
-После успешного выполнения предыдущих шагов, настало время запустить проект! Рассмотрим команды для запуска:
+- Opinionated project architecture.
+- Consistent project structure.
+- Pages, Sections, Components and Templates.
+- Centralized data organization.
+- Template API for reusable templates.
+- Automatic dependency analysis.
+- Dependency Graph.
+- Incremental Build.
+- Intelligent rebuild strategy.
+- Ready-to-use development environment.
+- Integrated code quality tools.
+- Comprehensive documentation.
 
-> **команды**
+These features are not isolated capabilities but different aspects of a single architectural approach.
 
-Режим разработчика, выполняет запуск локального сервера с проектом:
+---
+
+## Project Goals
+
+The Starter Kit was designed to:
+
+- provide a scalable and maintainable project architecture;
+- minimize project setup;
+- reduce repetitive manual work;
+- improve long-term maintainability;
+- establish consistent development conventions;
+- optimize the development workflow;
+- let developers focus on building websites instead of configuring tooling.
+
+---
+
+## Project Status
+
+> **Active development**
+
+The Starter Kit is actively maintained and continuously improved.
+
+Although it is already used in production projects, both the documentation and some internal APIs continue to evolve.
+
+---
+
+## Requirements
+
+Before getting started, make sure the following software is installed:
+
+- Node.js **22** or newer
+- npm **10** or newer
+- Git
+
+### Recommended
+
+- Visual Studio Code
+
+The Starter Kit is editor-agnostic, but Visual Studio Code provides the best development experience thanks to the preconfigured workspace included with the project.
+
+---
+
+## Quick Start
+
+### 1. Create a new project
+
+This repository is configured as a **GitHub Template Repository**.
+
+Click **Use this template** on GitHub to create a new project with the complete project structure, build system and development environment already configured.
+
+Alternatively, you can clone the repository manually.
+
+### 2. Install dependencies
+
+```bash
+npm install
+```
+
+### 3. Start the development server
 
 ```bash
 npm run dev
 ```
 
-Режим сборки проекта, осуществляется сборка проекта в директорию **build**
+The development server starts automatically with BrowserSync enabled.
 
-```bash
-npm run build
-```
+### 4. Open the project
 
-После успешного старта/сборки проекта, возникнет небольшое всплывающее окошко об информации в каком режиме находится инструмент (сборка/разработка)
+Open the project in Visual Studio Code.
 
-_Внимание!_
+The Starter Kit already contains a preconfigured `.vscode` workspace. Visual Studio Code will automatically recommend the required extensions, allowing you to start developing immediately without additional configuration.
 
-> **Приведённые команды не будут работать без дополнительного пакета @galaxyrobot1x/nsk-tools**
+### 5. Explore the documentation
 
-В `package.json` файле, в разделе `scripts` зарегистрированы команды для быстрой демонстрации `cli-tools`, а именно команды по архивации директории `build`, сначала произойдёт сборка проекта, далее выполнится команда по архивации директории.
+The documentation is intended to be read in the following order:
 
-команды для архивации в разделе `scripts`:
+1. Philosophy
+2. Architecture
+3. Build System
+4. Development
+5. Guides
+6. Development Tools
 
-| **команды**                            | **описание**                                                                           |
-| -------------------------------------- | -------------------------------------------------------------------------------------- |
-| <code>npm run build:archive:tgz</code> | собирает из исходников проект и упаковывает в tar.gz архив папку с собранным проектом. |
-| <code>npm run build:archive:tar</code> | собирает из исходников проект и упаковывает в tar архив папку с собранным проектом.    |
-| <code>npm run build:archive:zip</code> | собирает из исходников проект и упаковывает в zip архив папку с собранным проектом.    |
-
----
-
-## Структура проекта и соглашений об именовании файлов
-
-_Структура директории проекта_
-
-```bash
-./src
-├── assets
-│   ├── fonts
-│   ├── img
-│   ├── sprites
-│   └── styles
-│       ├── defaults
-│       └── main
-│           └── _sections
-├── scripts
-│   └── main
-└── views
-    ├── components
-    │   ├── Footer
-    │   └── Header
-    ├── data
-    ├── pages
-    ├── sections
-    └── templates
-```
-
-В данном проекте специфическая иерархия файлов и папок - расчитанная и разработанная специально под данный проект, используя этот инструмент вы должны понимать это и использовать следующие инструкции и соглашения.
-
-Правила для шаблонов **nunjucks** -> Все компоненты должны именоваться в стиле **PascalCase**, остальные файлы (кроме файлов в директории `./src/views/pages`) должны именоваться в одном из стилей **snake_case** (пример: `header_top.njk`) или **camelCase** (пример: `headerTop.njk`);
-
-Правила для стилей **SCSS/SASS** -> все компоненты, куски секций и прочией файлы должны именоваться в стиле **snake_case** пример: `header_top.scss`;
-
-- а так же, если это файлы, которые являются частью какого-то другого файла, то перед названием должны использовать (префикс) то-же правило распространяется и на файлы стилей компонент! **нижнее_подчеркивание** **\_** пример: `_nav_item.scss`;
-
-> Шаблоны **nunjucks** `src/views/`:
-
-- все компоненты создаются и находятся в соответствующей папке т.е. `src/views/components/**/*`
-- данные компонент находятся по пути: `src/views/data/*.json`
-- страницы проекта находятся по пути: `src/views/pages/*`
-- секции проекта находятся по пути: `src/views/sections/*` если многостраничный режим, то следует в директории с секцией создать поддиректории (используя стиль **snake_case**) с названиями страниц сайта и складывать в них секции зависящие от этих страниц! (перед названием секции не забываем ставить префикс **нижнее_подчеркивание** **\_**) пример: `src/views/sections/general_section/_header_top.njk`
-- так же существует раздел шаблонов, находится он: `src/views/templates/*` -> можно использовать для хранения там файлов с содержимым `html <head></head>` и прочими повторяющимися штуками.
-
-> Файлы стилей **scss** `src/assets/styles/`:
-
-- все файлы стилей подключаются в главный файл стилей `main.scss` но gulp отслеживает абсолютно все стили находящиеся в родительской директории и в поддерикториях.
-- директории в которых находятся стили подключаемые к файлу `main.scss` следует как и содержимое директорий именовать согласно стилю **snake_case**, а так же использовать префикс **нижнее_подчеркивание** перед названием файла/директории;
-- если у нас подразумевается многостраничный режим вёрстки, то в директории `src/assets/styles/_main/` следует создавать поддериктории с названиями страниц и уже во внутрь складывать файлы стилей зависящие от этих страниц, пример: `src/assets/styles/_main/_general_page/_header_top.scss`
-- директория `src/assets/styles/_defaults/` - для складирования туда сетки, всяких helper`ов, миксинов и дефолтных для проекта состояний, подключения шрифтов и т.д.
+Following this order provides a complete understanding of both the architectural concepts and the implementation details behind the Starter Kit.
 
 ---
 
-> Файлы скриптов **js/mjs** `src/scripts/`
+## Documentation
 
-- все файлы скриптов обрабатываются с помощью **babel+webpack**, в корневой директории расположения оных, есть две директории **main** и **vendor**
-- в директории **main** - находится наш главный файл `main.mjs`, допустимо плодить различные дир-рии и подключать просто всё это в `main.mjs`
-- в директории **vendor** - находится файл скриптов в которые будут подключаться сторонние библиотеки, необходимые на стороне клиента в качестве полноценных библиотек.
+## Documentation
+
+The project documentation is available in the `docs/` directory.
+
+For the best learning experience, it is recommended to read the documentation in the following order:
+
+1. Philosophy
+2. Architecture
+3. Build System
+4. Development
+5. Guides
+6. Development Tools
+
+Each section focuses on a different aspect of the Starter Kit, from its architectural philosophy to practical development workflows and implementation details.
+
+### Available languages
+
+- 🇬🇧 English — `docs/en/`
+- 🇷🇺 Русский — `docs/ru/`
+
+Additional translations may be added in the future.
+
+### Philosophy
+
+Explains the architectural principles and design decisions behind the project.
+
+### Architecture
+
+Describes the project structure, directory layout and responsibilities of every architectural entity.
+
+### Build System
+
+Documents the internal implementation of the build system, dependency graph, incremental rebuild logic and development pipeline.
+
+### Development
+
+Provides everything required to start working with the Starter Kit, including project setup, recommended workflow and development environment.
+
+### Guides
+
+Practical guides covering Pages, Sections, Components, Templates and Data, together with naming conventions and recommended usage patterns.
+
+### Development Tools
+
+Describes the integrated tooling used by the project, including linting, formatting, compilation, JavaScript bundling and editor integration.
 
 ---
 
-> Директория **assets** `src/assets/`
+## Ecosystem
 
-- храним в ней шрифты, картинки, и прочий медиа-мусор
+The Starter Kit can be extended with additional tools.
 
-<br><br>
-<br><br>
+One of them is **nsk-tools** — an optional CLI utility that automates repetitive development tasks while remaining completely independent from the build system itself.
+
+This separation keeps the Starter Kit lightweight while allowing the ecosystem to evolve independently.
 
 ---
 
-> последние обновления описания: **2026-04-19**
+## Contributing
+
+Contributions, ideas, bug reports and pull requests are always welcome.
+
+If you have suggestions for improving the architecture, development workflow or documentation, feel free to open an issue or start a discussion.
+
+---
+
+## License
+
+Released under the MIT License.

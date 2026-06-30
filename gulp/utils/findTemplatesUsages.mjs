@@ -7,7 +7,8 @@ import fs from 'node:fs/promises';
 
 import { stripComments } from './stripComments.mjs';
 
-const TEMPLATE_USAGE_REGEX = /(?:\{%\s*(?:include|import|from)\s+['"]templates\/(_?[a-zA-Z0-9-]+)\.njk['"])/g;
+// const TEMPLATE_USAGE_REGEX = /(?:\{%\s*(?:include|import|from)\s+['"]templates\/(_?[a-zA-Z0-9-]+)\.njk['"])/g;
+const TEMPLATE_USAGE_REGEX = /getTemplate\(\s*['"]([a-zA-Z0-9_-]+)['"]\s*\)/g;
 
 // Глоб для поиска только нужных .njk, исключая components/ и templates/
 const DEFAULT_GLOB = '**/*.njk';

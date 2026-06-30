@@ -14,7 +14,8 @@ import fg from 'fast-glob';
 import { stripComments } from './stripComments.mjs';
 
 // паттерн поиска getComponent(...)
-const GET_COMPONENT_REGEX = /getComponent\(\s*['"]([\w\-]+)['"]\s*\)/g;
+// const GET_COMPONENT_REGEX = /getComponent\(\s*['"]([\w\-]+)['"]\s*\)/g;
+const GET_COMPONENT_REGEX = /getComponent\(\s*['"]([a-zA-Z0-9_-]+)['"]\s*\)/g;
 
 // Глоб для поиска только нужных .njk, исключая components/ и templates/
 const DEFAULT_GLOB = '**/*.njk';
