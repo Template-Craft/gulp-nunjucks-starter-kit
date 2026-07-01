@@ -1,4 +1,4 @@
-/* eslint-disable no-undef */
+ 
 /* eslint-disable n/no-unpublished-import */
 // Монитор RAM/CPU процесса Gulp + системные оповещения
 

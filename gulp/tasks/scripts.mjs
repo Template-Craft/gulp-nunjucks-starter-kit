@@ -1,5 +1,5 @@
 /* eslint-disable n/no-unpublished-import */
-/* eslint-disable no-undef */
+ 
 //  -------------------------------------------------------------;
 //    Таск-раннер для отслеживания js скриптов
 //  -------------------------------------------------------------;
@@ -73,8 +73,17 @@ export const scripts = () => {
                         '@babel/preset-env',
                         {
                           debug: settings.debug ? true : false,
-                          corejs: 3,
-                          useBuiltIns: 'usage',
+                          browserslistEnv: 'javascripts',
+                        },
+                      ],
+                    ],
+                    plugins: [
+                      [
+                        'polyfill-corejs3',
+                        {
+                          method: 'usage-global',
+                          version: '3.49',
+                          browserslistEnv: 'javascripts',
                         },
                       ],
                     ],

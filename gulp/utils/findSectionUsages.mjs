@@ -8,7 +8,7 @@ import { settings } from '../config/settings.mjs';
 import { stripComments } from './stripComments.mjs';
 
 // паттерн поиска getSection(...)
-const GET_SECTION_REGEX = /\{\%\s*include\s+getSection\(([^)]*)\)\s*\%\}/g;
+const GET_SECTION_REGEX = /\{%\s*include\s+getSection\(([^)]*)\)\s*%\}/g;
 
 // Глоб для поиска только нужных .njk, исключая components/ и templates/
 const DEFAULT_GLOB = '**/*.njk';

@@ -1,4 +1,4 @@
-/* eslint-disable no-undef */
+ 
 'use strict';
 
 import { getDependencyCache, setDependencyCache } from './dependencyCache.mjs';

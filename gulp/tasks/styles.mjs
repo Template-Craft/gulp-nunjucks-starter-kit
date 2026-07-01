@@ -32,7 +32,8 @@ export const styles = async (changedFile = null) => {
     autoprefixer({
       cascade: true,
       grid: true,
-      overrideBrowserslist: ['last 6 versions'],
+      // overrideBrowserslist: ['last 6 versions'],
+      env: 'stylesheets',
     }),
     postCSSSortMediaQueries({
       sort: 'desktop-first',
