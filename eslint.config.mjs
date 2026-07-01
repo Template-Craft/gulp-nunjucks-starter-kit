@@ -19,12 +19,12 @@ const compat = new FlatCompat({
 });
 
 export default [
-  // 1. Игнорируемые файлы (добавлен билд)
+  // 1. Ignore files and derictories
   {
     ignores: ['**/node_modules/**', 'dist/**', 'build/**', 'package-lock.json'],
   },
 
-  // 2. Базовые рекомендуемые правила и плагины
+  // 2. Base recommended rules
   ...fixupConfigRules(
     compat.extends(
       'eslint:recommended',
@@ -36,7 +36,7 @@ export default [
     files: ['**/*.{js,mjs}'],
   })),
 
-  // 3. Главный блок настроек для JS файлов
+  // 3. General settings from js
   {
     files: ['**/*.{js,mjs}'],
 
@@ -46,7 +46,7 @@ export default [
     },
 
     languageOptions: {
-      parser: babelParser, // Парсер должен быть здесь
+      parser: babelParser, // Parser
       ecmaVersion: 'latest',
       sourceType: 'module',
 
@@ -59,24 +59,24 @@ export default [
       globals: {
         ...globals.browser,
         ...globals.node,
-        app: 'readonly' // Регистрируем глобальную переменную Gulp
+        app: 'readonly' // registration global variable 'app'
       },
     },
 
     linterOptions: {
-      reportUnusedDisableDirectives: 'warn', // Заменено на 'warn' для удобства разработки
+      reportUnusedDisableDirectives: 'warn',
     },
 
     rules: {
       'no-unused-vars': 'warn',
       'object-shorthand': ['error', 'consistent'],
 
-      // Полезные правила для Node.js 22 + ESM
+      // Rules from Node.js 22 + ESM
       'n/no-missing-import': 'off',
       'no-redeclare': ['error', { "builtinGlobals": false }]
     },
   },
 
-  // 4. Prettier ВСЕГДА должен идти самым последним объектом
+  // 4. Prettier
   ...compat.extends('prettier'),
 ];
