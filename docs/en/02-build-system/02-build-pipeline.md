@@ -1,76 +1,56 @@
 # Build Pipeline
 
-Build Pipeline определяет последовательность этапов, через которые проходит проект во время сборки.
+The Build Pipeline defines the sequence of stages performed by the Build System when processing a project.
 
-Каждый этап отвечает за собственную область ответственности и выполняет строго определённую задачу. Такой подход делает процесс сборки предсказуемым, упрощает сопровождение и позволяет независимо развивать отдельные части Build System.
+Each stage has a single responsibility and operates independently from the internal implementation of the others.
 
-## Основные этапы
+## Pipeline Stages
 
-Типичный цикл сборки состоит из следующих этапов.
+A typical build consists of the following stages:
 
 ```text
-Source Files
-      │
-      ▼
 Reset
-      │
-      ▼
-Packages
-      │
-      ▼
-Fonts
-      │
-      ▼
-Images
-      │
-      ▼
-Styles
-      │
-      ▼
-Scripts
-      │
-      ▼
-Templates
-      │
-      ▼
-Output
+   │
+   ▼
+Assets Processing
+   │
+   ▼
+Template Rendering
+   │
+   ▼
+Output Generation
 ```
 
-Каждый этап получает результат работы предыдущего и передаёт его следующему этапу.
+Each stage receives the result of the previous one and passes its output to the next stage.
 
-## Изоляция задач
+## Responsibility
 
-Каждая задача Build Pipeline отвечает только за один тип ресурсов.
+Every stage of the Build Pipeline is responsible only for its own task.
 
-Например:
+For example:
 
-- `styles` обрабатывает исключительно таблицы стилей;
-- `scripts` отвечает за клиентский JavaScript;
-- `images` выполняет обработку изображений;
-- `templates` строит HTML-документы.
+- asset processing prepares project resources;
+- template rendering generates HTML pages;
+- output generation writes the final files to the build directory.
 
-Такое разделение позволяет изменять или расширять отдельные этапы без влияния на остальные части Build System.
+This separation keeps the Build System modular and predictable.
 
-## Оркестрация
+## Independence
 
-Build Pipeline не содержит сложной бизнес-логики.
+Pipeline stages do not depend on the internal implementation of one another.
 
-Последовательность выполнения определяется центральной точкой входа Build System, которая объединяет независимые задачи в единый процесс сборки.
+As long as the input and output contracts remain unchanged, individual stages can evolve independently.
 
-Благодаря этому каждая задача остаётся самостоятельным модулем с чёткой областью ответственности.
+This simplifies maintenance and allows the Build System to grow without affecting unrelated parts of the pipeline.
 
-## Полная и инкрементальная сборка
+## Integration with Other Mechanisms
 
-Build Pipeline поддерживает два режима работы.
+The Build Pipeline works together with other Build System mechanisms.
 
-Полная сборка используется при первоначальном запуске проекта или когда требуется пересобрать все ресурсы.
+For example:
 
-Инкрементальная сборка используется во время разработки и обрабатывает только те архитектурные сущности, на которые повлияли внесённые изменения.
+- Dependency Graph determines which architectural entities are affected;
+- Incremental Build decides which pipeline stages must be executed;
+- Watch Mode detects file changes and triggers the pipeline.
 
-Механизм анализа зависимостей, используемый при инкрементальной сборке, рассматривается в отдельном разделе документации.
-
-## Почему Pipeline существует отдельно
-
-Выделение Build Pipeline в самостоятельный механизм позволяет отделить процесс выполнения задач от логики анализа проекта.
-
-Pipeline отвечает за последовательность выполнения работ, а решения о том, какие ресурсы необходимо пересобрать, принимаются другими механизмами Build System.
+Together, these mechanisms provide an efficient development workflow.

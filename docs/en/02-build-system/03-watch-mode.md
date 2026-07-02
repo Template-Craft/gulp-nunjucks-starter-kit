@@ -1,20 +1,20 @@
 # Watch Mode
 
-Watch Mode обеспечивает непрерывную работу Build System во время разработки.
+Watch Mode keeps the Build System running continuously during development.
 
-Он отслеживает изменения исходных файлов, определяет затронутые архитектурные сущности и запускает только необходимые этапы сборки.
+It monitors changes to source files, determines which architectural entities are affected, and triggers only the required build steps.
 
-## Назначение
+## Purpose
 
-Основная задача Watch Mode — сократить время между изменением исходного кода и получением результата.
+The primary purpose of Watch Mode is to minimize the time between changing the source code and seeing the result.
 
-Вместо повторного выполнения полного цикла сборки Build System анализирует изменения и выполняет только необходимые действия.
+Instead of executing a complete rebuild, the Build System analyzes the change and performs only the necessary actions.
 
-## Отслеживание изменений
+## Change Detection
 
-Watch Mode наблюдает за всеми архитектурными областями проекта.
+Watch Mode observes every architectural area of the project.
 
-Например:
+For example:
 
 - Templates;
 - Components;
@@ -25,26 +25,26 @@ Watch Mode наблюдает за всеми архитектурными об�
 - Images;
 - Fonts.
 
-При обнаружении изменений соответствующая задача передаётся Build System для дальнейшей обработки.
+When a change is detected, the corresponding task is passed to the Build System for further processing.
 
-## Взаимодействие с другими механизмами
+## Interaction with Other Mechanisms
 
-Watch Mode не принимает решений о пересборке самостоятельно.
+Watch Mode does not make rebuild decisions on its own.
 
-Его задача — обнаружить изменение и передать информацию другим механизмам Build System.
+Its responsibility is limited to detecting changes and passing that information to other Build System mechanisms.
 
-Дальнейший анализ выполняется системой зависимостей, которая определяет, какие архитектурные сущности необходимо обновить.
+The Dependency Graph then analyzes the change and determines which architectural entities must be updated.
 
-## Работа с Development Server
+## Working with the Development Server
 
-Во время разработки Watch Mode работает совместно с Development Server.
+During development, Watch Mode works together with the Development Server.
 
-После завершения обработки изменений сервер автоматически предоставляет актуальную версию проекта без необходимости ручного перезапуска.
+After processing a change, the server automatically provides the updated version of the project without requiring a manual restart.
 
-## Почему Watch Mode существует отдельно
+## Why Watch Mode Is a Separate Mechanism
 
-Разделение наблюдения за изменениями и логики пересборки позволяет Build System сохранять модульную архитектуру.
+Separating file watching from rebuild logic allows the Build System to maintain a modular architecture.
 
-Watch Mode отвечает только за обнаружение изменений.
+Watch Mode is responsible only for detecting changes.
 
-Анализ зависимостей, принятие решений о пересборке и выполнение соответствующих задач остаются обязанностью других компонентов Build System.
+Dependency analysis, rebuild decisions, and task execution remain the responsibility of other Build System components.

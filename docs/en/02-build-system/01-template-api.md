@@ -1,85 +1,69 @@
 # Template API
 
-Template API представляет собой слой абстракции между архитектурной моделью проекта и его физической структурой.
+The Template API provides a unified way to access architectural entities within the project.
 
-Вместо обращения к файлам по относительным путям шаблоны взаимодействуют с архитектурными сущностями через единый набор функций.
+Instead of referencing physical file paths, templates use architectural addresses that remain independent of the project's directory structure.
 
-## Назначение
+## Purpose
 
-Основной задачей Template API является скрытие физической структуры проекта.
+The primary goal of the Template API is to decouple templates from the physical organization of files.
 
-Разработчик работает с Components, Sections и Templates, не указывая пути к соответствующим файлам.
+A template should describe **what** it uses rather than **where** it is located.
 
-Например:
+This approach allows the internal structure of the project to evolve without requiring changes to existing templates.
+
+## Available API
+
+The Build System provides several global helper functions.
+
+### Components
+
+Components are included using:
 
 ```njk
 {% include getComponent("Header") %}
 ```
 
+If the Component is implemented as a Nunjucks macro:
+
+```njk
+{% from getComponent("Header") import Header %}
+```
+
+### Sections
+
+For Landing Page projects:
+
+```njk
+{% include getSection("", "about") %}
+```
+
+For Multipage projects:
+
 ```njk
 {% include getSection("about", "hero") %}
 ```
+
+### Templates
 
 ```njk
 {% include getTemplate("head") %}
 ```
 
-Во всех случаях Build System самостоятельно определяет физическое расположение необходимого шаблона.
+### Data
 
-## Архитектурная адресация
+```njk
+{{ getData("Global") }}
+```
 
-Template API использует архитектурные идентификаторы вместо путей к файлам.
+## Why Template API Exists
 
-Для различных архитектурных сущностей используются собственные соглашения адресации.
+The Template API separates architectural concepts from physical file locations.
 
-Components идентифицируются именем компонента.
+As a result:
 
-Sections идентифицируются сочетанием области и имени секции.
+- templates remain independent of the directory structure;
+- architectural entities have a consistent access mechanism;
+- project organization can change without modifying existing template code.
 
-Templates идентифицируются именем инфраструктурного шаблона.
-
-Во всех случаях разработчик работает с архитектурными идентификаторами, а физический путь определяется Build System автоматически.
-
-Такой подход позволяет изменять внутреннюю организацию проекта без изменения существующих шаблонов.
-
-## Интеграция с Nunjucks
-
-Во время инициализации Build System создаёт собственную среду выполнения Nunjucks и регистрирует Template API.
-
-После этого все шаблоны проекта получают доступ к архитектурным функциям, предоставляемым Build System.
-
-Он предоставляет единый механизм доступа к Components, Sections и Templates через архитектурные соглашения проекта.
-
-Таким образом Template API становится частью среды выполнения, а не отдельной библиотекой.
-
-## Реализованные функции
-
-На текущий момент Template API предоставляет следующие функции.
-
-| Функция                   | Назначение                                    |
-| ------------------------- | --------------------------------------------- |
-| `getComponent(name)`      | Возвращает путь к шаблону Component.          |
-| `getSection(group, name)` | Возвращает путь к шаблону Section.            |
-| `getTemplate(name)`       | Возвращает путь к инфраструктурному Template. |
-
-Все функции возвращают путь к соответствующему шаблону на основе архитектурных соглашений проекта.
-
-Разработчик не взаимодействует с физической структурой каталогов напрямую.
-
-## Почему не используются относительные пути
-
-Относительные пути создают жёсткую связь между шаблонами и файловой структурой проекта.
-
-Template API полностью устраняет эту зависимость.
-
-Изменение структуры каталогов не требует изменения существующих вызовов шаблонов, поскольку Build System самостоятельно разрешает архитектурный адрес в соответствующий файл.
-
-## Роль в архитектуре
-
-Template API является одним из ключевых элементов Build System.
-
-Он объединяет архитектурные соглашения проекта с механизмами сборки и позволяет разработчикам работать с архитектурными сущностями, не задумываясь о деталях их физической реализации.
-
-Template API является точкой взаимодействия между архитектурной моделью проекта и механизмами Build System.
-
-Именно через него шаблоны получают доступ к архитектурным сущностям, а Build System сохраняет независимость шаблонов от физической структуры проекта.
+This makes the project easier to maintain and scale over time.

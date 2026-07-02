@@ -154,8 +154,6 @@ Following this order provides a complete understanding of both the architectural
 
 ## Documentation
 
-## Documentation
-
 The project documentation is available in the `docs/` directory.
 
 For the best learning experience, it is recommended to read the documentation in the following order:

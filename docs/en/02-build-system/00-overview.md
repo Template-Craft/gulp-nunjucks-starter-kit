@@ -1,36 +1,36 @@
 # Build System Overview
 
-Build System является центральной частью проекта.
+The Build System is the central part of the project.
 
-Она отвечает не только за компиляцию исходных файлов, но и за поддержку архитектурного подхода, принятого в проекте.
+It is responsible not only for compiling source files, but also for implementing and maintaining the architectural approach adopted throughout the project.
 
-В отличие от традиционных систем сборки, Build System работает не только с файлами, но и с архитектурными сущностями, такими как Pages, Sections, Components, Templates и Data.
+Unlike traditional build systems, the Build System operates not only on files, but also on architectural entities such as Pages, Sections, Components, Templates, and Data.
 
-## Основные задачи
+## Main Responsibilities
 
-Build System выполняет несколько взаимосвязанных задач:
+The Build System performs several interconnected tasks:
 
-- подготовку окружения сборки;
-- обработку ресурсов проекта;
-- построение HTML-страниц;
-- анализ архитектурных зависимостей;
-- инкрементальную пересборку;
-- контроль архитектурных соглашений;
-- разработческий сервер и наблюдение за изменениями.
+- preparing the build environment;
+- processing project assets;
+- rendering HTML pages;
+- analyzing architectural dependencies;
+- performing incremental rebuilding;
+- enforcing architectural conventions;
+- providing a development server and file watching.
 
-Все эти механизмы работают как единая система и используют общую архитектурную модель проекта.
+All of these mechanisms work together as a unified system built upon a shared architectural model.
 
-## Архитектурный подход
+## Architectural Approach
 
-Build System не требует дополнительной конфигурации для описания структуры проекта.
+The Build System does not require additional configuration to describe the project's structure.
 
-Вместо этого она использует соглашения об именовании, структуру каталогов и Template API для автоматического определения архитектурных сущностей и связей между ними.
+Instead, it relies on naming conventions, directory organization, and the Template API to automatically identify architectural entities and the relationships between them.
 
-Такой подход позволяет разработчику сосредоточиться на архитектуре проекта, а не на настройке системы сборки.
+This approach allows developers to focus on the architecture of the project rather than configuring the build system itself.
 
-## Жизненный цикл сборки
+## Build Lifecycle
 
-Каждая сборка проходит несколько последовательных этапов.
+Each build goes through a sequence of well-defined stages.
 
 ```text
 Source Files
@@ -51,11 +51,11 @@ Write Output
 Development Server / Watch Mode
 ```
 
-Каждый этап отвечает за собственную область и не зависит от внутренней реализации других частей Build System.
+Each stage is responsible for its own area of work and remains independent from the internal implementation of the other parts of the Build System.
 
-## Внутренние механизмы
+## Core Mechanisms
 
-Работа Build System основана на нескольких взаимосвязанных механизмах:
+The Build System is based on several interconnected mechanisms:
 
 - Template API;
 - Build Pipeline;
@@ -63,4 +63,4 @@ Development Server / Watch Mode
 - Incremental Build;
 - Watch Mode.
 
-Каждый из них рассматривается подробно в последующих разделах документации.
+Each of these mechanisms is described in detail in the following sections of this documentation.

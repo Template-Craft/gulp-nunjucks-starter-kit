@@ -9,31 +9,16 @@ Build Pipeline определяет последовательность эта�
 Типичный цикл сборки состоит из следующих этапов.
 
 ```text
-Source Files
-      │
-      ▼
 Reset
-      │
-      ▼
-Packages
-      │
-      ▼
-Fonts
-      │
-      ▼
-Images
-      │
-      ▼
-Styles
-      │
-      ▼
-Scripts
-      │
-      ▼
-Templates
-      │
-      ▼
-Output
+   │
+   ▼
+Assets Processing
+   │
+   ▼
+Template Rendering
+   │
+   ▼
+Output Generation
 ```
 
 Каждый этап получает результат работы предыдущего и передаёт его следующему этапу.

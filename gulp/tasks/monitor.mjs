@@ -1,4 +1,3 @@
- 
 /* eslint-disable n/no-unpublished-import */
 // Монитор RAM/CPU процесса Gulp + системные оповещения
 
@@ -13,6 +12,8 @@ const CFG = settings.monitor ?? {};
 const MAX_MB = CFG.maxMemoryMB ?? 1500;
 const MAX_CPU = CFG.maxCpuPercent ?? 250; // %*сек за интервал
 const INTERVAL = CFG.intervalMs ?? 10_000;
+
+// example: gulp --no-monitor
 const ENABLED = !process.argv.includes('--no-monitor');
 
 export const monitor = () => {
