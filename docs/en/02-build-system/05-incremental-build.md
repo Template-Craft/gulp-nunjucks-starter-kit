@@ -1,18 +1,18 @@
 # Incremental Build
 
-Incremental Build позволяет пересобираться только тем частям проекта, которые действительно затронуты изменениями.
+Incremental Build rebuilds only the parts of the project that are actually affected by a change.
 
-Вместо повторной полной сборки Build System использует результаты Dependency Analysis для определения минимального объёма необходимых работ.
+Instead of performing a complete rebuild, the Build System uses the results of Dependency Analysis to determine the minimum amount of work required.
 
-## Назначение
+## Purpose
 
-Основная задача Incremental Build — сократить время разработки за счёт локальной пересборки архитектурных сущностей.
+The primary purpose of Incremental Build is to reduce development time by rebuilding only the affected architectural entities.
 
-После изменения файла система определяет не только его тип, но и влияние этого изменения на остальные части проекта.
+After a file changes, the system determines not only its type but also the impact of that change on the rest of the project.
 
-## Принцип работы
+## How It Works
 
-Обработка изменений выполняется в несколько этапов.
+Changes are processed through several stages.
 
 ```text
 File Changed
@@ -30,30 +30,30 @@ Affected Pages
 Rebuild
 ```
 
-Каждый этап выполняет только одну задачу и использует результаты предыдущего.
+Each stage performs a single task and uses the results produced by the previous stage.
 
-## Область влияния
+## Scope of Changes
 
-Build System принимает решение о пересборке на основании архитектурных связей.
+The Build System decides what to rebuild based on architectural relationships.
 
-Например, изменение Component не означает автоматическую пересборку всего проекта.
+For example, modifying a Component does not automatically trigger a rebuild of the entire project.
 
-Пересобраны будут только те Pages, которые используют Sections, содержащие данный Component.
+Only the Pages that use Sections containing that Component will be rebuilt.
 
-Аналогичный подход применяется и к другим архитектурным сущностям.
+The same approach is applied to all other architectural entities.
 
-## Совместная работа с Dependency Cache
+## Working with Dependency Cache
 
-Incremental Build не выполняет повторный анализ проекта при каждом изменении.
+Incremental Build does not perform a full dependency analysis after every change.
 
-Вместо этого он использует актуальный индекс зависимостей, поддерживаемый Build System.
+Instead, it uses the current dependency index maintained by the Build System.
 
-Благодаря этому определение области влияния занимает минимальное время независимо от размера проекта.
+As a result, determining the scope of changes requires only a minimal amount of time regardless of the project's size.
 
-## Почему Incremental Build существует отдельно
+## Why Incremental Build Exists as a Separate Mechanism
 
-Incremental Build отвечает исключительно за принятие решения о пересборке.
+Incremental Build is responsible exclusively for deciding what needs to be rebuilt.
 
-Он не занимается поиском зависимостей и не выполняет хранение результатов анализа.
+It neither analyzes dependencies nor stores the analysis results.
 
-Такое разделение ответственности делает архитектуру Build System более простой, модульной и предсказуемой.
+This separation of responsibilities keeps the Build System architecture simple, modular, and predictable.

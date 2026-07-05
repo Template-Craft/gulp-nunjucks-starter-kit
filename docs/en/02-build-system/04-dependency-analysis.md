@@ -1,14 +1,14 @@
 # Dependency Analysis
 
-Dependency Analysis отвечает за определение связей между архитектурными сущностями проекта.
+Dependency Analysis is responsible for identifying relationships between the architectural entities of the project.
 
-В отличие от традиционного анализа файловых зависимостей Build System анализирует использование архитектурных сущностей и поддерживает актуальную информацию о местах их применения.
+Unlike traditional file dependency analysis, the Build System analyzes the usage of architectural entities and maintains up-to-date information about where they are used.
 
-## Назначение
+## Purpose
 
-Основная задача Dependency Analysis — определить, какие части проекта используют конкретную архитектурную сущность.
+The primary purpose of Dependency Analysis is to determine which parts of the project use a particular architectural entity.
 
-Например:
+For example:
 
 ```text
 Component(Header)
@@ -18,42 +18,42 @@ Component(Header)
         └── contacts.njk
 ```
 
-Такая информация используется Build System при инкрементальной сборке для определения области влияния изменений.
+This information is used by the Build System during incremental builds to determine the scope of changes.
 
-## Архитектурные сущности
+## Architectural Entities
 
-Dependency Analysis работает со следующими сущностями:
+Dependency Analysis works with the following entities:
 
 - Components;
 - Sections;
 - Templates.
 
-Каждая сущность анализируется независимо в соответствии с соглашениями проекта.
+Each entity is analyzed independently according to the project's architectural conventions.
 
-## Принцип работы
+## How It Works
 
-Во время анализа Build System просматривает шаблоны проекта и определяет, какие архитектурные сущности в них используются.
+During analysis, the Build System scans the project's templates to determine which architectural entities they use.
 
-Для этого используются вызовы Template API, а не физические пути к файлам.
+The analysis is based on Template API calls rather than physical file paths.
 
-Благодаря этому анализ строится на архитектурной модели проекта и остаётся независимым от структуры каталогов.
+As a result, dependency analysis is built upon the project's architectural model and remains independent of the directory structure.
 
-## Исключение ложных зависимостей
+## Eliminating False Dependencies
 
-Перед анализом шаблонов Build System удаляет комментарии Nunjucks и HTML.
+Before analyzing templates, the Build System removes Nunjucks and HTML comments.
 
-Это предотвращает попадание в индекс закомментированных вызовов Template API и исключает ложные зависимости.
+This prevents commented Template API calls from being indexed and eliminates false dependencies.
 
-## Результат анализа
+## Analysis Result
 
-Результатом работы Dependency Analysis является индекс использования архитектурных сущностей.
+The result of Dependency Analysis is an index of architectural entity usage.
 
-Для каждой сущности Build System хранит список файлов, в которых она используется.
+For each entity, the Build System stores a list of files in which it is used.
 
-Этот индекс не описывает структуру проекта целиком, а содержит только информацию, необходимую для быстрого определения области влияния изменений.
+This index does not describe the entire project structure. Instead, it contains only the information required to quickly determine the scope of changes.
 
-## Почему Dependency Analysis существует отдельно
+## Why Dependency Analysis Exists as a Separate Mechanism
 
-Определение зависимостей является самостоятельной задачей Build System.
+Determining dependencies is an independent responsibility within the Build System.
 
-Выделение этого механизма позволяет отделить анализ архитектуры проекта от последующей логики пересборки и повторно использовать результаты анализа другими компонентами системы.
+Separating this mechanism isolates architectural analysis from the subsequent rebuild logic and allows the analysis results to be reused by other Build System components.

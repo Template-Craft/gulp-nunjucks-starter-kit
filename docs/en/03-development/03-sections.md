@@ -1,16 +1,16 @@
 # Sections
 
-Section представляет собой крупный самостоятельный блок страницы.
+A Section represents a large, self-contained part of a page.
 
-Обычно Section соответствует одному логическому экрану или смысловой части интерфейса и объединяет несколько Components.
+A Section typically corresponds to a single logical screen or a meaningful part of the interface and combines multiple Components.
 
-## Структура
+## Structure
 
-Build System поддерживает два способа организации Sections.
+The Build System supports two approaches to organizing Sections.
 
-### Одностраничные проекты
+### Landing Page Projects
 
-Для Landing Page все секции располагаются непосредственно в каталоге `sections`.
+For Landing Page projects, all Sections are placed directly in the `sections` directory.
 
 ```text
 src/views/sections/
@@ -20,16 +20,16 @@ src/views/sections/
 └── _contacts.njk
 ```
 
-Подключение выполняется через Template API.
+Sections are included through the Template API.
 
 ```njk
 {% include getSection("", "hero") %}
 {% include getSection("", "about") %}
 ```
 
-### Многостраничные проекты
+### Multipage Projects
 
-Для крупных проектов Sections рекомендуется группировать по страницам.
+For larger projects, it is recommended to group Sections by page.
 
 ```text
 src/views/sections/
@@ -43,23 +43,23 @@ src/views/sections/
 │   └── _form.njk
 ```
 
-Подключение выглядит следующим образом.
+Sections are included as follows:
 
 ```njk
 {% include getSection("about", "hero") %}
 {% include getSection("about", "history") %}
 ```
 
-## Назначение
+## Purpose
 
-Section отвечает за структуру конкретной части страницы.
+A Section is responsible for the structure of a specific part of a page.
 
-Внутри Section обычно располагаются Components, Templates и необходимая логика отображения.
+A Section typically contains Components, Templates, and the presentation logic required for that part of the interface.
 
-Section не должна содержать разметку, которая используется во многих независимых местах проекта. Такая разметка должна быть вынесена в Component.
+A Section should not contain markup that is reused across multiple independent areas of the project. Such markup should be extracted into a Component.
 
 ## Incremental Build
 
-При изменении Section Build System автоматически определяет страницы, в которых она используется, и пересобирает только их.
+When a Section is modified, the Build System automatically determines which Pages use it and rebuilds only those pages.
 
-Если Section используется только одной страницей, будет пересобрана только эта страница.
+If a Section is used by a single Page, only that Page will be rebuilt.

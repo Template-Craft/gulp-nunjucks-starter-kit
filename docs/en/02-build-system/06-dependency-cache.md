@@ -1,24 +1,24 @@
 # Dependency Cache
 
-Dependency Cache хранит результаты Dependency Analysis и поддерживает их в актуальном состоянии.
+Dependency Cache stores the results of Dependency Analysis and keeps them up to date.
 
-Вместо повторного анализа всего проекта после каждого изменения Build System использует существующий индекс зависимостей и обновляет только ту его часть, которая относится к изменённой архитектурной сущности.
+Instead of reanalyzing the entire project after every change, the Build System uses the existing dependency index and updates only the part related to the modified architectural entity.
 
-## Назначение
+## Purpose
 
-Основная задача Dependency Cache — сократить объём работы, необходимой для определения области влияния изменений.
+The primary purpose of Dependency Cache is to reduce the amount of work required to determine the scope of changes.
 
-После завершения первоначального анализа Build System располагает актуальным индексом использования архитектурных сущностей и может использовать его при последующих сборках.
+Once the initial analysis is complete, the Build System has an up-to-date index of architectural entity usage that can be reused during subsequent builds.
 
-## Принцип работы
+## How It Works
 
-При первом запуске Build System выполняет полный анализ проекта и формирует индекс зависимостей.
+During the initial build, the Build System performs a full project analysis and creates the dependency index.
 
-Во время дальнейшей разработки этот индекс не создаётся заново.
+Throughout the rest of the development process, this index is not rebuilt from scratch.
 
-После изменения файла Build System определяет тип архитектурной сущности, повторно анализирует только её использование и обновляет соответствующую запись в кэше.
+After a file changes, the Build System determines the type of architectural entity, reanalyzes only its usage, and updates the corresponding cache entry.
 
-Остальная информация остаётся неизменной.
+All remaining information stays unchanged.
 
 ```text
 Initial Build
@@ -42,32 +42,32 @@ Update Cache Entry
 Incremental Build
 ```
 
-## Инкрементальное обновление
+## Incremental Updates
 
-Dependency Cache обновляется локально.
+Dependency Cache is updated incrementally.
 
-Изменение одного Component, Section или Template не приводит к повторному анализу остальных архитектурных сущностей.
+Changing a single Component, Section, or Template does not trigger a new analysis of the remaining architectural entities.
 
-Благодаря этому стоимость обновления остаётся практически постоянной независимо от размера проекта.
+As a result, the cost of updating the cache remains nearly constant regardless of the project's size.
 
-## Взаимодействие с другими механизмами
+## Interaction with Other Mechanisms
 
-Dependency Cache является общей точкой взаимодействия между несколькими механизмами Build System.
+Dependency Cache serves as a shared integration point between several Build System mechanisms.
 
-- Dependency Analysis формирует и обновляет индекс.
-- Incremental Build использует его для определения области влияния изменений.
-- Watch Mode инициирует процесс обновления после обнаружения изменений.
+- Dependency Analysis creates and updates the dependency index.
+- Incremental Build uses the index to determine the scope of changes.
+- Watch Mode initiates the update process after detecting file changes.
 
-Каждый механизм отвечает только за собственную область ответственности.
+Each mechanism is responsible only for its own area of responsibility.
 
-## Почему Dependency Cache существует отдельно
+## Why Dependency Cache Exists as a Separate Mechanism
 
-Хранение результатов анализа является самостоятельной задачей.
+Storing analysis results is an independent responsibility.
 
-Выделение Dependency Cache в отдельный механизм позволяет избежать повторного анализа проекта, сократить время обработки изменений и сохранить модульную архитектуру Build System.
+Separating Dependency Cache into its own mechanism eliminates unnecessary project-wide analysis, reduces change processing time, and preserves the modular architecture of the Build System.
 
-## Архитектурный результат
+## Architectural Outcome
 
-Dependency Cache позволяет Build System принимать решения на основе уже известных архитектурных связей проекта.
+Dependency Cache enables the Build System to make decisions based on already known architectural relationships within the project.
 
-Именно благодаря этому инкрементальная сборка остаётся быстрой даже при увеличении количества страниц, Components, Sections и Templates.
+This is what allows Incremental Build to remain fast even as the number of Pages, Components, Sections, and Templates continues to grow.

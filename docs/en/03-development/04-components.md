@@ -1,19 +1,19 @@
 # Components
 
-Component является основной единицей повторного использования интерфейса.
+A Component is the primary reusable building block of the user interface.
 
-Каждый Component представляет собой самостоятельную директорию, содержащую все файлы, относящиеся к данной сущности.
+Each Component is represented by its own directory containing all files related to that architectural entity.
 
-## Структура
+## Structure
 
-Минимальная структура Component выглядит следующим образом.
+The minimum Component structure is:
 
 ```text
 Header/
 └── Header.njk
 ```
 
-На практике Component обычно содержит несколько файлов.
+In practice, a Component usually contains multiple files.
 
 ```text
 Header/
@@ -22,15 +22,15 @@ Header/
 └── Header.mjs
 ```
 
-Каждый файл отвечает только за собственную область ответственности.
+Each file has a single responsibility.
 
-- `Header.njk` — шаблон компонента.
-- `_Header.scss` — стили компонента.
-- `Header.mjs` — клиентская логика (при необходимости).
+- `Header.njk` — component template.
+- `_Header.scss` — component styles.
+- `Header.mjs` — client-side logic (when required).
 
-## Именование
+## Naming Convention
 
-Название директории, шаблона, стилей и JavaScript-файла должно совпадать.
+The directory, template, stylesheet, and JavaScript file must all use the same name.
 
 ```text
 Header/
@@ -39,43 +39,43 @@ Header/
 └── Header.mjs
 ```
 
-Такое соглашение позволяет Build System автоматически связывать Component с соответствующим JSON-файлом.
+This convention allows the Build System to automatically associate the Component with its corresponding JSON data file.
 
-## Данные Component
+## Component Data
 
-Если Component использует собственные данные, они располагаются отдельно.
+If a Component has its own data, it is stored separately.
 
 ```text
 src/views/data/
 └── Header.json
 ```
 
-Имя JSON-файла должно полностью совпадать с именем Component.
+The JSON file name must exactly match the Component name.
 
-После изменения такого файла Build System автоматически определяет Component, анализирует его использование и пересобирает только затронутые страницы.
+When this file changes, the Build System automatically identifies the corresponding Component, analyzes its usage, and rebuilds only the affected Pages.
 
-## Подключение
+## Including Components
 
-Components подключаются через Template API.
+Components are included through the Template API.
 
-Для подключения обычного шаблона используется:
+To include a regular template:
 
 ```njk
 {% include getComponent("Header") %}
 ```
 
-Если Component содержит Nunjucks Macro, используется импорт:
+If the Component is implemented as a Nunjucks Macro:
 
 ```njk
-{% from getComponent('Header') import Header %}
+{% from getComponent("Header") import Header %}
 ```
 
-Оба варианта поддерживаются Build System и учитываются системой анализа зависимостей.
+Both approaches are fully supported by the Build System and are taken into account during dependency analysis.
 
 ## Incremental Build
 
-Изменение любого файла Component приводит к поиску всех мест его использования.
+Changing any file within a Component triggers a search for all places where that Component is used.
 
-Если Component вложен в Section, Build System продолжит анализ зависимостей и определит страницы, которые используют эту Section.
+If the Component is included inside a Section, the Build System continues dependency analysis to determine which Pages use that Section.
 
-Благодаря этому пересобираются только действительно затронутые страницы.
+As a result, only the pages that are actually affected are rebuilt.

@@ -1,22 +1,22 @@
 # Pages
 
-Page представляет собой конечную точку сборки.
+A Page represents the final build target.
 
-Каждая страница компилируется в отдельный HTML-файл и является верхним уровнем архитектуры проекта.
+Each page is compiled into a separate HTML file and forms the highest architectural level of the project.
 
-## Расположение
+## Location
 
-Все страницы располагаются в каталоге:
+All Pages are located in:
 
 ```text
 src/views/pages/
 ```
 
-Каждый файл `.njk` соответствует одной HTML-странице после сборки.
+Each `.njk` file corresponds to a single HTML page after the build process.
 
-## Создание страницы
+## Creating a Page
 
-Для создания новой страницы достаточно добавить новый файл.
+To create a new page, simply add a new file.
 
 ```text
 src/views/pages/
@@ -25,27 +25,27 @@ src/views/pages/
 └── contacts.njk
 ```
 
-Никакая дополнительная регистрация не требуется.
+No additional registration is required.
 
-## Использование
+## Usage
 
-Страница объединяет остальные архитектурные сущности проекта.
+A Page combines the other architectural entities of the project.
 
-Обычно она:
+Typically, it:
 
-- подключает Templates;
-- подключает Sections;
-- использует глобальные данные.
+- includes Templates;
+- includes Sections;
+- uses global data.
 
-Pages не предназначены для хранения повторно используемой разметки.
+Pages are not intended to contain reusable markup.
 
-Повторяемые части интерфейса рекомендуется выносить в Components, Sections или Templates.
+Reusable parts of the interface should be moved into Components, Sections, or Templates.
 
-## Данные страницы
+## Page Data
 
-При необходимости страница может иметь собственный JSON-файл.
+If necessary, a Page can have its own JSON data file.
 
-Имя файла должно совпадать с именем страницы.
+The file name must match the page name.
 
 ```text
 pages/
@@ -55,10 +55,10 @@ data/
     about.json
 ```
 
-Изменение такого файла приводит к пересборке только соответствующей страницы.
+Changing this file rebuilds only the corresponding page.
 
 ## Incremental Build
 
-Изменение страницы не требует анализа зависимостей.
+Changing a Page does not require dependency analysis.
 
-Build System пересобирает только изменённую страницу.
+The Build System rebuilds only the modified page.

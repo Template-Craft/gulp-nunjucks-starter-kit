@@ -1,18 +1,18 @@
 # Data
 
-Build System использует JSON-файлы для хранения данных, необходимых при рендеринге шаблонов.
+The Build System uses JSON files to store the data required for rendering templates.
 
-Все данные проекта располагаются в одном каталоге независимо от того, какой архитектурной сущности они принадлежат.
+All project data is stored in a single directory regardless of which architectural entity it belongs to.
 
 ```text
 src/views/data/
 ```
 
-## Именование
+## Naming Convention
 
-Файл данных должен использовать имя архитектурной сущности, которой он принадлежит.
+A data file must use the name of the architectural entity it belongs to.
 
-Например:
+For example:
 
 ```text
 src/views/
@@ -24,26 +24,26 @@ src/views/
     └── Header.json
 ```
 
-Такое соглашение позволяет Build System автоматически определять связь между сущностью и её данными без дополнительной конфигурации.
+This convention allows the Build System to automatically associate an architectural entity with its data without requiring additional configuration.
 
-## Глобальные данные
+## Global Data
 
-Для хранения общих данных проекта используются специальные файлы:
+Special files are used to store data shared across the entire project:
 
 ```text
 Global.json
 Common.json
 ```
 
-Эти данные считаются доступными всему проекту.
+These files are considered globally available.
 
-Изменение любого из этих файлов приводит к полной пересборке проекта.
+Changing either of them triggers a full rebuild of the project.
 
-## Данные Pages
+## Page Data
 
-Страница может иметь собственный JSON-файл.
+A Page may have its own JSON data file.
 
-Например:
+For example:
 
 ```text
 pages/
@@ -53,13 +53,13 @@ data/
 └── about.json
 ```
 
-Если имя JSON-файла совпадает с именем страницы, Build System пересобирает только соответствующую страницу.
+If the JSON file name matches the Page name, the Build System rebuilds only that Page.
 
-## Данные Components
+## Component Data
 
-Component может иметь собственный JSON-файл.
+A Component may also have its own JSON data file.
 
-Например:
+For example:
 
 ```text
 components/
@@ -70,13 +70,13 @@ data/
 └── Header.json
 ```
 
-При изменении такого файла Build System автоматически определяет соответствующий Component, анализирует его использование и пересобирает только страницы, использующие этот Component.
+When this file changes, the Build System automatically identifies the corresponding Component, analyzes its usage, and rebuilds only the Pages that use that Component.
 
-## Данные Sections
+## Section Data
 
-Section также может иметь собственный JSON-файл.
+A Section may also have its own JSON data file.
 
-Например:
+For example:
 
 ```text
 sections/
@@ -86,32 +86,32 @@ data/
 └── about.json
 ```
 
-После изменения такого файла Build System определяет соответствующую Section, анализирует её использование и пересобирает только затронутые страницы.
+When this file changes, the Build System identifies the corresponding Section, analyzes its usage, and rebuilds only the affected Pages.
 
-## Данные Templates
+## Template Data
 
-Templates не имеют собственных JSON-файлов.
+Templates do not have their own JSON data files.
 
-Они представляют собой переиспользуемые фрагменты разметки и должны получать необходимые данные от вызывающей сущности (Page, Section или Component) либо использовать глобальные данные проекта.
+They represent reusable markup fragments and should receive the required data from the calling entity (Page, Section, or Component) or use the project's global data.
 
-Такой подход делает Templates независимыми от собственного источника данных и позволяет использовать один и тот же Template в различных частях проекта.
+This approach keeps Templates independent of their own data source and allows the same Template to be reused throughout different parts of the project.
 
-Например, Template может описывать разметку элемента формы, строки таблицы, элемента списка или другой переиспользуемой структуры, принимая необходимые данные через параметры или Nunjucks Macro.
+For example, a Template may describe the markup for a form element, a table row, a list item, or any other reusable structure while receiving its data through parameters or a Nunjucks Macro.
 
-## Получение данных
+## Accessing Data
 
-Данные загружаются через Template API.
+Data is accessed through the Template API.
 
 ```njk
 {{ getData("Header").title }}
 ```
 
-Build System автоматически читает соответствующий JSON-файл и передаёт его содержимое в шаблон.
+The Build System automatically loads the corresponding JSON file and makes its contents available to the template.
 
-## Архитектурный подход
+## Architectural Approach
 
-Все данные проекта располагаются в одном каталоге.
+All project data is stored in a single directory.
 
-Build System использует соглашения об именовании для автоматического определения принадлежности JSON-файлов к архитектурным сущностям проекта.
+The Build System relies on naming conventions to automatically determine which JSON file belongs to each architectural entity.
 
-Такой подход упрощает сопровождение проекта, делает структуру предсказуемой и позволяет системе автоматически выполнять анализ зависимостей и инкрементальную пересборку без дополнительной конфигурации.
+This approach simplifies project maintenance, keeps the structure predictable, and enables the Build System to perform dependency analysis and incremental rebuilding automatically without requiring additional configuration.

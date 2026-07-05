@@ -1,6 +1,6 @@
 # gulp-nunjucks-starter-kit
 
-> **Architecture-first Starter Kit focused on maintainable frontend development with Nunjucks.**
+> **Architecture-first Build System focused on maintainable frontend development with Nunjucks.**
 
 ## Why this project exists
 
@@ -11,6 +11,8 @@ As projects grow, however, the primary challenge is rarely the tooling itself. L
 **gulp-nunjucks-starter-kit** was created as the result of years of refining an architectural approach across real-world projects.
 
 Rather than introducing a new development methodology, the project formalizes proven architectural patterns and provides a build system that supports them.
+
+Over time, the Build System evolved beyond a collection of Gulp tasks into a complete development platform featuring dependency analysis, incremental builds, centralized runtime configuration, and resource monitoring.
 
 ---
 
@@ -41,35 +43,50 @@ Dependency Graph
 Incremental Build
       │
       ▼
+Dependency Cache
+      │
+      ▼
+Build Pipeline
+      │
+      ▼
+Runtime Configuration
+      │
+      ▼
+Runtime Monitor
+      │
+      ▼
 Development Experience
 ```
 
-The Starter Kit is built around this idea, ensuring that every part of the development workflow follows the same architectural principles.
+The Build System is built around this idea, ensuring that every part of the development workflow follows the same architectural principles.
 
 ---
 
 ## Features
 
-- Opinionated project architecture.
+- Architecture-first project organization.
 - Consistent project structure.
 - Pages, Sections, Components and Templates.
 - Centralized data organization.
-- Template API for reusable templates.
+- Template API.
 - Automatic dependency analysis.
 - Dependency Graph.
 - Incremental Build.
+- Dependency Cache.
+- Centralized Build System configuration.
+- Runtime Monitor for observing memory and CPU usage during development.
 - Intelligent rebuild strategy.
 - Ready-to-use development environment.
 - Integrated code quality tools.
 - Comprehensive documentation.
 
-These features are not isolated capabilities but different aspects of a single architectural approach.
+These capabilities are all consequences of the same architectural approach rather than independent features.
 
 ---
 
 ## Project Goals
 
-The Starter Kit was designed to:
+The Build System was designed to:
 
 - provide a scalable and maintainable project architecture;
 - minimize project setup;
@@ -85,7 +102,7 @@ The Starter Kit was designed to:
 
 > **Active development**
 
-The Starter Kit is actively maintained and continuously improved.
+The Build System is actively maintained and continuously improved.
 
 Although it is already used in production projects, both the documentation and some internal APIs continue to evolve.
 
@@ -103,7 +120,7 @@ Before getting started, make sure the following software is installed:
 
 - Visual Studio Code
 
-The Starter Kit is editor-agnostic, but Visual Studio Code provides the best development experience thanks to the preconfigured workspace included with the project.
+The Build System is editor-agnostic, but Visual Studio Code provides the best development experience thanks to the preconfigured workspace included with the project.
 
 ---
 
@@ -135,7 +152,7 @@ The development server starts automatically with BrowserSync enabled.
 
 Open the project in Visual Studio Code.
 
-The Starter Kit already contains a preconfigured `.vscode` workspace. Visual Studio Code will automatically recommend the required extensions, allowing you to start developing immediately without additional configuration.
+The Build System already contains a preconfigured `.vscode` workspace. Visual Studio Code will automatically recommend the required extensions, allowing you to start developing immediately without additional configuration.
 
 ### 5. Explore the documentation
 
@@ -148,7 +165,7 @@ The documentation is intended to be read in the following order:
 5. Guides
 6. Development Tools
 
-Following this order provides a complete understanding of both the architectural concepts and the implementation details behind the Starter Kit.
+Following this order provides a complete understanding of both the architectural concepts and the implementation details behind the Build System.
 
 ---
 
@@ -165,7 +182,7 @@ For the best learning experience, it is recommended to read the documentation in
 5. Guides
 6. Development Tools
 
-Each section focuses on a different aspect of the Starter Kit, from its architectural philosophy to practical development workflows and implementation details.
+Each section focuses on a different aspect of the Build System, from its architectural philosophy to practical development workflows and implementation details.
 
 ### Available languages
 
@@ -188,7 +205,7 @@ Documents the internal implementation of the build system, dependency graph, inc
 
 ### Development
 
-Provides everything required to start working with the Starter Kit, including project setup, recommended workflow and development environment.
+Provides everything required to start working with the Build System, including project setup, recommended workflow and development environment.
 
 ### Guides
 
@@ -202,11 +219,11 @@ Describes the integrated tooling used by the project, including linting, formatt
 
 ## Ecosystem
 
-The Starter Kit can be extended with additional tools.
+The Build System can be extended with additional tools.
 
 One of them is **nsk-tools** — an optional CLI utility that automates repetitive development tasks while remaining completely independent from the build system itself.
 
-This separation keeps the Starter Kit lightweight while allowing the ecosystem to evolve independently.
+This separation keeps the Build System lightweight while allowing the ecosystem to evolve independently.
 
 ---
 

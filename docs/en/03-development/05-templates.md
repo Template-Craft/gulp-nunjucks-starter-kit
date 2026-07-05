@@ -1,18 +1,18 @@
 # Templates
 
-Templates содержат повторно используемую разметку, которая не относится к конкретной странице, Section или Component.
+Templates contain reusable markup that does not belong to a specific Page, Section, or Component.
 
-Обычно здесь располагаются общие фрагменты документа, используемые во многих местах проекта.
+They are typically used for common document fragments shared across multiple parts of the project.
 
-## Расположение
+## Location
 
-Все Templates находятся в каталоге:
+All Templates are located in:
 
 ```text
 src/views/templates/
 ```
 
-Например:
+For example:
 
 ```text
 templates/
@@ -21,52 +21,54 @@ templates/
 └── _meta.njk
 ```
 
-## Подключение
+## Including Templates
 
-Templates подключаются через Template API.
+Templates are included through the Template API.
 
-Для подключения обычного шаблона используется:
+To include a regular template:
 
 ```njk
 {% include getTemplate("head") %}
 {% include getTemplate("scripts") %}
 ```
 
-Если Templates содержит Nunjucks Macro, используется импорт:
+If a Template is implemented as a Nunjucks Macro:
 
 ```njk
-{% from getComponent('head') import head %}
-{% from getComponent('scripts') import scripts %}
+{% from getTemplate("head") import head %}
+{% from getTemplate("scripts") import scripts %}
 ```
 
-Оба варианта поддерживаются Build System и учитываются системой анализа зависимостей.
+Both approaches are fully supported by the Build System and are taken into account during dependency analysis.
 
-Build System самостоятельно преобразует архитектурное имя Template в путь к соответствующему файлу.
+The Build System automatically resolves the architectural Template name to the corresponding file path.
 
-## Именование
+## Naming Convention
 
-Файлы Templates используют соглашение с ведущим символом `_`.
+Template files use a leading underscore.
 
 ```text
 _head.njk
 ```
 
-При использовании Template API подчёркивание не указывается.
+When using the Template API, the underscore is omitted.
 
 ```njk
 {% include getTemplate("head") %}
 ```
 
-Таким образом архитектурное имя Template всегда остаётся одинаковым независимо от имени файла.
+This ensures that the architectural Template name always remains the same regardless of the physical file name.
 
-## Данные
+## Template Data
 
-Templates не имеют собственных JSON-файлов. При необходимости они получают данные от вызывающей сущности или используют глобальные данные проекта.
+Templates do not have their own JSON data files.
 
-Подробнее см. раздел **Data**.
+When necessary, they receive data from the calling architectural entity or use the project's global data.
+
+See the **Data** section for more information.
 
 ## Incremental Build
 
-Build System анализирует использование каждого Template.
+The Build System analyzes the usage of every Template.
 
-При изменении Template автоматически определяется список Sections и Pages, в которых он используется, после чего пересобираются только затронутые страницы.
+When a Template changes, it automatically determines which Sections and Pages use it and rebuilds only the affected Pages.

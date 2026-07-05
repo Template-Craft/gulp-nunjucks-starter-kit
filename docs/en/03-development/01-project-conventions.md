@@ -1,14 +1,14 @@
 # Project Conventions
 
-Build System основана на соглашениях.
+The Build System is based on conventions.
 
-Структура каталогов, правила именования файлов и способы подключения архитектурных сущностей являются частью архитектуры проекта.
+The project structure, file naming rules, and methods of connecting architectural entities are all part of the project's architecture.
 
-Соблюдение этих соглашений обеспечивает корректную работу Dependency Analysis и Incremental Build.
+Following these conventions ensures that Dependency Analysis and Incremental Build work correctly.
 
-## Структура проекта
+## Project Structure
 
-Каждый тип архитектурной сущности располагается в собственной директории.
+Each type of architectural entity has its own dedicated directory.
 
 ```text
 src/views/
@@ -19,17 +19,17 @@ src/views/
 └── templates/
 ```
 
-Каждый каталог имеет строго определённое назначение.
+Each directory has a clearly defined purpose.
 
-Изменение структуры проекта требует изменения логики Build System.
+Changing the project structure requires corresponding changes to the Build System.
 
-## Именование
+## Naming Conventions
 
-Build System использует соглашения об именовании для автоматического поиска связанных файлов.
+The Build System uses naming conventions to automatically locate related files.
 
 ### Components
 
-Компоненты именуются в формате PascalCase.
+Components use the PascalCase naming convention.
 
 ```text
 Header/
@@ -39,14 +39,14 @@ Navigation/
 
 ### Sections
 
-Секции используют файловое соглашение с ведущим символом `_`.
+Sections use file names prefixed with an underscore.
 
 ```text
 _about.njk
 _hero.njk
 ```
 
-При группировке по страницам сохраняется то же правило.
+When Sections are grouped by page or feature, the same convention applies.
 
 ```text
 about/
@@ -56,14 +56,14 @@ about/
 
 ### Templates
 
-Все шаблоны располагаются в каталоге `templates` и также используют префикс `_`.
+All Templates are located in the `templates` directory and also use the underscore prefix.
 
 ```text
 _head.njk
 _scripts.njk
 ```
 
-При использовании Template API подчёркивание не указывается.
+When using the Template API, the underscore is omitted.
 
 ```njk
 {% include getTemplate("head") %}
@@ -71,7 +71,7 @@ _scripts.njk
 
 ### Data
 
-Файлы данных должны использовать имя архитектурной сущности, которой они принадлежат.
+Data files should use the name of the architectural entity they belong to.
 
 ```text
 Header.json
@@ -79,7 +79,7 @@ Footer.json
 About.json
 ```
 
-Глобальные данные используют специальные имена:
+Global data uses reserved names.
 
 ```text
 Global.json
@@ -88,14 +88,14 @@ Common.json
 
 ## Template API
 
-Архитектурные сущности подключаются исключительно через Template API.
+Architectural entities are connected exclusively through the Template API.
 
-Это позволяет Build System анализировать зависимости проекта без дополнительной конфигурации.
+This allows the Build System to analyze project dependencies without requiring additional configuration.
 
-## Следование соглашениям
+## Following the Conventions
 
-Build System не требует регистрации Components, Sections или Templates.
+The Build System does not require Components, Sections, or Templates to be registered manually.
 
-Достаточно разместить сущность в правильном каталоге, соблюсти соглашения по именованию и использовать Template API.
+Simply place the entity in the correct directory, follow the naming conventions, and use the Template API.
 
-После этого сущность автоматически становится частью архитектуры проекта.
+The entity then automatically becomes part of the project's architecture.

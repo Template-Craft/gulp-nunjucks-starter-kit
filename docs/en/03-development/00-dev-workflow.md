@@ -1,39 +1,39 @@
 # Development Workflow
 
-Build System определяет не только процесс сборки проекта, но и рекомендуемый способ организации разработки.
+The Build System defines not only the project's build process but also the recommended approach to development.
 
-В основе лежит архитектурный подход, при котором каждая сущность имеет собственную область ответственности, соглашения по именованию и предсказуемые связи с другими частями проекта.
+It is based on an architectural model in which every entity has a clearly defined responsibility, naming conventions, and predictable relationships with other parts of the project.
 
-Соблюдение этих соглашений позволяет Build System автоматически анализировать зависимости и выполнять точечную пересборку только затронутых страниц.
+Following these conventions allows the Build System to automatically analyze dependencies and perform incremental rebuilding of only the affected pages.
 
-## Общий процесс разработки
+## Development Process
 
-Типичный цикл разработки состоит из нескольких этапов:
+A typical development workflow consists of several steps:
 
-1. Создать новую архитектурную сущность (Page, Section, Component или Template).
-2. Разместить её в соответствующем каталоге.
-3. Следовать принятым соглашениям по именованию.
-4. Использовать Template API для подключения сущностей между собой.
-5. Запустить режим разработки и сосредоточиться только на изменяемой части проекта.
+1. Create a new architectural entity (Page, Section, Component, or Template).
+2. Place it in the appropriate directory.
+3. Follow the established naming conventions.
+4. Use the Template API to connect architectural entities.
+5. Start the development mode and focus only on the part of the project being modified.
 
-Build System самостоятельно определит зависимости между сущностями и выполнит необходимую пересборку.
+The Build System automatically determines the relationships between entities and performs the required rebuild.
 
-## Архитектурные соглашения
+## Architectural Conventions
 
-Проект построен вокруг соглашений.
+The project is built around conventions.
 
-Build System ожидает определённую структуру каталогов, правила именования файлов и способы подключения архитектурных сущностей.
+The Build System expects a specific directory structure, file naming rules, and methods for connecting architectural entities.
 
-Следование этим соглашениям является частью архитектуры проекта и позволяет избежать дополнительной конфигурации.
+Following these conventions is part of the project's architecture and eliminates the need for additional configuration.
 
 ## Incremental Build
 
-Во время разработки не требуется вручную определять, какие страницы необходимо пересобрать.
+During development, there is no need to manually determine which pages should be rebuilt.
 
-После каждого изменения Build System автоматически анализирует архитектурные зависимости и обновляет только те страницы, на которые изменение действительно влияет.
+After every change, the Build System automatically analyzes architectural dependencies and updates only the pages that are actually affected.
 
-Такой подход позволяет сохранять высокую скорость разработки даже в больших проектах.
+This approach keeps development fast even as the project grows.
 
-## Далее
+## Next
 
-Следующие документы подробно описывают процесс создания и использования каждой архитектурной сущности проекта.
+The following documents describe in detail how to create and use each architectural entity within the project.
