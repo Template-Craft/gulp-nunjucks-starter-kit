@@ -6,6 +6,7 @@
 import pidusage from 'pidusage';
 
 import { settings } from '../config/settings.mjs';
+import { t } from '../i18n/index.mjs';
 
 const PID = process.pid;
 const CFG = settings.monitor ?? {};
@@ -30,13 +31,13 @@ export const monitor = () => {
         console.log(app.plugins.chalk.bgRed.white(' MONITOR '), msg);
 
         app.plugins.notifier.notify({
-          title: 'Gulp monitor',
-          message: `Порог ресурсов превышен\n${msg}`,
+          title: t('monitor.notificationTitle'),
+          message: `${t('monitor.resourceExceeded')}\n${msg}`,
           timeout: 4,
         });
       }
     } catch (error) {
-      console.warn(`[${app.plugins.chalk.yellow('monitor')}] не удалось получить статистику: ${error.message}`);
+      console.warn(`[${app.plugins.chalk.yellow('monitor')}] ${t('monitor.statFailed', { error: error.message })}`);
     }
   }, INTERVAL);
 };

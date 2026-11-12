@@ -8,6 +8,7 @@
 import nodePath from 'node:path';
 
 import { settings } from '../config/settings.mjs';
+import { t } from '../i18n/index.mjs';
 
 const cache = {
   components: null,
@@ -33,7 +34,7 @@ export function setDependencyCache({ components, sections, templates }) {
   cache.timestamp = Date.now();
 
   if (settings.cache.verbose) {
-    console.log(`[${app.plugins.chalk.magenta('Cache')}] setDependencyCache вызван.`);
+    console.log(`[${app.plugins.chalk.magenta('Cache')}] ${t('cache.setCalled')}`);
     logMemoryUsage();
   }
 
@@ -56,14 +57,14 @@ export function hasDependencyCache() {
 }
 
 // Очистка кэша
-export function clearDependencyCache(reason = 'Неизвестно') {
+export function clearDependencyCache(reason = '?') {
   cache.components = null;
   cache.sections = null;
   cache.templates = null;
   cache.timestamp = null;
 
   if (settings.cache.verbose) {
-    console.log(`[${app.plugins.chalk.red('Cache')}] Кэш сброшен (${reason})`);
+    console.log(`[${app.plugins.chalk.red('Cache')}] ${t('cache.reset', { reason })}`);
   }
 }
 
@@ -114,20 +115,35 @@ export function logCacheUsed({
   // Формируем текстовую часть
   const parts = [];
   if (includeComponents) {
-    parts.push(`компоненты: ${app.plugins.chalk.blue(compCount)} (в ${app.plugins.chalk.blue(componentFiles)} файлах)`);
+    parts.push(
+      t('cache.componentsStat', {
+        count: app.plugins.chalk.blue(compCount),
+        files: app.plugins.chalk.blue(componentFiles),
+      }),
+    );
   }
 
   if (includeSections) {
-    parts.push(`секции: ${app.plugins.chalk.blue(sectCount)} (в ${app.plugins.chalk.blue(sectionFiles)} файлах)`);
+    parts.push(
+      t('cache.sectionsStat', {
+        count: app.plugins.chalk.blue(sectCount),
+        files: app.plugins.chalk.blue(sectionFiles),
+      }),
+    );
   }
 
   if (includeTemplates) {
-    parts.push(`шаблоны: ${app.plugins.chalk.blue(templCount)} (в ${app.plugins.chalk.blue(templFiles)} файлах)`);
+    parts.push(
+      t('cache.templatesStat', {
+        count: app.plugins.chalk.blue(templCount),
+        files: app.plugins.chalk.blue(templFiles),
+      }),
+    );
   }
 
   const sourceLabel = fromCache
-    ? app.plugins.chalk.blueBright('КЭШ зависимостей')
-    : app.plugins.chalk.yellow('НОВЫЙ АНАЛИЗ зависимостей');
+    ? app.plugins.chalk.blueBright(t('cache.usedFromCache'))
+    : app.plugins.chalk.yellow(t('cache.usedFresh'));
 
   console.log(`[${app.plugins.chalk.magenta('Cache')}] ${sourceLabel} -> ${parts.join(' | ')}`);
 
@@ -171,14 +187,14 @@ function maybeInvalidateByMemory() {
   const used = process.memoryUsage().heapUsed / 1024 / 1024;
 
   if (used > settings.cache.maxMemoryMB) {
-    clearDependencyCache(`[${app.plugins.chalk.red('Cache')}] Превышен лимит памяти: ${Math.round(used)} MB`);
+    clearDependencyCache(t('cache.memoryLimitExceeded', { used: Math.round(used) }));
   }
 }
 
 // Вывод информации в консоль
 function logMemoryUsage() {
   const used = process.memoryUsage();
-  console.log(`[${app.plugins.chalk.magenta('Cache')}] задействовано памяти:`);
+  console.log(`[${app.plugins.chalk.magenta('Cache')}] ${t('cache.memoryUsage')}`);
 
   for (const key in used) {
     const mb = Math.round((used[key] / 1024 / 1024) * 100) / 100;
@@ -190,7 +206,11 @@ function logMemoryUsage() {
   const templCount = cache.templates?.size || 0;
 
   console.log(
-    `[${app.plugins.chalk.magenta('Cache')}] Компонентов в кэшэ: ${app.plugins.chalk.blue(componentCount)}, секций в кэшэ: ${app.plugins.chalk.blue(sectionCount)}, шаблонов: ${app.plugins.chalk.blue(templCount)}`,
+    `[${app.plugins.chalk.magenta('Cache')}] ${t('cache.counts', {
+      components: app.plugins.chalk.blue(componentCount),
+      sections: app.plugins.chalk.blue(sectionCount),
+      templates: app.plugins.chalk.blue(templCount),
+    })}`,
   );
 }
 
@@ -201,7 +221,7 @@ function logMemoryUsage() {
  */
 function logDependencyTable(label, mapData) {
   if (!mapData || mapData.size === 0) {
-    console.log(`[${app.plugins.chalk.yellow('DEBUG')}] Нет данных для ${label.toLowerCase()}s`);
+    console.log(`[${app.plugins.chalk.yellow('DEBUG')}] ${t('debug.noData', { label: `${label.toLowerCase()}s` })}`);
     return;
   }
 
@@ -212,14 +232,13 @@ function logDependencyTable(label, mapData) {
 
     tableResultData.push({
       [label]: name,
-      'Кол-во файлов': relativePaths.length,
-      /* prettier-ignore */
-      'Используется в': relativePaths.join(', ') || '(нет)',
+      [t('table.fileCount')]: relativePaths.length,
+      [t('table.usedIn')]: relativePaths.join(', ') || '-',
     });
   }
 
   console.log(
-    `[${app.plugins.chalk.yellow('DEBUG')}] dependencyMap -> ${label.toLocaleLowerCase()}s: ${mapData.size} шт.`,
+    `[${app.plugins.chalk.yellow('DEBUG')}] ${t('debug.tableSummary', { label: label.toLocaleLowerCase(), count: mapData.size })}`,
   );
   console.table(tableResultData);
 }

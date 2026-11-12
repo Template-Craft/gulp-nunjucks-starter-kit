@@ -6,6 +6,7 @@ import fg from 'fast-glob';
 import fs from 'node:fs/promises';
 
 import { stripComments } from './stripComments.mjs';
+import { t } from '../i18n/index.mjs';
 
 // const TEMPLATE_USAGE_REGEX = /(?:\{%\s*(?:include|import|from)\s+['"]templates\/(_?[a-zA-Z0-9-]+)\.njk['"])/g;
 const TEMPLATE_USAGE_REGEX = /getTemplate\(\s*['"]([a-zA-Z0-9_-]+)['"]\s*\)/g;
@@ -48,7 +49,7 @@ export async function findTemplateUsages(baseDir, files) {
           usageMap.set(file, usedTemplates);
         }
       } catch (err) {
-        console.warn(`⚠️ Не удалось прочитать файл: ${file}`, err);
+        console.warn(t('common.readFileFailed', { file }), err);
       }
     }),
   );

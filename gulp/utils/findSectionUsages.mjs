@@ -6,6 +6,7 @@ import fg from 'fast-glob';
 
 import { settings } from '../config/settings.mjs';
 import { stripComments } from './stripComments.mjs';
+import { t } from '../i18n/index.mjs';
 
 // паттерн поиска getSection(...)
 const GET_SECTION_REGEX = /\{%\s*include\s+getSection\(([^)]*)\)\s*%\}/g;
@@ -58,7 +59,7 @@ export async function findSectionUsages(baseDir, files) {
           usageMap.set(file, Array.from(used));
         }
       } catch (err) {
-        console.warn(`⚠️ Не удалось прочитать файл: ${file}\n`, err);
+        console.warn(`${t('common.readFileFailed', { file })}\n`, err);
       }
     }),
   );

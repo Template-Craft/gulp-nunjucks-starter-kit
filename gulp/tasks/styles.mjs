@@ -18,6 +18,8 @@ import postCSSSortMediaQueries from 'postcss-sort-media-queries';
 import cssnano from 'cssnano';
 import sccnanoPresetAdvanced from 'cssnano-preset-advanced';
 
+import { t } from '../i18n/index.mjs';
+
 const sass = gulpSass(dartSass);
 
 /**
@@ -76,7 +78,7 @@ export const styles = async (changedFile = null) => {
   const isInitialRun = !changedFile;
 
   if (app.isDev && isInitialRun) {
-    console.log(`[${app.plugins.chalk.blue('SASS')}] Инициализация сборки main.scss`);
+    console.log(`[${app.plugins.chalk.blue('SASS')}] ${t('styles.initBuild')}`);
   }
 
   let changedBase = '';

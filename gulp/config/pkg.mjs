@@ -13,6 +13,8 @@ const __dirname = nodePath.resolve();
 
 import chalk from 'chalk';
 
+import { t } from '../i18n/index.mjs';
+
 //  Импортируем и парсим package.json
 const myPkg = JSON.parse(fs.readFileSync(nodePath.resolve(__dirname, './package.json'), 'utf-8'));
 
@@ -26,7 +28,7 @@ export const pkg = {
   arch: chalk.blue(os.arch),
   platform: chalk.blue(os.platform),
   runtimeVersion: chalk.green(process.env.npm_config_user_agent),
-  mode: chalk.green(devMode ? 'Development' : 'Production'),
+  mode: chalk.green(devMode ? t('info.modeDev') : t('info.modeProd')),
   informerHeader: chalk.dim(
     `############ * ${chalk.hex('#94345c').bold(myPkg.name.replaceAll('-', ' '))} * ############`,
   ),

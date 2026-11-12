@@ -18,6 +18,7 @@ import nunjucksRender from 'gulp-nunjucks-render';
 import { buildDependencyMap } from '../utils/buildDependencyMap.mjs';
 import { getSectionNameFromPath } from '../utils/getSectionName.mjs';
 import { getTemplateName } from '../utils/getTemplateName.mjs';
+import { t } from '../i18n/index.mjs';
 
 export const templates = async (changedFile = undefined) => {
   // Опции рендера для nunjucks:
@@ -153,7 +154,7 @@ async function resolveRenderTargets(changedType, changedFile) {
       // Сначала проверим, является ли это привязанной страницей напрямую (index.json -> index.njk)
       if (fs.existsSync(relatedPage)) {
         console.log(
-          `[${app.plugins.chalk.blue('Nunjucks')}] (Обновлён JSON ${app.plugins.chalk.magenta(basename)} -> пересборка только страницы "${basename}.njk"`,
+          `[${app.plugins.chalk.blue('Nunjucks')}] ${t('nunjucks.jsonDirectPage', { name: app.plugins.chalk.magenta(basename), page: basename })}`,
         );
         return relatedPage;
       }
@@ -174,7 +175,7 @@ async function resolveRenderTargets(changedType, changedFile) {
 
       if (pageTargets.length > 0) {
         console.log(
-          `[${app.plugins.chalk.blue('Nunjucks')}] Обновлён JSON ${app.plugins.chalk.magenta(basename)} -> связан с сущностью -> пересборка ${app.plugins.chalk.magenta(pageTargets.length)} файла(ов):`,
+          `[${app.plugins.chalk.blue('Nunjucks')}] ${t('nunjucks.jsonLinkedRebuild', { name: app.plugins.chalk.magenta(basename), count: app.plugins.chalk.magenta(pageTargets.length) })}`,
           pageTargets
             .map((f) => app.plugins.chalk.magenta(nodePath.relative(app.path.src.nunjucksIndexDir, f)))
             .join(', '),
@@ -184,20 +185,20 @@ async function resolveRenderTargets(changedType, changedFile) {
 
       // Fallback - полная пересборка
       console.log(
-        `[${app.plugins.chalk.blue('Nunjucks')}] Обновлён JSON ${app.plugins.chalk.magenta(basename)} -> нет связей -> пересборка всех страниц`,
+        `[${app.plugins.chalk.blue('Nunjucks')}] ${t('nunjucks.jsonNoLinks', { name: app.plugins.chalk.magenta(basename) })}`,
       );
       return app.path.src.nunjucksPages;
     }
 
     case 'global-json':
       console.log(
-        `[${app.plugins.chalk.blue('Nunjucks')}] Обновлён глобальный JSON (${app.plugins.chalk.magenta(nodePath.basename(changedFile))}) -> пересборка всех страниц`,
+        `[${app.plugins.chalk.blue('Nunjucks')}] ${t('nunjucks.globalJson', { name: app.plugins.chalk.magenta(nodePath.basename(changedFile)) })}`,
       );
       return app.path.src.nunjucksPages;
 
     case 'page':
       console.log(
-        `[${app.plugins.chalk.blue('Nunjucks')}] Обновлён шаблон страницы -> пересборка "${app.plugins.chalk.magenta(nodePath.basename(changedFile))}"`,
+        `[${app.plugins.chalk.blue('Nunjucks')}] ${t('nunjucks.pageUpdated', { name: app.plugins.chalk.magenta(nodePath.basename(changedFile)) })}`,
       );
       return changedFile;
 
@@ -248,10 +249,10 @@ async function resolveRenderTargets(changedType, changedFile) {
         }
 
         console.log(
-          `[${app.plugins.chalk.blue('Nunjucks')}] Обновлён компонент "${app.plugins.chalk.magenta(componentName)}" -> пересборка файла(ов):`,
+          `[${app.plugins.chalk.blue('Nunjucks')}] ${t('nunjucks.componentUpdated', { name: app.plugins.chalk.magenta(componentName) })}`,
           [...allPages]
             .map((f) => app.plugins.chalk.magenta(nodePath.relative(app.path.src.nunjucksIndexDir, f)))
-            .join(', ') || '(нет)',
+            .join(', ') || t('common.none'),
         );
 
         return allPages.size > 0 ? [...allPages] : app.path.src.nunjucksPages;
@@ -268,10 +269,10 @@ async function resolveRenderTargets(changedType, changedFile) {
         }
 
         console.log(
-          `[${app.plugins.chalk.blue('Nunjucks')}] Обновлена секция "${app.plugins.chalk.magenta(sectionName)}" -> пересборка файла(ов):`,
+          `[${app.plugins.chalk.blue('Nunjucks')}] ${t('nunjucks.sectionUpdated', { name: app.plugins.chalk.magenta(sectionName) })}`,
           [...allPages]
             .map((f) => app.plugins.chalk.magenta(nodePath.relative(app.path.src.nunjucksIndexDir, f)))
-            .join(', ') || '(нет)',
+            .join(', ') || t('common.none'),
         );
 
         return allPages.size > 0 ? [...allPages] : app.path.src.nunjucksPages;
@@ -299,17 +300,17 @@ async function resolveRenderTargets(changedType, changedFile) {
         }
 
         console.log(
-          `[${app.plugins.chalk.blue('Nunjucks')}] Обновлён шаблон "${app.plugins.chalk.magenta(templateName)}" -> пересборка файла(ов):`,
+          `[${app.plugins.chalk.blue('Nunjucks')}] ${t('nunjucks.templateUpdated', { name: app.plugins.chalk.magenta(templateName) })}`,
           [...allPages]
             .map((f) => app.plugins.chalk.magenta(nodePath.relative(app.path.src.nunjucksIndexDir, f)))
-            .join(', ') || '(нет)',
+            .join(', ') || t('common.none'),
         );
 
         return allPages.size > 0 ? [...allPages] : app.path.src.nunjucksPages;
       }
 
       console.log(
-        `[${app.plugins.chalk.blue('Nunjucks')}] Обновление "${app.plugins.chalk.magenta(changedFile)}" -> нет связей, пересборка всех страниц`,
+        `[${app.plugins.chalk.blue('Nunjucks')}] ${t('nunjucks.updateNoLinks', { name: app.plugins.chalk.magenta(changedFile) })}`,
       );
 
       return app.path.src.nunjucksPages;
@@ -318,9 +319,7 @@ async function resolveRenderTargets(changedType, changedFile) {
     case 'full':
     case 'unknown':
     default:
-      console.log(
-        `[${app.plugins.chalk.blue('Nunjucks')}] Неизвестное изменение или полный рендер -> пересборка всех страниц`,
-      );
+      console.log(`[${app.plugins.chalk.blue('Nunjucks')}] ${t('nunjucks.unknownOrFull')}`);
       return app.path.src.nunjucksPages;
   }
 }

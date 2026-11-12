@@ -7,6 +7,8 @@
 
 import notifier from 'node-notifier';
 
+import { t } from '../i18n/index.mjs';
+
 export const errors = {
   // Обработчик ошибок, перехватывает ошибки без остановки gulp.watch.
   // Отображает ошибки в терминале и в виде системных оповещений.
@@ -19,11 +21,11 @@ export const errors = {
     });
   },
   messages: {
-    sass: 'Oops! Sass errored',
-    njk: 'Oops! Nunjucks template errored',
-    scripts: 'Oops! Scripts errored',
-    json: 'Oops! Json errored',
-    vendors: 'Oops! Vendor plugin errored',
-    assets: 'Oops! Assets file errored',
+    sass: t('errors.sass'),
+    njk: t('errors.njk'),
+    scripts: t('errors.scripts'),
+    json: t('errors.json'),
+    vendors: t('errors.vendors'),
+    assets: t('errors.assets'),
   },
 };

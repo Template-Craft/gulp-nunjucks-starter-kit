@@ -60,6 +60,9 @@ import { setDependencyCache } from './gulp/utils/dependencyCache.mjs';
 import { updateDependencyMap, syncFileUsages } from './gulp/utils/updateDependencyMap.mjs';
 import { getSectionNameFromPath } from './gulp/utils/getSectionName.mjs';
 
+// Переводы консольного вывода
+import { t } from './gulp/i18n/index.mjs';
+
 // Передаём значения в глобальную переменную app
 global.app = {
   isBuild: process.argv.includes('--build'), // -> Проверяем режим продакшена
@@ -75,7 +78,7 @@ global.app = {
 async function initDependencyCacheIfNeeded() {
   if (!settings.cache.autoRebuild) return;
 
-  console.log(`[${app.plugins.chalk.magenta('Cache')}] Инициализация кэша зависимостей...`);
+  console.log(`[${app.plugins.chalk.magenta('Cache')}] ${t('cache.init')}`);
 
   const result = await buildDependencyMap({
     includeComponents: true,
@@ -90,7 +93,10 @@ async function initDependencyCacheIfNeeded() {
 function watcher() {
   // Отслеживаем изменения nunjucks компонентов и json данных
   gulp.watch([path.watch.nunjucksData, path.watch.nunjucks]).on('change', async (filePath) => {
-    console.log(`[${app.plugins.chalk.blue('Nunjucks watcher')}] Changed:`, app.plugins.chalk.magenta(filePath));
+    console.log(
+      `[${app.plugins.chalk.blue('Nunjucks watcher')}] ${t('watcher.changed')}`,
+      app.plugins.chalk.magenta(filePath),
+    );
 
     // Унифицированная нормализация
     const normalized = filePath.replace(/\\/g, '/');
@@ -126,7 +132,10 @@ function watcher() {
   });
 
   gulp.watch(path.watch.styles).on('change', (filePath) => {
-    console.log(`[${app.plugins.chalk.blue('SASS watcher')}] Changed:`, app.plugins.chalk.magenta(filePath));
+    console.log(
+      `[${app.plugins.chalk.blue('SASS watcher')}] ${t('watcher.changed')}`,
+      app.plugins.chalk.magenta(filePath),
+    );
 
     // Триггерим стили
     styles(filePath);
@@ -160,7 +169,7 @@ const dev = (callback) => {
   run((error) => {
     if (error) {
       // Сбой при старте -> выводим ошибку в оповещениях
-      notifySend('Gulp ошибка старта', error.message ?? String(error), 4);
+      notifySend(t('notify.startError'), error.message ?? String(error), 4);
       return callback(error);
     }
 
@@ -179,7 +188,7 @@ const build = (callback) => {
   run((error) => {
     if (error) {
       // Сбой при старте -> выводим ошибку в оповещениях
-      notifySend('Gulp ошибка сборки', error.message ?? String(error), 4);
+      notifySend(t('notify.buildError'), error.message ?? String(error), 4);
       return callback(error);
     }
 

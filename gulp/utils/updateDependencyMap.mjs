@@ -4,6 +4,7 @@
 import nodePath from 'node:path';
 
 import { settings } from '../config/settings.mjs';
+import { t } from '../i18n/index.mjs';
 import { getDependencyCache, setDependencyCache } from './dependencyCache.mjs';
 
 import { findComponentUsages } from './findComponentUsages.mjs';
@@ -81,7 +82,7 @@ export async function updateDependencyMap({ type, name }) {
   const label = isComponent ? 'component' : isSection ? 'section' : 'template';
 
   console.log(
-    `[${app.plugins.chalk.blue('DependencyMap')}] Инкрементально обновлён "${app.plugins.chalk.magenta(label)}" -> файлов: ${app.plugins.chalk.magenta(usedBy.size)}`,
+    `[${app.plugins.chalk.blue('DependencyMap')}] ${t('depmap.incrementalUpdate', { label: app.plugins.chalk.magenta(label), count: app.plugins.chalk.magenta(usedBy.size) })}`,
   );
 }
 
@@ -122,7 +123,7 @@ export async function syncFileUsages(filePath) {
 
   if (settings.cache.verbose) {
     console.log(
-      `[${app.plugins.chalk.blue('DependencyMap')}] Синхронизация файла "${app.plugins.chalk.magenta(nodePath.relative(app.path.projectRoot, filePath))}" -> связи обновлены`,
+      `[${app.plugins.chalk.blue('DependencyMap')}] ${t('depmap.fileSynced', { path: app.plugins.chalk.magenta(nodePath.relative(app.path.projectRoot, filePath)) })}`,
     );
   }
 }

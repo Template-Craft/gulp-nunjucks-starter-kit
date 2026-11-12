@@ -7,6 +7,7 @@
 'use strict';
 
 import { createNotification, send as notifySend } from './notify.mjs';
+import { t } from '../i18n/index.mjs';
 
 export const server = () => {
   app.plugins.browsersync.init(
@@ -24,7 +25,7 @@ export const server = () => {
     (error) => {
       // Старт сервера не удался - фиксируем ошибку
       if (error) {
-        notifySend('Gulp ошибка старта сервера', error.message ?? String(error), 4);
+        notifySend(t('notify.serverError'), error.message ?? String(error), 4);
         return;
       }
 
