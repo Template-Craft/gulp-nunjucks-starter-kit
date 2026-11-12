@@ -82,7 +82,7 @@ export const scripts = () => {
                         'polyfill-corejs3',
                         {
                           method: 'usage-global',
-                          version: '3.49',
+                          version: '3.51',
                           browserslistEnv: 'javascripts',
                         },
                       ],
