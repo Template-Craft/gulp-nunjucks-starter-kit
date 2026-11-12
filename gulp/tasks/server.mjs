@@ -15,6 +15,8 @@ export const server = () => {
       watch: true,
       notify: false,
       port: 8080,
+      // Внутри Docker-контейнера открывать браузер некому - см. docker-compose.yml
+      open: process.env.IN_DOCKER ? false : true,
       server: {
         baseDir: app.path.build.html,
       },

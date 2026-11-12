@@ -1,0 +1,31 @@
+# Опциональный способ запуска Build System в контейнере - полностью
+# изолированно от хостового Node/npm. По умолчанию НЕ используется:
+# обычный путь разработки - npm install && npm run dev.
+#
+# Запуск:          docker compose up
+# Продакшен-сборка: docker compose run --rm dev npm run build
+#
+# На macOS/Windows (Docker Desktop) живая перезагрузка может срабатывать
+# с задержкой из-за виртуализации ФС - в этом случае раскомментируйте
+# CHOKIDAR_USEPOLLING ниже.
+#
+# Примечание: settings.monitor.maxMemoryMB (gulp/config/settings.mjs) считается
+# от ОЗУ ХОСТА (os.totalmem()), а не от лимита контейнера. Если ограничиваете
+# контейнер через deploy.resources/mem_limit, порог стоит задать вручную.
+
+services:
+  dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    init: true # корректная обработка сигналов (Ctrl+C, docker compose down)
+    tty: true # сохраняет цветной вывод chalk в логах
+    ports:
+      - '8080:8080'
+      - '3001:3001'
+    environment:
+      IN_DOCKER: 'true' # отключает авто-открытие браузера внутри контейнера
+      # CHOKIDAR_USEPOLLING: '1' # раскомментируйте на macOS/Windows при проблемах с live-reload
+    volumes:
+      - .:/app
+      - /app/node_modules # отдельный volume - не используем node_modules с хоста (нативные бинарники собраны под Linux)
