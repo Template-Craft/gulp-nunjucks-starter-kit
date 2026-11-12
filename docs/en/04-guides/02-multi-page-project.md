@@ -1,62 +1,13 @@
 # Multi-page Project
 
-Для многостраничных проектов рекомендуется группировать Sections по страницам.
+Use this mode when there are several pages and each has its own set of Sections. Set `settings.isMultipage: true`.
 
-Это позволяет избежать перегруженного каталога `sections` и упрощает навигацию по проекту.
+For the directory structure, the `sections/<page>/` example, and `getSection("about", "hero")`, see Architecture → Sections and Development → Sections (the "Multi-page projects" part).
 
-## Рекомендуемая структура
+## What's different from Landing Page
 
-```text
-src/views/
-├── pages/
-│   ├── index.njk
-│   ├── about.njk
-│   ├── services.njk
-│   └── contacts.njk
-│
-├── sections/
-│   ├── about/
-│   │   ├── _hero.njk
-│   │   ├── _history.njk
-│   │   └── _team.njk
-│   │
-│   ├── services/
-│   │   ├── _hero.njk
-│   │   └── _pricing.njk
-│   │
-│   └── contacts/
-│       ├── _hero.njk
-│       └── _form.njk
-│
-├── components/
-├── templates/
-└── data/
-```
+- `sections/` is grouped by page instead of being a flat list;
+- `getSection(group, name)` is called with a non-empty `group` — the page's name;
+- identical Section names across different pages don't conflict — they belong to different architectural areas.
 
-## Подключение Sections
-
-Sections подключаются через Template API.
-
-```njk
-{% include getSection("about", "hero") %}
-{% include getSection("about", "history") %}
-{% include getSection("about", "team") %}
-```
-
-## Общие Components
-
-Components остаются общими для всего проекта.
-
-Один и тот же Component может использоваться в Sections различных страниц без каких-либо ограничений.
-
-## Templates
-
-Templates также являются общими для всего проекта и могут использоваться любыми Components и Sections независимо от страницы.
-
-Они предназначены для переиспользования небольших частей разметки и не привязаны к конкретной странице.
-
-## Когда использовать
-
-Такая структура рекомендуется для проектов с большим количеством страниц, где каждая страница имеет собственный набор Sections.
-
-Она сохраняет порядок в каталоге проекта, облегчает навигацию и хорошо масштабируется по мере роста приложения.
+Components and Templates stay shared across the whole project regardless of mode — the same Component can be used in Sections belonging to any page, without restriction.

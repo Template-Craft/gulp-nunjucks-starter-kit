@@ -1,36 +1,21 @@
 # Build System Overview
 
-The Build System is the central part of the project.
+The Build System is the project's central part. Unlike a typical bundler, it works not just with files but with architectural entities: Pages, Sections, Components, Templates, Data.
 
-It is responsible not only for compiling source files, but also for implementing and maintaining the architectural approach adopted throughout the project.
-
-Unlike traditional build systems, the Build System operates not only on files, but also on architectural entities such as Pages, Sections, Components, Templates, and Data.
-
-## Main Responsibilities
-
-The Build System performs several interconnected tasks:
+## Main responsibilities
 
 - preparing the build environment;
 - processing project assets;
 - rendering HTML pages;
 - analyzing architectural dependencies;
-- performing incremental rebuilding;
-- enforcing architectural conventions;
-- providing a development server and file watching.
+- incremental rebuilding;
+- the dev server and watch mode.
 
-All of these mechanisms work together as a unified system built upon a shared architectural model.
+## Architectural approach
 
-## Architectural Approach
+The Build System doesn't require configuring the project's structure — instead it relies on naming conventions, directory layout, and the Template API to determine entities and the relationships between them on its own.
 
-The Build System does not require additional configuration to describe the project's structure.
-
-Instead, it relies on naming conventions, directory organization, and the Template API to automatically identify architectural entities and the relationships between them.
-
-This approach allows developers to focus on the architecture of the project rather than configuring the build system itself.
-
-## Build Lifecycle
-
-Each build goes through a sequence of well-defined stages.
+## Build lifecycle
 
 ```text
 Source Files
@@ -51,11 +36,7 @@ Write Output
 Development Server / Watch Mode
 ```
 
-Each stage is responsible for its own area of work and remains independent from the internal implementation of the other parts of the Build System.
-
-## Core Mechanisms
-
-The Build System is based on several interconnected mechanisms:
+## Internal mechanisms
 
 - Template API;
 - Build Pipeline;
@@ -63,4 +44,4 @@ The Build System is based on several interconnected mechanisms:
 - Incremental Build;
 - Watch Mode.
 
-Each of these mechanisms is described in detail in the following sections of this documentation.
+Each is covered in detail in the following sections.

@@ -1,51 +1,24 @@
 # CSS Pipeline
 
-Starter Kit использует последовательный конвейер обработки стилей.
-
-Каждый этап выполняет одну задачу и передаёт результат следующему этапу.
-
-## Pipeline
-
 ```text
-SCSS
-    ↓
-Sass
-    ↓
-PostCSS
-    ↓
-Autoprefixer
-    ↓
-Sort Media Queries
-    ↓
-CSSNano (production)
-    ↓
-CSS
+SCSS → Sass → PostCSS (Autoprefixer → Sort Media Queries) → CSSNano (только build) → CSS
 ```
+
+Единственная точка входа — `src/assets/styles/main.scss` (`gulp/tasks/styles.mjs`).
 
 ## Sass
 
-В качестве препроцессора используется Sass.
-
-Он отвечает за компиляцию SCSS в CSS и позволяет использовать современные возможности языка.
+Компиляция SCSS → CSS через `sass` (Dart Sass). В dev-режиме сразу генерируются Source Maps (`sourcemaps: true` только при `app.isDev`).
 
 ## PostCSS
 
-После компиляции результат передаётся в PostCSS.
+- **Autoprefixer** — браузерные префиксы по `browserslist` из `package.json` (ключ `stylesheets`);
+- **postcss-sort-media-queries** — сортирует `@media` (`desktop-first`) для предсказуемого и компактного вывода.
 
-На этом этапе Build System выполняет дополнительную обработку CSS.
+## CSSNano — только в build
 
-## Autoprefixer
+```js
+app.isBuild ? [cssnano({ preset: [cssnanoPresetAdvanced, { discardComments: true, mergeRules: true, ... }] })] : [];
+```
 
-Autoprefixer автоматически добавляет необходимые браузерные префиксы.
-
-Это избавляет от необходимости поддерживать их вручную.
-
-## Sort Media Queries
-
-Media Queries автоматически сортируются, что делает итоговый CSS более предсказуемым и удобным для сопровождения.
-
-## CSSNano
-
-При production-сборке CSS дополнительно минимизируется при помощи CSSNano.
-
-Во время разработки минимизация не выполняется, что упрощает отладку.
+В dev-режиме CSSNano вообще не подключается — минификация стоит времени, а в dev она не нужна. Это сознательный выбор ради скорости цикла разработки, а не недосмотр.

@@ -1,19 +1,17 @@
 # Components
 
-A Component is the primary reusable building block of the user interface.
-
-Each Component is represented by its own directory containing all files related to that architectural entity.
+A Component is the main unit of interface reuse: a self-contained directory holding every file that belongs to that entity.
 
 ## Structure
 
-The minimum Component structure is:
+Minimal:
 
 ```text
 Header/
 └── Header.njk
 ```
 
-In practice, a Component usually contains multiple files.
+In practice — usually more:
 
 ```text
 Header/
@@ -22,60 +20,37 @@ Header/
 └── Header.mjs
 ```
 
-Each file has a single responsibility.
+- `Header.njk` — the template;
+- `_Header.scss` — the styles;
+- `Header.mjs` — client-side logic (optional).
 
-- `Header.njk` — component template.
-- `_Header.scss` — component styles.
-- `Header.mjs` — client-side logic (when required).
+## Naming
 
-## Naming Convention
+The directory, template, styles, and script file names must all match — that's the only thing the Build System needs to link the component to its JSON data automatically, with zero configuration.
 
-The directory, template, stylesheet, and JavaScript file must all use the same name.
-
-```text
-Header/
-├── Header.njk
-├── _Header.scss
-└── Header.mjs
-```
-
-This convention allows the Build System to automatically associate the Component with its corresponding JSON data file.
-
-## Component Data
-
-If a Component has its own data, it is stored separately.
+## Data
 
 ```text
 src/views/data/
 └── Header.json
 ```
 
-The JSON file name must exactly match the Component name.
+The JSON file's name must fully match the component's name.
 
-When this file changes, the Build System automatically identifies the corresponding Component, analyzes its usage, and rebuilds only the affected Pages.
-
-## Including Components
-
-Components are included through the Template API.
-
-To include a regular template:
+## Usage
 
 ```njk
 {% include getComponent("Header") %}
 ```
 
-If the Component is implemented as a Nunjucks Macro:
+or, if the component is a Nunjucks macro:
 
 ```njk
-{% from getComponent("Header") import Header %}
+{% from getComponent('Header') import Header %}
 ```
 
-Both approaches are fully supported by the Build System and are taken into account during dependency analysis.
+Both forms are accounted for by the dependency analysis.
 
 ## Incremental Build
 
-Changing any file within a Component triggers a search for all places where that Component is used.
-
-If the Component is included inside a Section, the Build System continues dependency analysis to determine which Pages use that Section.
-
-As a result, only the pages that are actually affected are rebuilt.
+Changing any file in a component triggers a search for every place it's used. If the Component is nested inside a Section, the analysis continues up to the pages that use that Section — only the pages actually affected get rebuilt.

@@ -1,69 +1,26 @@
 # Template API
 
-The Template API provides a unified way to access architectural entities within the project.
-
-Instead of referencing physical file paths, templates use architectural addresses that remain independent of the project's directory structure.
-
-## Purpose
-
-The primary goal of the Template API is to decouple templates from the physical organization of files.
-
-A template should describe **what** it uses rather than **where** it is located.
-
-This approach allows the internal structure of the project to evolve without requiring changes to existing templates.
-
-## Available API
-
-The Build System provides several global helper functions.
-
-### Components
-
-Components are included using:
+The abstraction layer between the project's architectural model and its physical structure. Instead of relative paths, templates reach architectural entities through a single set of functions — the Build System resolves the physical location itself.
 
 ```njk
 {% include getComponent("Header") %}
-```
-
-If the Component is implemented as a Nunjucks macro:
-
-```njk
-{% from getComponent("Header") import Header %}
-```
-
-### Sections
-
-For Landing Page projects:
-
-```njk
-{% include getSection("", "about") %}
-```
-
-For Multipage projects:
-
-```njk
 {% include getSection("about", "hero") %}
-```
-
-### Templates
-
-```njk
 {% include getTemplate("head") %}
+{% set siteData = getData("Global") %}
 ```
 
-### Data
+## Available functions
 
-```njk
-{{ getData("Global") }}
-```
+| Function                  | Purpose                                            |
+| -------------------------- | --------------------------------------------------- |
+| `getComponent(name)`       | Path to a Component's template.                     |
+| `getSection(group, name)`  | Path to a Section's template (`group` is empty for a Landing Page). |
+| `getTemplate(name)`        | Path to an infrastructural Template.                |
+| `getData(name)`            | Reads `src/views/data/<name>.json` and returns it as an object. |
+| `jsonParse` (filter)       | `{{ value \| jsonParse }}` — parses a JSON string inside a template. |
 
-## Why Template API Exists
+All functions and the filter are registered in the Nunjucks runtime when the Build System starts (`gulp/tasks/templates.mjs`) and are available in any `.njk` file without extra imports.
 
-The Template API separates architectural concepts from physical file locations.
+## Why not relative paths
 
-As a result:
-
-- templates remain independent of the directory structure;
-- architectural entities have a consistent access mechanism;
-- project organization can change without modifying existing template code.
-
-This makes the project easier to maintain and scale over time.
+Relative paths hard-wire templates to the file structure. The Template API removes that dependency: changing the directory layout doesn't require touching existing calls, because the Build System resolves the architectural address to a file itself.

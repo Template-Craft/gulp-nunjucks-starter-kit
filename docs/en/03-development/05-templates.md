@@ -1,74 +1,51 @@
 # Templates
 
-Templates contain reusable markup that does not belong to a specific Page, Section, or Component.
-
-They are typically used for common document fragments shared across multiple parts of the project.
+Templates are reusable markup that isn't tied to a specific page, Section, or Component: shared document fragments needed in many places across the project.
 
 ## Location
 
-All Templates are located in:
-
 ```text
 src/views/templates/
-```
-
-For example:
-
-```text
-templates/
 ├── _head.njk
 ├── _scripts.njk
 └── _meta.njk
 ```
 
-## Including Templates
-
-Templates are included through the Template API.
-
-To include a regular template:
+## Usage
 
 ```njk
 {% include getTemplate("head") %}
 {% include getTemplate("scripts") %}
 ```
 
-If a Template is implemented as a Nunjucks Macro:
+If the Template is a Nunjucks macro:
 
 ```njk
-{% from getTemplate("head") import head %}
-{% from getTemplate("scripts") import scripts %}
+{% from getTemplate('head') import HTMLHead %}
+{% from getTemplate('scripts') import scripts %}
 ```
 
-Both approaches are fully supported by the Build System and are taken into account during dependency analysis.
+Both forms are accounted for by the dependency analysis. The underscore in the file name isn't used when calling it — the Build System converts the architectural name into a path itself.
 
-The Build System automatically resolves the architectural Template name to the corresponding file path.
+## Constraint: Templates don't call Components
 
-## Naming Convention
-
-Template files use a leading underscore.
-
-```text
-_head.njk
-```
-
-When using the Template API, the underscore is omitted.
+This is a hard rule, not a style recommendation. Dependency analysis (`gulp/utils/findComponentUsages.mjs`) deliberately excludes `views/templates/**` when scanning for `getComponent(...)` calls:
 
 ```njk
-{% include getTemplate("head") %}
+{# NOT ALLOWED — this call won't make it into the Dependency Graph #}
+{% include getComponent("Header") %}
 ```
 
-This ensures that the architectural Template name always remains the same regardless of the physical file name.
+If you write `getComponent(...)` inside a Template anyway, the page will still render fine — the call itself works. But the Build System won't know about that link: when `Header` changes, Incremental Build won't find the pages that use this Template and won't rebuild them. The result is silently stale HTML in `build/`, which won't surface right away.
 
-## Template Data
+If a Template needs component-level reusable markup, express it as a Nunjucks macro inside the Template itself, or extract it as a Component and include that Component from the Page/Section directly — not from inside a Template.
 
-Templates do not have their own JSON data files.
+The reverse direction — a Page/Section/Component calling a Template through `getTemplate(...)` — works as expected and is fully tracked by the dependency analysis.
 
-When necessary, they receive data from the calling architectural entity or use the project's global data.
+## Data
 
-See the **Data** section for more information.
+Templates don't have their own JSON files — data comes from the calling entity, or global data is used (see the Data section for details).
 
 ## Incremental Build
 
-The Build System analyzes the usage of every Template.
-
-When a Template changes, it automatically determines which Sections and Pages use it and rebuilds only the affected Pages.
+When a Template changes, the Build System finds every Section and Page that uses it and rebuilds only those.

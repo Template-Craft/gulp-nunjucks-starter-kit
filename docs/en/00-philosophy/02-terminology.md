@@ -1,83 +1,69 @@
 # Terminology
 
-This documentation uses a consistent set of architectural terms.
-
-Each term has a precise meaning and is used consistently throughout the documentation to eliminate ambiguity when describing both the architecture and the internal mechanisms of the Build System.
+The shared vocabulary used throughout the documentation.
 
 ---
 
 ## Architectural Approach
 
-The collection of architectural principles and design decisions that define the organization of a project independently of the technologies used to implement it.
+The set of architectural principles and decisions that define a project's organization independently of the tools used.
 
 ---
 
 ## Build System
 
-The implementation of the architectural approach responsible for automating development, dependency analysis and the build process.
+The implementation of the architectural approach: automates development, dependency analysis, and the build itself.
 
 ---
 
 ## Page
 
-A template that serves as the entry point for generating a single HTML page.
+A template that acts as the entry point when generating a single HTML page.
 
 ---
 
 ## Section
 
-A major functional part of a page used to compose its overall structure.
-
-A Section groups related interface elements and may use Components, Data and other Templates.
+A large functional block of a page. Groups related components, data, and other templates around a single concern (Hero, About, Gallery, etc.).
 
 ---
 
 ## Component
 
-A reusable user interface element with its own structure and clearly defined responsibility.
-
-Components may be shared across multiple Pages and Sections.
+A reusable interface element with its own structure and area of responsibility. Can be used by any number of pages and sections.
 
 ---
 
 ## Template
 
-An infrastructure template intended to solve auxiliary rendering tasks.
-
-A Template is neither an entry point nor an independent user interface element.
+An infrastructural template for supporting tasks (`<head>`, script injection, etc.). Not a standalone page or interface element.
 
 ---
 
 ## Data
 
-Structured information used during template rendering.
-
-Data is separated from templates and treated as an independent architectural entity.
+Structured data (JSON) used when rendering templates. The data source is decoupled from the templates themselves.
 
 ---
 
 ## Template API
 
-A collection of conventions and interaction mechanisms used by architectural entities.
-
-The Template API defines how templates are reused and how architectural entities communicate with one another.
+The set of functions (`getComponent`, `getSection`, `getTemplate`, `getData`) templates use to reach architectural entities by name instead of by file path.
 
 ---
 
 ## Dependency Graph
 
-A model describing the relationships between architectural entities.
-
-It is used by the Build System to analyze changes and determine the minimum set of files that must be rebuilt.
+The map of relationships between a project's architectural entities. Used to analyze changes and determine the minimal set of files that need rebuilding.
 
 ---
 
 ## Incremental Build
 
-A build mode in which the Build System rebuilds only the pages and assets affected by recent changes.
+A build mode where only the pages actually affected by a change get rebuilt.
 
 ---
 
 ## Build Pipeline
 
-The sequence of processing stages executed by the Build System during development and production builds.
+The sequence of processing stages the project goes through during development and build.

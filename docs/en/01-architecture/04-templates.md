@@ -1,89 +1,34 @@
 # Templates
 
-## Purpose
-
-A **Template** is a reusable infrastructure template.
-
-Unlike Components, Templates are not intended to represent user interface elements. Instead, they provide reusable markup that supports other architectural entities.
-
-Typical examples include layouts, wrappers, form fragments and other reusable rendering structures.
-
----
-
-## Responsibilities
-
-A Template is responsible for:
-
-- providing reusable infrastructure markup;
-- reducing duplication across Components and Sections;
-- accepting rendering parameters;
-- remaining independent of any specific Page or Section.
-
-Templates should focus exclusively on rendering infrastructure.
-
----
-
-## Composition
-
-Templates are typically used by Components or Sections.
-
-Rather than representing standalone interface elements, they provide reusable markup that simplifies the implementation of higher-level architectural entities.
-
----
-
-## Organization
-
-All Templates are stored in a single directory.
+Templates are infrastructural markup: the document's base structure, `<head>` contents, shared resource includes. A Template doesn't define a page's composition and isn't an interface element on its own — that's the job of Pages, Sections, and Components.
 
 ```text
 src/views/templates/
 ├── _head.njk
-├── _form.njk
-├── _select.njk
-├── _option.njk
-└── _card-layout.njk
+└── _scripts.njk
 ```
 
-The directory contains infrastructure templates shared across the entire project.
+## Difference from Components
 
----
+Both use the same templating engine, but solve different problems: a Component is a self-contained interface entity, a Template is infrastructure other entities rely on.
 
-## Naming Convention
+It's not just a conceptual distinction: a Template **cannot** call `getComponent(...)` — dependency analysis deliberately doesn't track such calls inside `templates/`, and the link would simply fall out of the Dependency Graph. See Development → Templates for details and what to do instead.
 
-All Template files begin with an underscore (`_`).
-
-The file name should describe the purpose of the template rather than a specific page or feature.
-
----
-
-## Access Through the Template API
-
-Templates are included through the Template API.
+## Usage
 
 ```njk
 {% include getTemplate("head") %}
+{% include getTemplate("scripts") %}
 ```
 
-Developers reference the architectural name of the Template rather than its physical location.
+or, if the Template is written as a Nunjucks macro:
 
-The build system resolves the corresponding file automatically.
+```njk
+{% from getTemplate('head') import HTMLHead %}
+```
 
-This allows the internal directory structure to change without affecting existing template calls.
-
----
+The Build System converts the architectural name into a file path itself — no need to add `_` or an extension.
 
 ## Data
 
-Templates do not have dedicated JSON data files.
-
-Instead, they use global data or receive all required information from the Components or Sections that include them.
-
-Templates are intentionally designed to remain independent of application data and focus solely on reusable rendering logic.
-
----
-
-## Why Templates Exist Separately
-
-Templates solve infrastructure-level rendering problems.
-
-Keeping them separate from Components prevents reusable interface elements from becoming cluttered with generic markup while encouraging consistent reuse throughout the project.
+Templates don't have their own JSON files. If a template needs data, the calling entity (Page, Section, Component) passes it in, or global project data is used.

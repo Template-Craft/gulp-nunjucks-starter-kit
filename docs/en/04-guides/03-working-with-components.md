@@ -1,49 +1,12 @@
 # Working with Components
 
-Components являются основной единицей повторного использования в проекте.
+Create a Component when an interface element is used more than once, or stands on its own as a self-contained logical block. For directory structure, naming, data, and usage (`getComponent`/`from ... import`), see Development → Components — same rules, same examples, no point repeating them here.
 
-Если элемент интерфейса используется более одного раза или представляет собой самостоятельный логический блок, рекомендуется оформить его как Component.
+## When NOT to make a Component
 
-## Рекомендуемая структура
+- the element is used exactly once and isn't a self-contained logical block — keep the markup inside the Section;
+- you need infrastructural markup other entities rely on (not a UI element) — that's a Template, not a Component (and a Template can't call a Component — see Development → Templates).
 
-Каждый Component располагается в собственной директории.
+## The main rule
 
-```text
-Header/
-├── Header.njk
-├── _Header.scss
-└── Header.mjs
-```
-
-При необходимости Component может иметь собственный JSON-файл.
-
-```text
-src/views/data/
-└── Header.json
-```
-
-## Подключение
-
-Components подключаются через Template API.
-
-```njk
-{% include getComponent("Header") %}
-```
-
-Если Component реализован как Nunjucks Macro, используется импорт.
-
-```njk
-{% from getComponent("Header") import Header %}
-```
-
-## Ответственность
-
-Component отвечает только за собственную функциональность.
-
-Он не должен содержать логику страницы или описывать её структуру.
-
-## Повторное использование
-
-Component может использоваться в любом количестве Pages и Sections.
-
-При изменении Component Build System автоматически определяет все связанные страницы и выполняет инкрементальную пересборку только затронутых файлов.
+A Component is responsible only for its own functionality — not for page logic or structure. When it changes, the Build System finds every related page on its own and rebuilds only those.

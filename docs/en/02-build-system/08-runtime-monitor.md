@@ -1,45 +1,22 @@
 # Runtime Monitor
 
-During development, the Build System can automatically monitor memory and CPU usage.
+During development, tracks the Gulp process's RAM and CPU usage and warns when a threshold is exceeded — running alongside everything else, with no extra setup required.
 
-The Runtime Monitor operates alongside the other Build System mechanisms and helps identify excessive resource consumption during long development sessions.
+## What's monitored
 
-## Purpose
+Memory (RSS/CPU, via `pidusage`) is checked every `intervalMs` (10 seconds by default). Thresholds are `settings.monitor.maxMemoryMB` and `maxCpuPercent` (see the Settings section).
 
-The primary purpose of the Runtime Monitor is to observe the Gulp process while the Build System is running.
+## When a threshold is exceeded
 
-If resource usage exceeds configured limits, the Build System notifies the developer.
+The Build System:
 
-## Monitored Resources
+- prints a message to the console;
+- shows a system notification (`node-notifier`).
 
-The Runtime Monitor observes:
+## Disabling it
 
-- memory usage;
-- CPU usage.
-
-The corresponding thresholds are configured in:
-
-```text
-gulp/config/settings.mjs
+```bash
+gulp --no-monitor
 ```
 
-## Notifications
-
-When resource usage exceeds the configured limits, the Build System:
-
-- writes a message to the console;
-- displays a system notification.
-
-This helps detect potential memory leaks or unexpectedly high CPU usage during development.
-
-## Integration
-
-The Runtime Monitor starts automatically together with the Development Server when running the Build System in development mode.
-
-No additional configuration is required.
-
-## Disabling the Monitor
-
-If necessary, the Runtime Monitor can be disabled by starting the Build System with the appropriate command-line option.
-
-All other Build System mechanisms continue to operate normally.
+or via `npm run dev -- --no-monitor`. Everything else keeps working as usual.

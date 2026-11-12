@@ -1,47 +1,17 @@
 # Development Workflow
 
-Starter Kit построен таким образом, чтобы цикл разработки был максимально коротким.
-
-Большинство операций выполняется автоматически и не требуют вмешательства разработчика.
-
-## Типичный процесс
-
-Во время разработки работа обычно выглядит следующим образом.
-
 ```text
-Изменение файла
-        ↓
-Определение типа изменения
-        ↓
-Анализ зависимостей
-        ↓
-Инкрементальная пересборка
-        ↓
-BrowserSync
-        ↓
-Обновление страницы
+File changes → Determine change type → Dependency analysis → Incremental rebuild → BrowserSync → Page updates
 ```
 
 ## BrowserSync
 
-После успешной сборки BrowserSync автоматически обновляет браузер.
-
-Разработчику не требуется вручную перезагружать страницу после каждого изменения.
+Reloads the browser automatically after a build — CSS/images update in place (no page reload), HTML/JS trigger a full reload.
 
 ## Source Maps
 
-Для SCSS автоматически создаются Source Maps.
+In dev mode, SCSS gets Source Maps — browser devtools show the original `.scss` files instead of the compiled CSS.
 
-Благодаря этому инструменты разработчика браузера показывают исходные SCSS-файлы вместо скомпилированного CSS, что значительно упрощает отладку.
+## Console output and notifications
 
-## Уведомления
-
-Во время работы Build System выводит подробную информацию в консоль.
-
-При возникновении ошибок используются уведомления операционной системы, позволяющие быстро обнаружить проблему.
-
-## Инкрементальная сборка
-
-При изменении Components, Sections, Templates или данных Build System анализирует зависимости и пересобирает только затронутые страницы.
-
-Это существенно сокращает время ожидания при разработке крупных проектов.
+The Build System logs what's happening in detail to the console (in whatever language `settings.locale` picks, see Build System → Settings); on errors, it additionally shows a system notification (`node-notifier`).

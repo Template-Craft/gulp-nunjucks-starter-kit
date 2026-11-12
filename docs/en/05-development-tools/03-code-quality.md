@@ -1,37 +1,18 @@
 # Code Quality
 
-Starter Kit включает инструменты контроля качества кода, которые помогают поддерживать единый стиль проекта и предотвращать распространённые ошибки ещё на этапе разработки.
-
 ## ESLint
 
-ESLint используется для статического анализа JavaScript.
+Static analysis for JS/MJS (`eslint.config.mjs`, flat config): syntax errors, likely bugs, unused code, violated conventions.
 
-Конфигурация проекта ориентирована на современный JavaScript и учитывает особенности Build System.
-
-Во время разработки ESLint помогает обнаруживать:
-
-- синтаксические ошибки;
-- потенциальные ошибки выполнения;
-- нарушение соглашений проекта;
-- неиспользуемый код;
-- проблемы совместимости.
+```bash
+npm run eslint:status
+npm run eslint:fixesAll
+```
 
 ## Prettier
 
-Prettier отвечает за автоматическое форматирование исходного кода.
+Automatic source formatting — the same style for every developer regardless of editor. `eslint-config-prettier` turns off the ESLint style rules that would otherwise conflict with Prettier — the two tools don't argue with each other.
 
-Все разработчики получают одинаковый стиль оформления независимо от используемого редактора.
+## Recommendation
 
-## Совместная работа
-
-ESLint и Prettier используются совместно.
-
-ESLint отвечает за качество кода, а Prettier — за его оформление.
-
-Такое разделение позволяет избежать конфликтов между инструментами и делает конфигурацию более предсказуемой.
-
-## Рекомендации
-
-Рекомендуется настроить редактор таким образом, чтобы форматирование выполнялось автоматически при сохранении файла.
-
-Это позволяет сосредоточиться на разработке, а не на ручном оформлении кода.
+Set your editor to format on save (see Editor Setup) — then formatting isn't something you have to think about at all.

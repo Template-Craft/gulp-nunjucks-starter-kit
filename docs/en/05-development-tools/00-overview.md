@@ -1,39 +1,19 @@
 # Development Tools
 
-Starter Kit включает готовую среду разработки, предназначенную для повседневой работы над проектом.
+A ready-made development environment, integrated into the Build System and requiring no setup after `npm install`.
 
-Все инструменты уже интегрированы в Build System и не требуют дополнительной настройки после установки зависимостей.
+## What's included
 
-## Что входит
+- HTML processing through Nunjucks;
+- SCSS/CSS processing;
+- JavaScript bundling;
+- code quality tooling (ESLint + Prettier);
+- automatic browser sync (BrowserSync);
+- incremental rebuilding and dependency analysis;
+- system notifications about build progress;
+- [optional Docker](./09-docker.md) — isolated development with no Node/npm on the host;
+- additional tools (see Optional Tools).
 
-Среда разработки включает несколько направлений.
+## Build System vs. Development Tools
 
-- обработку HTML через Nunjucks;
-- обработку SCSS и CSS;
-- сборку JavaScript;
-- контроль качества кода;
-- автоматическую синхронизацию браузера;
-- инкрементальную пересборку проекта;
-- анализ зависимостей между сущностями проекта;
-- уведомления о ходе сборки;
-- дополнительные инструменты разработчика.
-
-Каждый инструмент решает собственную задачу и является частью общего процесса разработки.
-
-## Основные принципы
-
-Development Tools строятся на нескольких принципах.
-
-- минимальная ручная настройка;
-- автоматизация повторяющихся операций;
-- быстрое получение обратной связи;
-- единые соглашения для всех проектов;
-- возможность использовать только необходимые возможности Starter Kit.
-
-## Связь с Build System
-
-Build System отвечает за выполнение задач.
-
-Development Tools описывает инструменты, которые используются внутри этих задач и помогают разработчику в ежедневной работе.
-
-Таким образом Build System определяет процесс сборки, а Development Tools — рабочую среду разработчика.
+The Build System decides *what* gets built and *when*. Development Tools are what runs inside those tasks and helps with day-to-day work (linting, formatting, the editor, notifications).

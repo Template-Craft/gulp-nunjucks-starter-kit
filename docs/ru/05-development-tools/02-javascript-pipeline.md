@@ -1,39 +1,29 @@
 # JavaScript Pipeline
 
-Starter Kit использует современный конвейер обработки JavaScript.
-
-Разработка ведётся с использованием современного синтаксиса JavaScript, а Build System автоматически подготавливает код для браузеров.
-
-## Pipeline
-
 ```text
-JavaScript
-      ↓
-Babel
-      ↓
-Webpack
-      ↓
-Bundle
+JavaScript (ESM) → Babel (babel-loader) → Webpack → Bundle
 ```
 
-## Babel
+Точка входа — `src/scripts/main/app.mjs` (`gulp/tasks/scripts.mjs`).
 
-Babel преобразует современный JavaScript в совместимый код.
+## Babel + core-js
 
-При необходимости используются возможности `core-js` для поддержки требуемых возможностей языка.
+`@babel/preset-env` таргетится на `browserslist` (ключ `javascripts`), `babel-plugin-polyfill-corejs3` добавляет полифиллы `core-js` только там, где они реально используются (`method: 'usage-global'`). Версия в опциях плагина (`version: '3.51'`) должна совпадать с версией установленного `core-js` — при обновлении `core-js` это значение нужно поднимать вручную.
 
 ## Webpack
 
-Webpack отвечает за сборку модулей в итоговый bundle.
+Алиас `Components` указывает на `src/views/components/` — импорт клиентской логики компонента без относительных путей:
 
-Это позволяет использовать модульную структуру проекта без дополнительной ручной настройки.
+```js
+import something from 'Components/Header/Header.mjs';
+```
 
-## Development
+## Dev vs Production
 
-Во время разработки Build System автоматически пересобирает JavaScript только при необходимости.
+| | Dev | Build |
+| --- | --- | --- |
+| `devtool` | `eval-cheap-module-source-map` | выключен |
+| `cache` | `{ type: 'filesystem' }` | выключен |
+| минификация | нет | да, с суффиксом `.min.js` |
 
-Ошибки отображаются непосредственно в процессе сборки, что ускоряет цикл разработки.
-
-## Production
-
-При production-сборке выполняется оптимизированная сборка JavaScript, готовая к публикации проекта.
+Filesystem-кэш и быстрые source maps в dev — ради скорости пересборки, не ради качества итогового бандла (это задача build-режима).

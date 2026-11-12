@@ -1,33 +1,24 @@
 # Optional Tools
 
-Starter Kit полностью работоспособен без установки дополнительных инструментов.
-
-Однако некоторые утилиты могут значительно упростить сопровождение проекта и выполнение повторяющихся операций.
+The Starter Kit is fully functional without these — they're maintenance utilities, not build dependencies.
 
 ## nsk-tools
 
-`nsk-tools` — отдельный CLI-проект, разработанный специально для Starter Kit.
-
-Он распространяется независимо от Build System и не является обязательной зависимостью проекта.
-
-Инструмент автоматизирует различные задачи разработки, позволяя сократить количество ручной работы и придерживаться единых соглашений проекта.
-
-Подробная документация и список возможностей находятся в репозитории `[nsk-tools](https://github.com/Ko2doo/nsk-tools)`.
+An independent CLI for routine development tasks — creating files/directories following the project's conventions, and similar chores. Details: [nsk-tools](https://github.com/Ko2doo/nsk-tools).
 
 ## npm-check-updates
 
-`npm-check-updates` помогает отслеживать появление новых версий зависимостей.
-
-Инструмент используется только при сопровождении Starter Kit и не участвует в процессе сборки.
+```bash
+npm run ncu                       # what's outdated
+npm run ncu:interactive           # update selectively
+npm run ncu:interactive:formatgroup
+```
 
 ## sass-migrator
 
-`sass-migrator` предназначен для автоматической миграции проектов при изменении синтаксиса Sass.
+```bash
+npm run sass:migrator
+npm run sass:migrator:imports
+```
 
-В обычной разработке Starter Kit он практически не используется, однако может быть полезен при обновлении старых проектов.
-
-## Принцип использования
-
-Все дополнительные инструменты являются необязательными.
-
-Starter Kit не требует их установки и не зависит от них во время разработки или сборки проекта.
+Migrates Sass syntax when the language changes — rarely needed day to day, mostly useful when porting an older project.

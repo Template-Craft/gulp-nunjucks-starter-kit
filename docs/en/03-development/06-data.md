@@ -1,117 +1,37 @@
 # Data
 
-The Build System uses JSON files to store the data required for rendering templates.
-
-All project data is stored in a single directory regardless of which architectural entity it belongs to.
+Every piece of project data is a JSON file in one directory, regardless of which entity it belongs to:
 
 ```text
 src/views/data/
 ```
 
-## Naming Convention
+## Naming by entity
 
-A data file must use the name of the architectural entity it belongs to.
+| Entity | Example |
+| --- | --- |
+| Page | `pages/about.njk` → `data/about.json` |
+| Component | `components/Header/Header.njk` → `data/Header.json` |
+| Section | `sections/_about.njk` → `data/about.json` |
+| Template | has no data of its own — gets it from the calling entity or from global data |
 
-For example:
+The matching name is all the Build System needs to link data to an entity automatically.
 
-```text
-src/views/
-├── components/
-│   └── Header/
-│       └── Header.njk
-│
-└── data/
-    └── Header.json
-```
-
-This convention allows the Build System to automatically associate an architectural entity with its data without requiring additional configuration.
-
-## Global Data
-
-Special files are used to store data shared across the entire project:
+## Global data
 
 ```text
 Global.json
 Common.json
 ```
 
-These files are considered globally available.
+Available to the whole project. Changing either of these triggers a full rebuild.
 
-Changing either of them triggers a full rebuild of the project.
-
-## Page Data
-
-A Page may have its own JSON data file.
-
-For example:
-
-```text
-pages/
-└── about.njk
-
-data/
-└── about.json
-```
-
-If the JSON file name matches the Page name, the Build System rebuilds only that Page.
-
-## Component Data
-
-A Component may also have its own JSON data file.
-
-For example:
-
-```text
-components/
-└── Header/
-    └── Header.njk
-
-data/
-└── Header.json
-```
-
-When this file changes, the Build System automatically identifies the corresponding Component, analyzes its usage, and rebuilds only the Pages that use that Component.
-
-## Section Data
-
-A Section may also have its own JSON data file.
-
-For example:
-
-```text
-sections/
-└── _about.njk
-
-data/
-└── about.json
-```
-
-When this file changes, the Build System identifies the corresponding Section, analyzes its usage, and rebuilds only the affected Pages.
-
-## Template Data
-
-Templates do not have their own JSON data files.
-
-They represent reusable markup fragments and should receive the required data from the calling entity (Page, Section, or Component) or use the project's global data.
-
-This approach keeps Templates independent of their own data source and allows the same Template to be reused throughout different parts of the project.
-
-For example, a Template may describe the markup for a form element, a table row, a list item, or any other reusable structure while receiving its data through parameters or a Nunjucks Macro.
-
-## Accessing Data
-
-Data is accessed through the Template API.
+## Reading data
 
 ```njk
 {{ getData("Header").title }}
 ```
 
-The Build System automatically loads the corresponding JSON file and makes its contents available to the template.
+## Recommendations
 
-## Architectural Approach
-
-All project data is stored in a single directory.
-
-The Build System relies on naming conventions to automatically determine which JSON file belongs to each architectural entity.
-
-This approach simplifies project maintenance, keeps the structure predictable, and enables the Build System to perform dependency analysis and incremental rebuilding automatically without requiring additional configuration.
+Keep data as close as possible to the entity it belongs to. Use `Global.json`/`Common.json` only for data that's genuinely shared across the whole project: this keeps coupling loose and lets Incremental Build pinpoint what actually needs rebuilding.

@@ -116,6 +116,10 @@ Before getting started, make sure the following software is installed:
 - npm **10** or newer
 - Git
 
+### Platform
+
+The Build System is **architecture-first**, but also **Linux-first**: it is primarily developed and tested on Linux. It works just as well on macOS and 64-bit Windows, but some mechanisms — most notably live-reload file-watching speed, especially inside Docker — behave faster and more predictably on Linux specifically. See the Docker section in `docs/` for details.
+
 ### Recommended
 
 - Visual Studio Code

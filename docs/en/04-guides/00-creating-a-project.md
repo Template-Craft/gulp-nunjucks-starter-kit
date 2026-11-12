@@ -1,82 +1,17 @@
 # Creating a Project
 
-Новый проект начинается не с настройки Build System, а с организации архитектуры.
+A new project starts with architecture, not with configuring the Build System: decide on the structure, the main Sections, and the reusable Components before you write the first page.
 
-Перед созданием первой страницы рекомендуется определить структуру проекта, основные Sections и повторно используемые Components.
+## Steps
 
-## Минимальная структура
+1. Create the first page: `src/views/pages/index.njk` (plus `data/index.json` if it needs data).
+2. Pick a mode — Landing Page or Multipage (see below) — and set `settings.isMultipage` accordingly.
+3. Break the page into Sections, wire them up with `getSection(...)`.
+4. Extract repeated elements into Components.
+5. `npm run dev` — the Build System tracks dependencies from here on.
 
-Новый проект обычно содержит следующую структуру.
+Directory structure and naming conventions live in Development → Project Conventions; examples of wiring up each entity live in the corresponding files in the Development section.
 
-```text
-src/
-├── assets/
-├── scripts/
-└── views/
-    ├── components/
-    ├── data/
-    ├── pages/
-    ├── sections/
-    └── templates/
-```
+## nsk-tools (optional)
 
-Такой структуры достаточно для начала разработки.
-
-Новые сущности создаются по мере необходимости без дополнительной регистрации в Build System.
-
-## Создание первой страницы
-
-Добавьте новую страницу.
-
-```text
-src/views/pages/
-└── index.njk
-```
-
-При необходимости создайте файл данных.
-
-```text
-src/views/data/
-└── index.json
-```
-
-После запуска Build System страница автоматически станет частью проекта.
-
-## Добавление Sections
-
-Следующим этапом обычно создаются Sections, определяющие структуру страницы.
-
-Например:
-
-```text
-sections/
-├── _hero.njk
-├── _about.njk
-└── _contacts.njk
-```
-
-Страница подключает их через Template API.
-
-```njk
-{% include getSection("", "hero") %}
-{% include getSection("", "about") %}
-{% include getSection("", "contacts") %}
-```
-
-## Добавление Components
-
-Повторно используемые элементы рекомендуется выносить в Components.
-
-Каждый Component представляет собой самостоятельную архитектурную единицу со своей разметкой, стилями, логикой и, при необходимости, собственными данными.
-
-## Использование nsk-tools
-
-Создание файлов и каталогов может выполняться вручную либо при помощи дополнительного CLI-инструмента **nsk-tools**.
-
-Использование CLI является необязательным и служит исключительно для автоматизации рутинных операций.
-
-## Итог
-
-Build System не требует регистрации новых сущностей.
-
-Достаточно соблюдать архитектурные соглашения, использовать Template API и придерживаться рекомендуемой структуры проекта.
+Creating files/directories can be automated with the independent **nsk-tools** CLI — entirely optional, purely a convenience.

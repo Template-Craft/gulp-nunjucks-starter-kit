@@ -1,101 +1,63 @@
 # Troubleshooting
 
-Этот раздел содержит рекомендации по поиску и устранению наиболее распространённых проблем, возникающих во время разработки.
+## Changes don't show up in the browser
 
-## Изменения не отображаются в браузере
+- is the Build System still running (`npm run dev`)?
+- any errors in the console?
+- is the changed file inside `src/`?
+- running in Docker? See [the Docker section](./09-docker.md) on `CHOKIDAR_USEPOLLING` (relevant on macOS/Windows).
 
-Если после изменения файла страница не обновилась автоматически:
+## The expected page didn't rebuild
 
-- убедитесь, что Build System продолжает работать;
-- проверьте сообщения в консоли;
-- убедитесь, что изменённый файл находится внутри директории `src`;
-- проверьте, не произошло ли ошибки во время сборки.
+- is the Template API used correctly;
+- does the entity's name match the convention;
+- is the file in the right directory;
+- **check for a `getComponent(...)` call inside `templates/`** — such links aren't tracked on purpose (see Development → Templates), and this is the most common hidden cause of "the page didn't update."
 
-## Не пересобралась нужная страница
+If the Build System can't unambiguously determine the dependency, it falls back to a full rebuild (that's expected behavior, not an error).
 
-Starter Kit использует инкрементальную сборку и анализ зависимостей.
-
-Если ожидаемая страница не была пересобрана:
-
-- проверьте правильность использования Template API;
-- убедитесь, что имя сущности соответствует соглашениям проекта;
-- убедитесь, что файл расположен в правильной директории.
-
-При невозможности определить зависимости Build System выполнит полную пересборку проекта.
-
-## Компонент не найден
-
-Проверьте:
-
-- существование директории компонента;
-- правильность регистра имени;
-- использование `getComponent()`;
-- соответствие соглашениям об именовании.
-
-Например:
+## Component not found
 
 ```njk
 {% include getComponent("Header") %}
 ```
 
-## Секция не подключается
+Check: the component's directory exists, the name's casing is correct, and it matches the naming convention.
 
-Убедитесь, что используется правильный вариант подключения.
+## Section doesn't include
 
-Для одностраничного проекта:
+Make sure you're using the right call form.
+
+Single-page project:
 
 ```njk
 {% include getSection("", "about") %}
 ```
 
-Для многостраничного проекта:
+Multi-page project:
 
 ```njk
 {% include getSection("about", "hero") %}
 ```
 
-Также следует проверить структуру директории `sections`.
+Also check the `sections/` directory structure and the value of `settings.isMultipage`.
 
-## Шаблон не найден
-
-Templates подключаются через Template API.
-
-Например:
+## Template not found
 
 ```njk
 {% include getTemplate("head") %}
 ```
 
-Starter Kit автоматически преобразует имя шаблона в путь к файлу.
+The Starter Kit converts the template name into a file path automatically. Don't include Templates directly via relative paths.
 
-Не рекомендуется подключать Templates напрямую через относительные пути.
+## Data isn't updating
 
-## Данные не обновляются
+Check the JSON file's name, that it follows the naming convention, and that it lives in `src/views/data`. Also remember the distinction between local and global data: changing `Global.json` or `Common.json` rebuilds the whole project — that's expected.
 
-Проверьте:
+## Build errors
 
-- имя JSON-файла;
-- соответствие соглашениям об именовании;
-- расположение файла в директории `src/views/data`.
+When something fails, the Build System prints detailed output to the console. Start debugging from the first error message — later ones are often just a consequence of the original cause.
 
-Также следует учитывать различие между локальными и глобальными данными.
+## If it's not one of these
 
-Изменение `Global.json` или `Common.json` приводит к пересборке всех страниц проекта.
-
-## Ошибки сборки
-
-При возникновении ошибок Build System выводит подробную информацию в консоль.
-
-Рекомендуется начинать поиск проблемы именно с первого сообщения об ошибке, поскольку последующие сообщения часто являются следствием первоначальной причины.
-
-## Если проблема сохраняется
-
-В большинстве случаев проблему удаётся определить по сообщениям Build System.
-
-Если причина остаётся неясной:
-
-- выполните полную пересборку проекта;
-- убедитесь, что все зависимости установлены;
-- проверьте соответствие структуры проекта соглашениям Starter Kit.
-
-Соблюдение архитектурных соглашений практически всегда позволяет избежать подобных ситуаций.
+Most of the time the cause shows up in the Build System's own messages. If it's still unclear: run a full rebuild, double-check every dependency is installed, and verify the project structure matches the Starter Kit's conventions. Following the architectural conventions almost always prevents these situations in the first place.

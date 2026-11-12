@@ -1,22 +1,8 @@
 # Pages
 
-A Page represents the final build target.
+A Page is the final target of the build: every `.njk` file in `src/views/pages/` becomes a separate HTML file.
 
-Each page is compiled into a separate HTML file and forms the highest architectural level of the project.
-
-## Location
-
-All Pages are located in:
-
-```text
-src/views/pages/
-```
-
-Each `.njk` file corresponds to a single HTML page after the build process.
-
-## Creating a Page
-
-To create a new page, simply add a new file.
+## Creating one
 
 ```text
 src/views/pages/
@@ -25,27 +11,13 @@ src/views/pages/
 └── contacts.njk
 ```
 
-No additional registration is required.
+No registration needed — just add the file.
 
 ## Usage
 
-A Page combines the other architectural entities of the project.
+A page typically includes Templates, Sections, and global data. Don't store repeated markup in a Page — that's what Components, Sections, and Templates are for.
 
-Typically, it:
-
-- includes Templates;
-- includes Sections;
-- uses global data.
-
-Pages are not intended to contain reusable markup.
-
-Reusable parts of the interface should be moved into Components, Sections, or Templates.
-
-## Page Data
-
-If necessary, a Page can have its own JSON data file.
-
-The file name must match the page name.
+## Page data
 
 ```text
 pages/
@@ -55,10 +27,8 @@ data/
     about.json
 ```
 
-Changing this file rebuilds only the corresponding page.
+The JSON file's name must match the page's name — then changing the data rebuilds only that page.
 
 ## Incremental Build
 
-Changing a Page does not require dependency analysis.
-
-The Build System rebuilds only the modified page.
+Changing the page itself doesn't require dependency analysis — only that page gets rebuilt.

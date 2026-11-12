@@ -1,64 +1,33 @@
 # Pages
 
-## Purpose
+Pages are the Build System's entry points. Every file in `views/pages/` becomes a separate HTML page after the build.
 
-A **Page** is the entry point for generating an HTML document.
+## Responsibility
 
-Each page represents a single output file and defines the high-level composition of that document.
-
-Pages are responsible for assembling Sections rather than implementing user interface logic directly.
-
----
-
-## Responsibilities
-
-A Page is responsible for:
-
-- defining the document structure;
-- composing the required Sections;
-- providing page-specific Data;
-- serving as the starting point for rendering.
-
-A Page should remain lightweight and focus on composition rather than implementation.
-
----
-
-## Composition
-
-Pages typically consist of multiple Sections.
+A Page is responsible only for composing the page: which Sections are used, in what order, what data is needed, and which Template serves as the base. A Page shouldn't contain complex logic or reusable markup — that's the job of Sections, Components, and Templates.
 
 ```njk
-{% include getSection("hero") %}
-{% include getSection("features") %}
-{% include getSection("contacts") %}
+{% from getTemplate('head') import HTMLHead %}
+<html>
+  <head>{{ HTMLHead() }}</head>
+  <body>
+    {% from getComponent('Header') import Header %}
+    {{ Header() }}
+
+    {% include getSection('', 'first_section') %}
+
+    {% from getComponent('Footer') import Footer %}
+    {{ Footer() }}
+
+    {% include getTemplate('scripts') %}
+  </body>
+</html>
 ```
-
-Each Section encapsulates an independent part of the page, allowing the overall structure to remain clean and easy to understand.
-
----
-
-## Reusability
-
-Pages are not intended to be reused.
-
-Each Page represents a unique entry point within the project and is rendered into a single HTML document.
-
-Reusable functionality belongs in Sections, Components or Templates rather than in Pages.
-
----
 
 ## Data
 
-A Page may have its own JSON data file.
+A Page can use its own data, global data (`Global.json`), and data needed by the entities it includes. The page itself shouldn't become a data source for other parts of the project.
 
-This data is available only while rendering the corresponding Page and is intended to describe page-specific content.
+## Incremental Build
 
-Shared or reusable data should belong to the appropriate architectural entity instead.
-
----
-
-## Why Pages Exist Separately
-
-Pages define the public entry points of the project.
-
-Separating them from reusable entities keeps responsibilities clear and allows the build system to analyze dependencies more accurately during incremental builds.
+For the Build System, a Page is the final target of the build and the unit Incremental Build operates on. When a component, section, template, or data file changes, the Build System figures out which Pages depend on it and rebuilds only those.

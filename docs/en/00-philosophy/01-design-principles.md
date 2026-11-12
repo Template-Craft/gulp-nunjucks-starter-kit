@@ -1,73 +1,37 @@
 # Design Principles
 
-The architectural approach implemented by the Build System is based on a small set of fundamental design principles.
+The Build System's architectural approach rests on a handful of principles. Every decision described in the rest of the documentation follows from one or more of them.
 
-Every architectural decision described throughout this documentation is derived from one or more of these principles.
+## Architecture defines the tools
 
----
+Gulp and Nunjucks were chosen not because they're mandatory, but because they implement an architectural approach that already existed. If better tools come along, the approach stays the same.
 
-## Architecture Defines the Tools
+## One element — one responsibility
 
-Technology choices are always driven by architectural requirements.
+- **Pages** are the application's entry points.
+- **Sections** structure individual pages.
+- **Components** hold reusable interface elements.
+- **Templates** provide infrastructural markup.
+- **Data** is the source of content for templates.
 
-The Build System is built on Gulp and Nunjucks not because these technologies are mandatory, but because they provide an effective foundation for implementing the project's architectural concepts.
+This separation is what makes the architecture predictable — which is why the sections on each entity below don't repeat a separate "why is this its own thing" justification: the reason is always this one.
 
-Should more suitable technologies emerge in the future, the architectural approach itself would remain unchanged.
+## Project structure must be self-evident
 
----
+A developer opening the project for the first time should understand what each top-level directory is for from its name and position in the tree — without reading documentation or source code.
 
-## One Responsibility per Architectural Entity
+## Reuse is part of the architecture, not an afterthought
 
-Every architectural entity has a single, clearly defined responsibility.
+The architecture is built so that reusing Components, Sections, and Templates is a natural consequence of the structure, not a separate practice someone has to maintain by hand.
 
-For example:
+## The Build System understands architecture, not just files
 
-- **Pages** define application entry points.
-- **Sections** compose the structure of individual pages.
-- **Components** provide reusable user interface elements.
-- **Templates** implement reusable infrastructure templates.
-- **Data** serves as the source of information used during rendering.
+The Build System operates on architectural entities — pages, sections, components, templates, and the relationships between them — not on files matched by a glob. That's what enables a level of automation plain file processing can't reach.
 
-Clear separation of responsibilities makes the project easier to understand, maintain and evolve.
+## Every dependency must be known to the system
 
----
+Relationships between entities must be visible to the Build System — this is the basis for the Dependency Graph and for rebuilding only the pages actually affected by a change.
 
-## Project Structure Should Be Self-Explanatory
+## Performance is a consequence of architecture
 
-The project structure should communicate its architecture without requiring developers to study the documentation or source code first.
-
-A developer opening the project for the first time should be able to understand the purpose of its primary directories simply by looking at their names and organization.
-
----
-
-## Reusability Is an Architectural Principle
-
-Code reuse is not treated as an optional feature.
-
-Instead, the project architecture is intentionally designed so that reusing Components, Sections and Templates becomes a natural consequence of the overall structure.
-
----
-
-## The Build System Must Understand the Architecture
-
-The Build System operates on more than just files.
-
-It understands architectural entities such as Pages, Sections, Components, Templates and the relationships between them.
-
-This enables a significantly higher level of automation than traditional file-based processing.
-
----
-
-## Every Dependency Must Be Known
-
-Relationships between architectural entities should always be visible to the Build System.
-
-This allows the system to analyze changes, construct the Dependency Graph and rebuild only the parts of the project that are actually affected.
-
----
-
-## Performance Is a Consequence of Architecture
-
-Optimizing the build process is not an independent objective.
-
-Capabilities such as Incremental Build become possible because the Build System understands the project's architecture and has complete knowledge of the relationships between its entities.
+Incremental Build isn't a separate optimization bolted on — it's possible because the Build System already understands the project's architecture and every dependency between its elements.

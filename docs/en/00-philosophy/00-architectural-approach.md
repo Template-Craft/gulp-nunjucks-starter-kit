@@ -1,61 +1,48 @@
 # Architectural Approach
 
-## Introduction
+The architectural approach is the foundation the whole Build System is built around. It defines how the project is organized, what role each element plays, and how those elements interact. The Build System doesn't invent these rules — it implements and automates them.
 
-The Architectural Approach is the foundation of the entire Build System.
+## Why architecture matters more than tools
 
-It defines the overall project organization, the responsibilities of architectural entities, and the principles governing their interaction. Rather than creating these rules, the Build System implements them and automates the processes built around them.
+For small sites, the choice of build system or templating engine often looks like the main decision. As a project grows, it becomes clear that long-term complexity is driven by architecture, not tooling — architecture is what answers:
 
-For this reason, the architectural approach is considered the highest level of the system, while the choice of technologies is treated as its consequence.
+- how the project is organized;
+- what role each type of template plays;
+- where data lives;
+- how code reuse is achieved;
+- how the project's elements interact with each other;
+- how changes propagate through the system.
 
----
+Without these decisions — or when they're made ad hoc — a project loses predictability regardless of the stack behind it.
 
-## Why Architecture Matters More Than Tools
+## Architecture defines the tools
 
-When developing small websites, choosing a template engine or build tool often appears to be the most important decision.
+The Build System is built on Gulp and Nunjucks because they let you implement an architectural approach that already existed — not because they define it. The tools can be replaced without changing the architecture itself.
 
-As projects grow, however, it becomes clear that long-term complexity is determined not by the tools themselves, but by the architecture behind them.
+## What follows from this
 
-Architecture answers questions such as:
+Every Build System capability is a consequence of the architectural approach, not an independent feature:
 
-- How is the project organized?
-- What responsibilities does each template type have?
-- Where is data stored?
-- How is code reuse achieved?
-- How do architectural entities interact?
-- How do changes propagate throughout the project?
+```text
+Architecture
+      │
+      ▼
+Project Structure
+      │
+      ▼
+Separation of templates by responsibility (Pages / Sections / Components / Templates)
+      │
+      ▼
+Template API
+      │
+      ▼
+Dependency Graph
+      │
+      ▼
+Incremental Build
+      │
+      ▼
+Build Pipeline
+```
 
-Without clear architectural decisions, even the best technology stack gradually becomes difficult to maintain.
-
----
-
-## Architecture Defines the Tools
-
-Technology was never the starting point of this project.
-
-The architectural approach evolved over many years through real-world development. As it matured, it naturally established requirements for the template engine, build system and supporting tools.
-
-This is why the Build System is based on Gulp and Nunjucks. These technologies were selected because they support the architectural principles established by the project—not because they define them.
-
-Should more suitable technologies become available in the future, the architectural approach itself would remain unchanged.
-
----
-
-## The Foundation of the Build System
-
-Every capability provided by the Build System originates from the architectural approach.
-
-It directly influences:
-
-- project organization;
-- architectural entities;
-- Template API;
-- Dependency Graph;
-- Incremental Build;
-- the Build Pipeline.
-
-Each layer builds upon the previous one.
-
-For this reason, the Build System should be viewed as an implementation of the architectural approach rather than a collection of independent development tools.
-
-The following sections explore each of these concepts in greater detail.
+Each level builds on the one before it — that's why the following sections cover them in exactly this order.

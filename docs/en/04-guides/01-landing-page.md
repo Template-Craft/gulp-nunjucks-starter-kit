@@ -1,58 +1,13 @@
 # Landing Page
 
-Для одностраничных проектов рекомендуется использовать плоскую структуру Sections.
+Use this mode when the project has a single page and Sections don't need to be grouped by site area. Set `settings.isMultipage: false` (this is also the default).
 
-## Пример структуры
+For the directory structure, the `sections/` example, and `getSection("", "...")`, see Architecture → Sections and Development → Sections (the "Single-page projects" part).
 
-```text
-src/views/
-├── pages/
-│   └── index.njk
-│
-├── sections/
-│   ├── _hero.njk
-│   ├── _about.njk
-│   ├── _services.njk
-│   ├── _gallery.njk
-│   ├── _contacts.njk
-│   └── _footer.njk
-│
-├── components/
-├── templates/
-└── data/
-```
+## What's different from Multipage
 
-Каждая Section отвечает за отдельный логический экран страницы.
+- `getSection(group, name)` is called with an empty `group` (`getSection("", "hero")`);
+- `sections/` is a flat list of files, no nested per-page folders;
+- Components and Templates work exactly the same, no differences there.
 
-## Страница
-
-Обычно Page содержит только подключение Sections.
-
-```njk
-{% include getSection("", "hero") %}
-{% include getSection("", "about") %}
-{% include getSection("", "services") %}
-{% include getSection("", "gallery") %}
-{% include getSection("", "contacts") %}
-{% include getSection("", "footer") %}
-```
-
-Это позволяет сохранить Page максимально компактной.
-
-## Components
-
-Если отдельные элементы интерфейса начинают повторяться, их рекомендуется переносить в Components.
-
-Sections отвечают за структуру страницы, а Components — за повторно используемые части интерфейса.
-
-## Templates
-
-Templates используются для небольших переиспользуемых фрагментов разметки, которые могут применяться внутри Components или Sections.
-
-Как правило, они не используются непосредственно на уровне Page.
-
-## Преимущества
-
-Такой подход делает архитектуру проекта простой, предсказуемой и хорошо масштабируемой.
-
-Даже крупные Landing Page остаются легко читаемыми благодаря разделению страницы на независимые Sections.
+If the project later grows into several pages, switch to the Multi-page Project structure — the Components/Templates architecture doesn't change.

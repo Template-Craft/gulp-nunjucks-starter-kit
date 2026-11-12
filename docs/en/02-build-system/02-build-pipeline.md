@@ -1,12 +1,6 @@
 # Build Pipeline
 
-The Build Pipeline defines the sequence of stages performed by the Build System when processing a project.
-
-Each stage has a single responsibility and operates independently from the internal implementation of the others.
-
-## Pipeline Stages
-
-A typical build consists of the following stages:
+The sequence of stages the project goes through during a build. Each stage owns one area and doesn't depend on the internal implementation of the rest.
 
 ```text
 Reset
@@ -21,36 +15,14 @@ Template Rendering
 Output Generation
 ```
 
-Each stage receives the result of the previous one and passes its output to the next stage.
+## Task isolation
 
-## Responsibility
+Each Gulp task is responsible for exactly one type of resource: `styles` handles stylesheets, `scripts` handles client JS, `images`/`fonts` handle assets, `templates` builds the HTML. This lets you change or extend one stage without touching the rest of the Build System.
 
-Every stage of the Build Pipeline is responsible only for its own task.
+## Orchestration
 
-For example:
+Sequencing and parallelism are set via `gulp.series`/`gulp.parallel` in `gulpfile.mjs` — the Pipeline itself contains no business logic, it just wires independent tasks together.
 
-- asset processing prepares project resources;
-- template rendering generates HTML pages;
-- output generation writes the final files to the build directory.
+## Full vs. incremental build
 
-This separation keeps the Build System modular and predictable.
-
-## Independence
-
-Pipeline stages do not depend on the internal implementation of one another.
-
-As long as the input and output contracts remain unchanged, individual stages can evolve independently.
-
-This simplifies maintenance and allows the Build System to grow without affecting unrelated parts of the pipeline.
-
-## Integration with Other Mechanisms
-
-The Build Pipeline works together with other Build System mechanisms.
-
-For example:
-
-- Dependency Graph determines which architectural entities are affected;
-- Incremental Build decides which pipeline stages must be executed;
-- Watch Mode detects file changes and triggers the pipeline.
-
-Together, these mechanisms provide an efficient development workflow.
+A full build runs on `npm run build` or the first `npm run dev` start. During development, incremental build takes over — only the entities affected by a given change get processed (see Incremental Build).

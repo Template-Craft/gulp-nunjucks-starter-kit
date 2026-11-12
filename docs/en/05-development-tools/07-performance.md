@@ -1,42 +1,17 @@
 # Performance
 
-Одной из основных целей Starter Kit является сокращение времени ожидания во время разработки.
+Dev speed isn't a side effect — it's an architectural requirement: most of the mechanisms that make things faster run automatically and need no configuration.
 
-Build System стремится выполнять только необходимую работу и избегает полной пересборки проекта без необходимости.
+## Incremental Build + Dependency Cache
 
-## Инкрементальная сборка
+Only pages actually affected get rebuilt; the dependency map lives in process memory and is updated incrementally, not recomputed from scratch on every change (see the Build System section for details).
 
-При изменении файлов анализируются зависимости между страницами, секциями, компонентами, шаблонами и данными.
+## What's deliberately disabled in dev
 
-В результате пересобираются только те страницы, которые действительно затронуты изменением.
+- CSSNano (CSS minification) — build only;
+- HTML beautify — build only;
+- a full production JS build — dev uses `eval-cheap-module-source-map` + webpack's filesystem cache instead.
 
-## Кэш зависимостей
+## Fast feedback
 
-Starter Kit хранит карту зависимостей в памяти.
-
-После первоначального анализа Build System повторно использует полученные данные, обновляя только изменившиеся части кэша.
-
-Это значительно уменьшает объём повторных вычислений.
-
-## Минимизация операций
-
-Во время разработки выполняются только необходимые действия.
-
-Например:
-
-- не выполняется production-оптимизация;
-- не используется минификация ресурсов;
-- не запускаются лишние задачи;
-- пересобираются только изменённые сущности.
-
-## Быстрая обратная связь
-
-После завершения сборки BrowserSync автоматически обновляет страницу.
-
-Разработчик практически сразу видит результат своих изменений, что позволяет сосредоточиться на написании кода, а не на ожидании завершения сборки.
-
-## Производительность как часть архитектуры
-
-Оптимизация производительности является частью архитектуры Starter Kit, а не отдельной возможностью.
-
-Большинство механизмов ускорения работают автоматически и не требуют дополнительной настройки со стороны разработчика.
+BrowserSync updates the page right after the build finishes — no manual reload, so you can focus on writing code instead of waiting for it to compile.

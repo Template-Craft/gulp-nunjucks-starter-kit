@@ -1,62 +1,11 @@
 # Working with Data
 
-Build System использует соглашения об именовании для автоматического связывания данных с архитектурными сущностями.
+A naming convention links a JSON file to an entity automatically. For the full mapping table (Page/Component/Section/Template) and `getData(...)`, see Development → Data.
 
-## Pages
+## Recommendations
 
-Если JSON-файл имеет имя страницы, Build System автоматически связывает их между собой.
+- keep data as close as possible to the entity it belongs to;
+- use `Global.json`/`Common.json` only for data that's genuinely shared across the project: changing either file triggers a full rebuild;
+- Templates never have their own data — pass it in from the calling entity (Page/Section/Component).
 
-```text
-pages/
-└── about.njk
-
-data/
-└── about.json
-```
-
-## Components
-
-Components также могут иметь собственные данные.
-
-```text
-components/
-└── Header/
-    └── Header.njk
-
-data/
-└── Header.json
-```
-
-## Sections
-
-Sections поддерживают собственные JSON-файлы по тому же принципу.
-
-```text
-sections/
-└── _about.njk
-
-data/
-└── about.json
-```
-
-## Templates
-
-Templates не имеют собственных JSON-файлов.
-
-Если Template требует данные, они должны передаваться вызывающей сущностью или использоваться из глобальных данных проекта.
-
-## Получение данных
-
-Данные загружаются через Template API.
-
-```njk
-{{ getData("Header").title }}
-```
-
-## Рекомендации
-
-Старайтесь хранить данные максимально близко к той архитектурной сущности, которой они принадлежат.
-
-Используйте `Global.json` и `Common.json` только для действительно общих данных, доступных всему проекту.
-
-Такой подход сохраняет слабую связанность между сущностями и позволяет Build System эффективно выполнять анализ зависимостей и инкрементальную пересборку.
+This keeps coupling loose and lets Incremental Build pinpoint what actually needs rebuilding.

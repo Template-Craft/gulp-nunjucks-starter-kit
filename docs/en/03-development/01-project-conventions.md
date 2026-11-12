@@ -1,14 +1,6 @@
 # Project Conventions
 
-The Build System is based on conventions.
-
-The project structure, file naming rules, and methods of connecting architectural entities are all part of the project's architecture.
-
-Following these conventions ensures that Dependency Analysis and Incremental Build work correctly.
-
-## Project Structure
-
-Each type of architectural entity has its own dedicated directory.
+Directory structure, file names, and how entities get wired up are part of the architecture, not a style choice. Following them is the only requirement for Dependency Analysis and Incremental Build to work correctly — there's no separate registration step for new Components, Sections, or Templates.
 
 ```text
 src/views/
@@ -19,83 +11,21 @@ src/views/
 └── templates/
 ```
 
-Each directory has a clearly defined purpose.
+## Naming
 
-Changing the project structure requires corresponding changes to the Build System.
+| Entity         | Convention                       | Example                               |
+| -------------- | --------------------------------- | --------------------------------------- |
+| **Components** | PascalCase, own directory         | `Header/`, `Footer/`, `Navigation/`      |
+| **Sections**   | `_` + name                        | `_about.njk`, `about/_hero.njk`          |
+| **Templates**  | `_` + name (inside `templates/`)  | `_head.njk`, `_scripts.njk`              |
+| **Data**       | file name = entity name           | `Header.json`, `Global.json`, `Common.json` |
 
-## Naming Conventions
-
-The Build System uses naming conventions to automatically locate related files.
-
-### Components
-
-Components use the PascalCase naming convention.
-
-```text
-Header/
-Footer/
-Navigation/
-```
-
-### Sections
-
-Sections use file names prefixed with an underscore.
-
-```text
-_about.njk
-_hero.njk
-```
-
-When Sections are grouped by page or feature, the same convention applies.
-
-```text
-about/
-    _hero.njk
-    _gallery.njk
-```
-
-### Templates
-
-All Templates are located in the `templates` directory and also use the underscore prefix.
-
-```text
-_head.njk
-_scripts.njk
-```
-
-When using the Template API, the underscore is omitted.
+For Templates, the underscore is part of the file name but isn't used when calling the Template API:
 
 ```njk
 {% include getTemplate("head") %}
 ```
 
-### Data
+## The Template API is the only way to wire things up
 
-Data files should use the name of the architectural entity they belong to.
-
-```text
-Header.json
-Footer.json
-About.json
-```
-
-Global data uses reserved names.
-
-```text
-Global.json
-Common.json
-```
-
-## Template API
-
-Architectural entities are connected exclusively through the Template API.
-
-This allows the Build System to analyze project dependencies without requiring additional configuration.
-
-## Following the Conventions
-
-The Build System does not require Components, Sections, or Templates to be registered manually.
-
-Simply place the entity in the correct directory, follow the naming conventions, and use the Template API.
-
-The entity then automatically becomes part of the project's architecture.
+Every entity is connected only through `getComponent`/`getSection`/`getTemplate`/`getData` — that's what lets the Build System analyze dependencies without extra configuration. Direct relative paths break that link.

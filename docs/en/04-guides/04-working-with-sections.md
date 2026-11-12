@@ -1,52 +1,11 @@
 # Working with Sections
 
-Sections описывают структуру страницы.
+A Section describes the structure of one logical block of a page (Hero, About, Gallery, Contacts). For the directory layout (Landing Page vs. Multipage) and wiring things up through `getSection(...)`, see Development → Sections.
 
-Каждая Section представляет собой самостоятельный логический блок, например Hero, About, Gallery или Contacts.
+## The main rule
 
-## Организация
+A Section groups Components into a finished block, but shouldn't duplicate markup across sections — the moment a piece of markup repeats in more than one Section, move it into a Component (see Working with Components).
 
-Для Landing Page рекомендуется использовать плоскую структуру.
+## Which mode to pick
 
-```text
-sections/
-├── _hero.njk
-├── _about.njk
-└── _contacts.njk
-```
-
-Для многостраничных проектов рекомендуется группировать Sections по страницам.
-
-```text
-sections/
-└── about/
-    ├── _hero.njk
-    ├── _history.njk
-    └── _team.njk
-```
-
-## Подключение
-
-Sections подключаются через Template API.
-
-```njk
-{% include getSection("", "hero") %}
-```
-
-или
-
-```njk
-{% include getSection("about", "hero") %}
-```
-
-## Использование Components
-
-Section может содержать любое количество Components.
-
-Именно Sections обычно объединяют Components в законченные блоки страницы.
-
-## Ответственность
-
-Section отвечает за композицию страницы, но не должна дублировать повторно используемые элементы интерфейса.
-
-Если часть разметки начинает использоваться в нескольких Sections, её рекомендуется вынести в отдельный Component.
+A single page file → Landing Page; several pages each with their own set of sections → Multi-page Project. Switching between modes doesn't require rewriting the Sections themselves, only their location and the `group` argument passed to `getSection`.

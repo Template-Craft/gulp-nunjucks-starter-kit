@@ -1,90 +1,56 @@
-# Build System Configuration
+# Build System Settings
 
-The Build System uses a centralized configuration system.
-
-All settings that affect the behavior of Build System mechanisms are defined in a single location:
+Every parameter that affects the Build System's behavior lives in one place:
 
 ```text
 gulp/config/settings.mjs
 ```
 
-This approach allows the behavior of the Build System to be adjusted without modifying individual tasks.
-
-## Purpose
-
-The `settings.mjs` file defines the runtime configuration of the Build System.
-
-Depending on the configuration, it controls:
-
-- project mode;
-- Dependency Cache behavior;
-- Runtime Monitor settings;
-- debug mode.
-
-All Build System mechanisms use the same configuration source.
-
-## Project Mode
-
-The
+## Project mode
 
 ```js
-isMultipage;
+isMultipage; // false = Landing Page, true = Multipage Project
 ```
 
-option defines the architectural mode of the project.
+Some mechanisms (for example, how `getSection` addresses Sections) behave differently depending on this flag.
 
-Two modes are supported:
+## Console output language
 
-- Landing Page;
-- Multipage Project.
+```js
+locale: 'en'; // 'en' | 'ru' | 'pl' | ...
+```
 
-Some Build System mechanisms automatically adapt their behavior depending on the selected mode.
+Translations live in `gulp/i18n/locales/*.mjs` — one file per language. If the given locale isn't supported, or a specific string is missing from it, English is used (both as the fallback and as the default). Technical tags in logs (`[Cache]`, `[DEBUG]`, entity names) are never translated — they're grep-able labels, not prose.
 
 ## Dependency Cache
 
-The
-
 ```js
-settings.cache;
+cache: {
+  autoRebuild: true,   // build the cache on dev startup
+  maxMemoryMB: 300,    // memory limit; the cache is cleared past it
+  verbose: true,        // log cache access
+  debugTables: false,   // always print dependency tables, not just on a fresh analysis
+}
 ```
 
-section controls the behavior of the Dependency Cache.
-
-Its primary settings include:
-
-- automatic cache rebuilding during startup;
-- memory usage limits;
-- diagnostic logging;
-- dependency table output.
-
-A detailed explanation of the Dependency Cache is provided in its dedicated documentation.
+See the Dependency Cache section for details.
 
 ## Runtime Monitor
 
-The
-
 ```js
-settings.monitor;
+monitor: {
+  maxMemoryMB: Math.round((os.totalmem() / 1024 / 1024) * 0.15), // 15% of RAM
+  maxCpuPercent: CORES * 60,
+  intervalMs: 10_000,
+}
 ```
 
-section configures the Runtime Monitor responsible for observing system resource usage.
+`os.totalmem()` always returns the HOST's memory — if the Build System runs inside a memory-capped Docker container, set the real limit explicitly via the `DOCKER_MEM_LIMIT_MB` environment variable (see the Docker section): the threshold is then computed from it instead of the host's memory.
 
-It defines:
-
-- maximum memory usage;
-- maximum CPU usage;
-- monitoring interval.
-
-These settings allow the Build System to be adapted to different development environments.
-
-## Debug Mode
-
-The
+## Debugging
 
 ```js
-debug;
+debug: false;
 ```
 
-option enables additional diagnostic features of the Build System.
-
-This mode is intended primarily for debugging and analyzing the internal behavior of the Build System rather than everyday development.
+Turns on extra diagnostics. Not needed for everyday development.
