@@ -5,19 +5,31 @@
 # Запуск:          docker compose up
 # Продакшен-сборка: docker compose run --rm dev npm run build
 #
+# UID/GID: контейнер работает под непривилегированным юзером (не root).
+# По умолчанию 1000:1000 (самый частый случай на одно-пользовательской Linux-
+# машине). Если `id -u`/`id -g` на хосте другие - создайте рядом .env с:
+#   UID=1001
+#   GID=1001
+# и пересоберите образ (docker compose build), иначе запись в примонтированный
+# build/ с хоста упрётся в permission denied.
+#
 # На macOS/Windows (Docker Desktop) живая перезагрузка может срабатывать
 # с задержкой из-за виртуализации ФС - в этом случае раскомментируйте
 # CHOKIDAR_USEPOLLING ниже.
 #
-# Примечание: settings.monitor.maxMemoryMB (gulp/config/settings.mjs) считается
-# от ОЗУ ХОСТА (os.totalmem()), а не от лимита контейнера. Если ограничиваете
-# контейнер через deploy.resources/mem_limit, порог стоит задать вручную.
+# Память: settings.monitor.maxMemoryMB (gulp/config/settings.mjs) по умолчанию
+# считается от ОЗУ ХОСТА (os.totalmem()), а не от лимита контейнера. Если
+# реально ограничиваете контейнер через mem_limit/deploy.resources - укажите
+# тот же лимит в DOCKER_MEM_LIMIT_MB ниже, иначе монитор никогда не сработает.
 
 services:
   dev:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        UID: ${UID:-1000}
+        GID: ${GID:-1000}
     init: true # корректная обработка сигналов (Ctrl+C, docker compose down)
     tty: true # сохраняет цветной вывод chalk в логах
     ports:
@@ -26,6 +38,8 @@ services:
     environment:
       IN_DOCKER: 'true' # отключает авто-открытие браузера внутри контейнера
       # CHOKIDAR_USEPOLLING: '1' # раскомментируйте на macOS/Windows при проблемах с live-reload
+      # DOCKER_MEM_LIMIT_MB: '2048' # укажите вместе с mem_limit ниже, если реально ограничиваете контейнер
+    # mem_limit: 2048m
     volumes:
       - .:/app
       - /app/node_modules # отдельный volume - не используем node_modules с хоста (нативные бинарники собраны под Linux)
