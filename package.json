@@ -1,6 +1,6 @@
 {
   "name": "gulp-nunjucks-starter-kit",
-  "version": "1.0.3",
+  "version": "2.0.0",
   "description": "Architecture-first Starter Kit focused on maintainable frontend development with Nunjucks.",
   "main": "gulpfile.mjs",
   "scripts": {
