@@ -1,6 +1,9 @@
- 
+
 'use strict';
 
+import nodePath from 'node:path';
+
+import { settings } from '../config/settings.mjs';
 import { getDependencyCache, setDependencyCache } from './dependencyCache.mjs';
 
 import { findComponentUsages } from './findComponentUsages.mjs';
@@ -80,4 +83,86 @@ export async function updateDependencyMap({ type, name }) {
   console.log(
     `[${app.plugins.chalk.blue('DependencyMap')}] Инкрементально обновлён "${app.plugins.chalk.magenta(label)}" -> файлов: ${app.plugins.chalk.magenta(usedBy.size)}`,
   );
+}
+
+/**
+ * Синхронизирует карту зависимостей с точки зрения ИЗМЕНЁННОГО ФАЙЛА, а не сущности.
+ *
+ * updateDependencyMap() выше обновляет запись сущности (например "Header"), перепроверяя
+ * только уже известные ей файлы - поэтому НОВЫЙ вызов getComponent/getSection/getTemplate,
+ * впервые добавленный в странице/секции/компоненте, не попадает в кэш до полного ребилда.
+ *
+ * Эта функция решает обратную задачу: сканирует конкретный filePath и добавляет/удаляет
+ * его из записей всех сущностей, которые он теперь использует (или перестал использовать).
+ *
+ * @param {string} filePath - абсолютный путь изменённого .njk файла
+ */
+export async function syncFileUsages(filePath) {
+  const cache = getDependencyCache();
+  if (!cache) return;
+
+  const [componentUsage, sectionUsage, templateUsage] = await Promise.all([
+    findComponentUsages(app.path.src.nunjucksIndexDir, [filePath]),
+    findSectionUsages(app.path.src.nunjucksIndexDir, [filePath]),
+    findTemplateUsages(app.path.src.nunjucksIndexDir, [filePath]),
+  ]);
+
+  const components = syncMapForFile(cache.components, filePath, componentUsage.get(filePath));
+  const sections = syncMapForFile(cache.sections, filePath, sectionUsage.get(filePath));
+  const templates = syncMapForFile(cache.templates, filePath, templateUsage.get(filePath));
+
+  // Ничего не изменилось относительно этого файла - не трогаем кэш и не логируем
+  if (!components.changed && !sections.changed && !templates.changed) return;
+
+  setDependencyCache({
+    components: components.map,
+    sections: sections.map,
+    templates: templates.map,
+  });
+
+  if (settings.cache.verbose) {
+    console.log(
+      `[${app.plugins.chalk.blue('DependencyMap')}] Синхронизация файла "${app.plugins.chalk.magenta(nodePath.relative(app.path.projectRoot, filePath))}" -> связи обновлены`,
+    );
+  }
+}
+
+/**
+ * Приводит одну карту (components/sections/templates) в соответствие с актуальным
+ * списком сущностей, которые использует filePath.
+ * @returns {{map: Map, changed: boolean}}
+ */
+function syncMapForFile(map, filePath, usedNamesList) {
+  if (!map) return { map: map, changed: false };
+
+  const usedNames = new Set(usedNamesList || []);
+  const newMap = new Map(map);
+  let changed = false;
+
+  // Добавляем filePath в сущности, которые он теперь использует
+  for (const name of usedNames) {
+    const files = new Set(newMap.get(name) || []);
+
+    if (!files.has(filePath)) {
+      files.add(filePath);
+      newMap.set(name, Array.from(files));
+      changed = true;
+    }
+  }
+
+  // Убираем filePath из сущностей, которые он больше не использует
+  for (const [name, files] of newMap.entries()) {
+    if (usedNames.has(name) || !files.includes(filePath)) continue;
+
+    const filtered = files.filter((file) => file !== filePath);
+    changed = true;
+
+    if (filtered.length > 0) {
+      newMap.set(name, filtered);
+    } else {
+      newMap.delete(name);
+    }
+  }
+
+  return { map: newMap, changed: changed };
 }

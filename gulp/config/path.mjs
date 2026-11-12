@@ -50,6 +50,7 @@ export const path = {
     ],
     scripts: [`${srcFolder}/scripts/main/**/*.{js,mjs}`, `${srcFolder}/views/components/**/*.{js,mjs}`],
     images: `${srcFolder}/assets/img/**/*.{jpg,jpeg,png,gif,tiff,svg,webp}`,
+    fonts: `${srcFolder}/assets/fonts/**/*.{woff,woff2,ttf}`,
   },
   clean: buildFolder,
   srcFolder: srcFolder,

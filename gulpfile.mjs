@@ -57,7 +57,7 @@ import { createNotification, send as notifySend } from './gulp/tasks/notify.mjs'
 // Кэш зависимостей
 import { buildDependencyMap } from './gulp/utils/buildDependencyMap.mjs';
 import { setDependencyCache } from './gulp/utils/dependencyCache.mjs';
-import { updateDependencyMap } from './gulp/utils/updateDependencyMap.mjs';
+import { updateDependencyMap, syncFileUsages } from './gulp/utils/updateDependencyMap.mjs';
 import { getSectionNameFromPath } from './gulp/utils/getSectionName.mjs';
 
 // Передаём значения в глобальную переменную app
@@ -106,12 +106,19 @@ function watcher() {
           ? nodePath.basename(filePath, '.njk')
           : null;
 
-    // Инкрементальное обновление dependencyMap
+    // Инкрементальное обновление dependencyMap (перспектива сущности)
     if (name) {
       await updateDependencyMap({
         type: isComponent ? 'component' : isSection ? 'section' : 'template',
         name: name,
       });
+    }
+
+    // Синхронизация dependencyMap (перспектива самого изменённого файла):
+    // ловит новые/удалённые вызовы getComponent/getSection/getTemplate внутри него,
+    // даже если файл не является определением сущности (например страница или секция)
+    if (nodePath.extname(filePath) === '.njk') {
+      await syncFileUsages(filePath);
     }
 
     // Триггерим шаблоны (точечная/полная пересборка определяется внутри)
@@ -127,6 +134,7 @@ function watcher() {
 
   gulp.watch(path.watch.scripts, scripts);
   gulp.watch(path.watch.images, images);
+  gulp.watch(path.watch.fonts, fonts);
 }
 
 // gulp.parallel() - параллельное выполнение задач
